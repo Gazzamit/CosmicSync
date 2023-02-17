@@ -15,11 +15,7 @@ public class OrbitScript : MonoBehaviour
         //set angle to Radians +90 degrees to start from top
         float angle = (loopPosition * 360 + 90) * Mathf.Deg2Rad;
 
-        //correct rotation at the start of the song
-        if (loopPosition < 0)
-        {
-            loopPosition = loopPosition + 1;
-        }   
+        //loopPosition is already adjusted for offset by adding bars until its positive in Contoller
         transform.rotation = Quaternion.Euler(0,0,Mathf.Lerp(0, 360, loopPosition));
 
         float x = radius * Mathf.Cos(angle);

@@ -75,6 +75,12 @@ public class Controller : MonoBehaviour
         //playhead beats within current loop
         loopPlayheadInBeats = playheadInBeats - loopCount * beatsInLoop;
 
+        //offset may make loop value negative, so keep adding bars until cycled through to positive number
+        while (loopPlayheadInBeats < 0)
+        {
+            loopPlayheadInBeats += beatsInLoop;
+        }
+
         //Normalised playhead beats within current loop (for other scripts)
         loopPlayheadNormalised = loopPlayheadInBeats / beatsInLoop;
     }
