@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TapLeft : MonoBehaviour
+public class TapRight : MonoBehaviour
 {
     private Renderer renderer;
 
@@ -27,29 +27,29 @@ public class TapLeft : MonoBehaviour
 
         //get normalised value of playhead position within loop
         float loopPosition = Controller.instance.loopPlayheadNormalised;
-        //Debug.Log("LoopPosition Left: " + loopPosition);
+        //Debug.Log("LoopPosition Right: " + loopPosition);
 
         /*Will need to build beat list input system for this, however, this works as a test for tap on first beat of bar*/
 
         // Check if the object tapped at top (first beat of the bar)
         // must not have been tapped already
-        // top of loop of 0
+        // top of loop is 0.5
         if (!isTappedThisRotation && context.performed)
         {
             //check timing accuracy of tap
-            if (loopPosition > (1 - perfectThreshold) || loopPosition < perfectThreshold) //perfect
+            if (loopPosition > (0.5f - perfectThreshold) && loopPosition < (0.5f + perfectThreshold)) //perfect
             {
-                //Debug.Log("Object tapped L Perfect: " + loopPosition);
+                //Debug.Log("Object tapped R Perfect: " + loopPosition);
                 SetColorAndReset(1);
             }
-            else if (loopPosition > (1 - goodThreshold) || loopPosition < goodThreshold) //good
+            else if (loopPosition > (0.5f - goodThreshold) && loopPosition < (0.5f + goodThreshold)) //good
             {
-                //Debug.Log("Object tapped L Good: " + loopPosition);
+                //Debug.Log("Object tapped R Good: " + loopPosition);
                 SetColorAndReset(2);
             }
-            else if (loopPosition > (1 - poorThreshold) || loopPosition < poorThreshold) //poor
+            else if (loopPosition > (0.5f - poorThreshold) && loopPosition < (0.5 + poorThreshold)) //poor
             {
-                //Debug.Log("Object tapped L Poor: " + loopPosition);
+                //Debug.Log("Object tapped R Poor: " + loopPosition);
                 SetColorAndReset(3);
             }
             else //miss
@@ -80,13 +80,13 @@ public class TapLeft : MonoBehaviour
     {
         float loopPosition = Controller.instance.loopPlayheadNormalised;
 
-        while (loopPosition <= 0.2f || loopPosition >= 0.8f)
+        while (loopPosition >= 0.3f && loopPosition <= 0.7f)
         {
             yield return null;
             loopPosition = Controller.instance.loopPlayheadNormalised;
         }
 
         isTappedThisRotation = false;
-        //Debug.Log("Allowing L sTaps again");
+        //Debug.Log("Allowing R Taps again");
     }
 }
