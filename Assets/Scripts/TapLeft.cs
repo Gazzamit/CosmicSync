@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.VectorGraphics;
 
 public class TapLeft : MonoBehaviour
 {
-    private Renderer renderer;
+    private SVGImage svgImage;
 
     private float perfectThreshold, goodThreshold, poorThreshold;
     [Header("REQUIRED")]
@@ -14,7 +15,7 @@ public class TapLeft : MonoBehaviour
 
     void Start()
     {
-        renderer = GetComponent<Renderer>();
+        svgImage = GetComponent<SVGImage>();
 
         perfectThreshold = Controller.instance.perfectTapThereshold;
         goodThreshold = Controller.instance.goodTapThreshold;
@@ -27,7 +28,7 @@ public class TapLeft : MonoBehaviour
 
         //get normalised value of playhead position within loop
         float loopPosition = Controller.instance.loopPlayheadNormalised;
-        //Debug.Log("LoopPosition Left: " + loopPosition);
+        Debug.Log("LoopPosition Left: " + loopPosition);
 
         /*Will need to build beat list input system for this, however, this works as a test for tap on first beat of bar*/
 
@@ -62,7 +63,7 @@ public class TapLeft : MonoBehaviour
     private void SetColorAndReset(int colorIndex)
     {
         //set colour of the circle if tap is perfect(1), good(2), poor(3)
-        renderer.material.color = colors[colorIndex];
+        svgImage.color = colors[colorIndex];
         //diallow other taps this rotation until reset
         isTappedThisRotation = true;
         //reet colour after fraction of a second
@@ -73,7 +74,7 @@ public class TapLeft : MonoBehaviour
     IEnumerator ResetColour()
     {
         yield return new WaitForSeconds(0.3f);
-        renderer.material.color = colors[0];
+        svgImage.color = colors[0];
     }
 
     IEnumerator Reset_isTapped()
