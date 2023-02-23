@@ -13,8 +13,12 @@ public class TapLeft : MonoBehaviour
     [SerializeField] private Color[] colors;
     private bool isTappedThisRotation = false;
 
+    public List<float> leftBeats;
+
     void Start()
     {
+        leftBeats.AddRange(new float[] { 1f});
+        
         svgImage = GetComponent<SVGImage>();
 
         perfectThreshold = Controller.instance.perfectTapThereshold;
@@ -28,15 +32,18 @@ public class TapLeft : MonoBehaviour
 
         //get normalised value of playhead position within loop
         float loopPosition = Controller.instance.loopPlayheadNormalised;
-        Debug.Log("LoopPosition Left: " + loopPosition);
+        //Debug.Log("LoopPosition Left: " + loopPosition);
 
         /*Will need to build beat list input system for this, however, this works as a test for tap on first beat of bar*/
 
         // Check if the object tapped at top (first beat of the bar)
         // must not have been tapped already
         // top of loop of 0
+
+
         if (!isTappedThisRotation && context.performed)
         {
+            CheckValidBeat();
             //check timing accuracy of tap
             if (loopPosition > (1 - perfectThreshold) || loopPosition < perfectThreshold) //perfect
             {
@@ -56,6 +63,23 @@ public class TapLeft : MonoBehaviour
             else //miss
             {
                 //do miss action
+            }
+        }
+    }
+
+    private void CheckValidBeat()
+    {
+        //Debug.Log("LeftBeat Count: " + leftBeats.Count); 
+        for (int i = 0; i < leftBeats.Count; i++)
+        {
+            //Debug.Log("LeftBeat: " + leftBeats[i] + " PlayheadBeats: " + Controller.instance.playheadInBeats);
+            if (Mathf.Round(Controller.instance.loopPlayheadInBeats) == (leftBeats[i] - 1))
+            {
+                Debug.Log("Loop Beat: " + Mathf.Round(Controller.instance.loopPlayheadInBeats) + " Beat: " + (leftBeats[i] - 1));
+            }
+            else
+            {
+                Debug.Log("Missed beat");
             }
         }
     }
