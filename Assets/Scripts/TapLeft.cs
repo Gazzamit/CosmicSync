@@ -15,9 +15,11 @@ public class TapLeft : MonoBehaviour
 
     public List<float> leftBeats;
 
+    private bool isKeyPressed = false;
+
     void Start()
     {
-        leftBeats.AddRange(new float[] { 1f});
+        leftBeats.AddRange(new float[] { 1, 2, 3, 4});
         
         svgImage = GetComponent<SVGImage>();
 
@@ -26,60 +28,51 @@ public class TapLeft : MonoBehaviour
         poorThreshold = Controller.instance.poorTapThreshold;
     }
 
-    public void Fire(InputAction.CallbackContext context)
+    void Update()
     {
-        //Debug.Log("Callback Triggered: " + context.phase);
-
-        //get normalised value of playhead position within loop
-        float loopPosition = Controller.instance.loopPlayheadNormalised;
-        //Debug.Log("LoopPosition Left: " + loopPosition);
-
-        /*Will need to build beat list input system for this, however, this works as a test for tap on first beat of bar*/
-
-        // Check if the object tapped at top (first beat of the bar)
-        // must not have been tapped already
-        // top of loop of 0
-
-
-        if (!isTappedThisRotation && context.performed)
+        
+        //stop on beat one AV sync check
+        if(Controller.instance.stopOnBeatSyncCheck == true)
         {
-            CheckValidBeat();
-            //check timing accuracy of tap
-            if (loopPosition > (1 - perfectThreshold) || loopPosition < perfectThreshold) //perfect
+            if (Controller.instance.loopPlayheadInSeconds > Controller.instance.secondsPerBeat * 2)
             {
-                //Debug.Log("Object tapped L Perfect: " + loopPosition);
-                SetColorAndReset(1);
-            }
-            else if (loopPosition > (1 - goodThreshold) || loopPosition < goodThreshold) //good
-            {
-                //Debug.Log("Object tapped L Good: " + loopPosition);
-                SetColorAndReset(2);
-            }
-            else if (loopPosition > (1 - poorThreshold) || loopPosition < poorThreshold) //poor
-            {
-                //Debug.Log("Object tapped L Poor: " + loopPosition);
-                SetColorAndReset(3);
-            }
-            else //miss
-            {
-                //do miss action
+                Debug.Log("Sec Per beat: " + Controller.instance.secondsPerBeat + " Playhead: " + Controller.instance.loopPlayheadInSeconds);
+                Time.timeScale = 0.0f; // Stop time
+                AudioListener.pause = true;
             }
         }
     }
-
-    private void CheckValidBeat()
+    public void AnyKeyPressed(InputAction.CallbackContext context)
     {
-        //Debug.Log("LeftBeat Count: " + leftBeats.Count); 
-        for (int i = 0; i < leftBeats.Count; i++)
+        //Debug.Log("Callback Triggered L: " + context.phase);
+
+
+        if (context.performed)
         {
-            //Debug.Log("LeftBeat: " + leftBeats[i] + " PlayheadBeats: " + Controller.instance.playheadInBeats);
-            if (Mathf.Round(Controller.instance.loopPlayheadInBeats) == (leftBeats[i] - 1))
+            //Debug.Log("Tap Time: " + Controller.instance.loopPlayheadInSeconds);
+            foreach (float beatTime in leftBeats) 
             {
-                Debug.Log("Loop Beat: " + Mathf.Round(Controller.instance.loopPlayheadInBeats) + " Beat: " + (leftBeats[i] - 1));
-            }
-            else
-            {
-                Debug.Log("Missed beat");
+                float timeDiff = Mathf.Abs((beatTime - 1) * Controller.instance.secondsPerBeat - Controller.instance.loopPlayheadInSeconds);
+                //float tolerance = Controller.instance.secondsPerBeat  * 0.05f;
+                if (timeDiff <= perfectThreshold) 
+                    {
+                        Debug.Log("Perfect: timeDiff: " + timeDiff);
+                    }
+                else 
+                if (timeDiff <= goodThreshold) 
+                    {
+                        Debug.Log("Good: timeDiff: " + timeDiff);
+                    }
+                else 
+                if (timeDiff <= poorThreshold) 
+                    {
+                        Debug.Log("Poor: timeDiff: " + timeDiff);
+                    }
+                else 
+                    {
+                        //Debug.Log("beatTime: " + beatTime);
+                    }
+
             }
         }
     }
@@ -92,8 +85,6 @@ public class TapLeft : MonoBehaviour
         isTappedThisRotation = true;
         //reet colour after fraction of a second
         StartCoroutine(ResetColour());
-        //check if loopPosition is outside tappable area and then reset it
-        StartCoroutine(Reset_isTapped());
     }
     IEnumerator ResetColour()
     {
@@ -101,17 +92,4 @@ public class TapLeft : MonoBehaviour
         svgImage.color = colors[0];
     }
 
-    IEnumerator Reset_isTapped()
-    {
-        float loopPosition = Controller.instance.loopPlayheadNormalised;
-
-        while (loopPosition <= 0.2f || loopPosition >= 0.8f)
-        {
-            yield return null;
-            loopPosition = Controller.instance.loopPlayheadNormalised;
-        }
-
-        isTappedThisRotation = false;
-        //Debug.Log("Allowing L sTaps again");
-    }
 }

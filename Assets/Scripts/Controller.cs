@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour
     public float secondsPerBeat, playheadInSeconds;
 
     //playhead in beats; playhead in the loop
-    public float playheadInBeats, loopPlayheadInBeats;
+    public float playheadInBeats, loopPlayheadInBeats, loopPlayheadInSeconds;
 
     //loop counter
     public int loopCount = 0;
@@ -37,6 +37,9 @@ public class Controller : MonoBehaviour
     //The current relative position of the song within the loop measured between 0 and 1.
     //Used for normalised 0 to 1 movement / lerp in other scripts
     public float loopPlayheadNormalised;
+
+    //check for AV sync
+    public bool stopOnBeatSyncCheck = false;
 
     //Conductor static instance so can be referenced in other scripts
     public static Controller instance;
@@ -60,7 +63,7 @@ public class Controller : MonoBehaviour
         dspTimeAtStart = (float)AudioSettings.dspTime;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //playhead seconds from first beat (after start offset)
         playheadInSeconds = (float)(AudioSettings.dspTime - dspTimeAtStart - startOffset);
@@ -80,6 +83,9 @@ public class Controller : MonoBehaviour
         {
             loopPlayheadInBeats += beatsInLoop;
         }
+
+        //Current playhead position in seconds within the loop (for Tap scripts)
+        loopPlayheadInSeconds = loopPlayheadInBeats * secondsPerBeat;
 
         //Normalised playhead beats within current loop (for other scripts)
         loopPlayheadNormalised = loopPlayheadInBeats / beatsInLoop;

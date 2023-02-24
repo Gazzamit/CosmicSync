@@ -159,7 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tempo: 95
   beatsInLoop: 4
-  startOffset: 2.65
+  startOffset: 2.59
   audioSource: {fileID: 1190500756}
   perfectTapThereshold: 0.03
   goodTapThreshold: 0.05
@@ -169,8 +169,10 @@ MonoBehaviour:
   playheadInSeconds: 0
   playheadInBeats: 0
   loopPlayheadInBeats: 0
+  loopPlayheadInSeconds: 0
   loopCount: 0
   loopPlayheadNormalised: 0
+  stopOnBeatSyncCheck: 0
 --- !u!4 &15605042
 Transform:
   m_ObjectHideFlags: 0
@@ -551,9 +553,9 @@ GameObject:
   - component: {fileID: 262212371}
   - component: {fileID: 262212370}
   - component: {fileID: 262212368}
-  - component: {fileID: 262212369}
+  - component: {fileID: 262212372}
   m_Layer: 5
-  m_Name: Ring Left
+  m_Name: Left Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,8 +578,38 @@ MonoBehaviour:
   - {r: 0.36293197, g: 1, b: 0, a: 1}
   - {r: 1, g: 0.6431373, b: 0, a: 1}
   - {r: 1, g: 0, b: 0.40135288, a: 1}
-  leftBeeats: []
---- !u!114 &262212369
+  leftBeats: []
+--- !u!114 &262212370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262212365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8b96895a0ec4ba685178a052544251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: 73ddb2958e9cd451c82f37c26efa5eb0, type: 2}
+  m_Color: {r: 0, g: 0.76642406, b: 0.9529412, a: 0.39215687}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 3286163911610860551, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
+  m_PreserveAspect: 0
+--- !u!222 &262212371
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262212365}
+  m_CullTransparentMesh: 1
+--- !u!114 &262212372
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -663,10 +695,14 @@ MonoBehaviour:
     m_ActionId: ffe5a646-f0e8-4821-9922-6f7fdfa117ae
     m_ActionName: SpaceshipControls/PitchYaw[/Mouse/delta]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bf89cc9a-7bd7-48ce-a046-07e433d92f17
+    m_ActionName: SpaceshipControls/Fire[/Keyboard/f,/Mouse/leftButton]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 262212368}
         m_TargetAssemblyTypeName: TapLeft, Assembly-CSharp
-        m_MethodName: Fire
+        m_MethodName: AnyKeyPressed
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -676,43 +712,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: bf89cc9a-7bd7-48ce-a046-07e433d92f17
-    m_ActionName: SpaceshipControls/Fire[/Keyboard/f,/Mouse/leftButton]
+    m_ActionId: aeb88716-711a-4fe5-ba98-a1da3a393bf9
+    m_ActionName: SpaceshipControls/AnyKey[/Keyboard/s,/Keyboard/w,/Keyboard/q,/Keyboard/e,/Keyboard/leftMeta,/Keyboard/space,/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: SpaceshipControls
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &262212370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 262212365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef8b96895a0ec4ba685178a052544251, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 73ddb2958e9cd451c82f37c26efa5eb0, type: 2}
-  m_Color: {r: 0, g: 0.76642406, b: 0.9529412, a: 0.39215687}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-  m_PreserveAspect: 0
---- !u!222 &262212371
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 262212365}
-  m_CullTransparentMesh: 1
 --- !u!4 &267843228 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4299018308365020, guid: f90b6d79d3a03de42a5c6e13911b860e, type: 3}
@@ -1366,38 +1372,38 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 4.924528
-      outSlope: 4.924528
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.041666668
+      outWeight: 0
     - serializedVersion: 3
-      time: 0.39878443
-      value: 0.84269464
-      inSlope: 0.54243237
-      outSlope: 0.54243237
+      time: 0.49500573
+      value: 0.14809698
+      inSlope: 0.85667825
+      outSlope: 0.85667825
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.35219806
-      outWeight: 0.63560754
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.6694686
-      value: 0.936941
-      inSlope: 0.25112784
-      outSlope: 0.25112784
+      time: 0.7422555
+      value: 0.84896165
+      inSlope: 1.6076049
+      outSlope: 1.6076049
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.7030405
-      outWeight: 0.54618543
+      inWeight: 0.33333334
+      outWeight: 0.31181857
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.15723279
-      outSlope: 0.15723279
+      inSlope: -0.1391897
+      outSlope: -0.1391897
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.5785968
+      inWeight: 1
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1692,9 +1698,8 @@ GameObject:
   - component: {fileID: 2058865902}
   - component: {fileID: 2058865901}
   - component: {fileID: 2058865900}
-  - component: {fileID: 2058865899}
   m_Layer: 5
-  m_Name: Ring Right
+  m_Name: Right Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1720,112 +1725,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2058865899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2058865897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 9dc20ec84cf514f5b8750de5e742a607, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 37722b5e-1043-4743-a9a5-1ea612e1ad61
-    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 52d23115-fe45-4195-91de-c2d40a05885d
-    m_ActionName: UI/Submit[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9d4322c6-69db-410f-83e8-78911f94cba7
-    m_ActionName: UI/Cancel[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: abcd8f4c-eb26-4d45-84b2-4260eabec020
-    m_ActionName: UI/Point[/Mouse/position,/Pen/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: aec2912b-0df7-4578-aa5b-7dc89cfb368c
-    m_ActionName: UI/Click[/Mouse/leftButton,/Pen/tip]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9e2d12a9-e70a-41fa-9c8d-50ad855ddb42
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c8111782-2dd6-47e6-9189-20c328cef96b
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f06b34eb-ab54-44ea-b75a-bec1b1d95863
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 76a074d7-0fac-44e3-aef5-d45c870837fe
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 268083f9-f6be-4a64-b122-7eb3c5a7e5ab
-    m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: ba62206d-7f61-4029-b5ba-3bb478e6ae4b
-    m_ActionName: SpaceshipControls/Thrust[/Keyboard/s,/Keyboard/w]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4abc7d56-cc29-469b-9b2f-ead07dd745df
-    m_ActionName: SpaceshipControls/Strafe[/Keyboard/q,/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5dd6cd5d-637e-430e-827e-1e67472aab62
-    m_ActionName: SpaceshipControls/UpDown[/Keyboard/leftMeta,/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 3800fa57-f924-41ed-ab24-d465a99f277c
-    m_ActionName: SpaceshipControls/Roll[/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: ffe5a646-f0e8-4821-9922-6f7fdfa117ae
-    m_ActionName: SpaceshipControls/PitchYaw[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2058865900}
-        m_TargetAssemblyTypeName: TapLeft, Assembly-CSharp
-        m_MethodName: Fire
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: bf89cc9a-7bd7-48ce-a046-07e433d92f17
-    m_ActionName: SpaceshipControls/Fire[/Keyboard/f,/Mouse/leftButton]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: SpaceshipControls
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &2058865900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1843,7 +1742,7 @@ MonoBehaviour:
   - {r: 0.36293197, g: 1, b: 0, a: 1}
   - {r: 1, g: 0.64142984, b: 0, a: 1}
   - {r: 1, g: 0, b: 0.40392157, a: 1}
-  leftBeeats: []
+  leftBeats: []
 --- !u!114 &2058865901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1874,65 +1773,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2058865897}
   m_CullTransparentMesh: 1
---- !u!1001 &2069231737
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 2
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -3888481672020999207, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_Name
-      value: Ring-White
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 859.85565
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 341.40805
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -641.812
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742538545776668643, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_AddedGameObjects: []
-  m_SourcePrefab: {fileID: 7243324766535440047, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
 --- !u!4 &2132710151 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4300762526349960, guid: 1202b1e73ba4e0d468ce4000e6509541, type: 3}
@@ -2114,6 +1954,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: bf89cc9a-7bd7-48ce-a046-07e433d92f17
     m_ActionName: SpaceshipControls/Fire1[/Keyboard/f,/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1578558911106267}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: aeb88716-711a-4fe5-ba98-a1da3a393bf9
+    m_ActionName: SpaceshipControls/AnyKey[/Keyboard/s,/Keyboard/w,/Keyboard/q,/Keyboard/e,/Keyboard/leftMeta,/Keyboard/space,/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: SpaceshipControls

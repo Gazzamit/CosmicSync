@@ -24,6 +24,8 @@ public class TapRight : MonoBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
+        if(false)
+        {
         //Debug.Log("Callback Triggered: " + context.phase);
 
         //get normalised value of playhead position within loop
@@ -57,6 +59,7 @@ public class TapRight : MonoBehaviour
             {
                 //do miss action
             }
+        }
         }
     }
 
