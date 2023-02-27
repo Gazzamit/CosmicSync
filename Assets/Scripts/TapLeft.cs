@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.VectorGraphics;
+using System;
 
 public class TapLeft : MonoBehaviour
 {
@@ -11,28 +12,39 @@ public class TapLeft : MonoBehaviour
     private float perfectThreshold, goodThreshold, poorThreshold;
     [Header("REQUIRED")]
     [SerializeField] private Color[] colors;
-    private bool isTappedThisRotation = false;
 
-    public List<float> leftBeats;
+    public List<float> leftBeats; //beats entered in inspector
+    private bool[] beatsProcessed; //track beats processed to avoid double tap on beat
 
-    private bool isKeyPressed = false;
+    public float startOffsetUnit; //0 to 1
+
+    private float loopPlayheadInSeconds; 
+    private float barInSeconds;
+
+    private bool resetLoop = false;
 
     void Start()
     {
-        leftBeats.AddRange(new float[] { 1, 2, 3, 4});
-        
+        //leftBeats.AddRange(new float[] { 1, 3});
+
         svgImage = GetComponent<SVGImage>();
 
         perfectThreshold = Controller.instance.perfectTapThereshold;
         goodThreshold = Controller.instance.goodTapThreshold;
         poorThreshold = Controller.instance.poorTapThreshold;
+
+        // Initialize beatsProcessed array with the same size as leftBeats array
+        beatsProcessed = new bool[leftBeats.Count];
+
+        //length in seconds of one bar of 'x' beats
+        barInSeconds = Controller.instance.beatsInLoop * Controller.instance.secondsPerBeat;
     }
 
     void Update()
     {
-        
+
         //stop on beat one AV sync check
-        if(Controller.instance.stopOnBeatSyncCheck == true)
+        if (Controller.instance.stopOnBeatSyncCheck == true)
         {
             if (Controller.instance.loopPlayheadInSeconds > Controller.instance.secondsPerBeat * 2)
             {
@@ -41,38 +53,67 @@ public class TapLeft : MonoBehaviour
                 AudioListener.pause = true;
             }
         }
+
+        //reset beatsProcessed array ready for next loop
+        loopPlayheadInSeconds = Controller.instance.loopPlayheadInSeconds;
+        if (resetLoop && loopPlayheadInSeconds >= (barInSeconds - poorThreshold - 0.05f))
+        {
+            //Debug.Log("L Array clear at: " + loopPlayheadInSeconds + " / " + barInSeconds);
+            Array.Clear(beatsProcessed, 0, beatsProcessed.Length);
+            resetLoop = false;
+        }
+        if ( !resetLoop && loopPlayheadInSeconds > poorThreshold && loopPlayheadInSeconds < poorThreshold + 0.05f) resetLoop = true;
     }
+
     public void AnyKeyPressed(InputAction.CallbackContext context)
     {
         //Debug.Log("Callback Triggered L: " + context.phase);
 
-
         if (context.performed)
         {
-            //Debug.Log("Tap Time: " + Controller.instance.loopPlayheadInSeconds);
-            foreach (float beatTime in leftBeats) 
-            {
-                float timeDiff = Mathf.Abs((beatTime - 1) * Controller.instance.secondsPerBeat - Controller.instance.loopPlayheadInSeconds);
-                //float tolerance = Controller.instance.secondsPerBeat  * 0.05f;
-                if (timeDiff <= perfectThreshold) 
-                    {
-                        Debug.Log("Perfect: timeDiff: " + timeDiff);
-                    }
-                else 
-                if (timeDiff <= goodThreshold) 
-                    {
-                        Debug.Log("Good: timeDiff: " + timeDiff);
-                    }
-                else 
-                if (timeDiff <= poorThreshold) 
-                    {
-                        Debug.Log("Poor: timeDiff: " + timeDiff);
-                    }
-                else 
-                    {
-                        //Debug.Log("beatTime: " + beatTime);
-                    }
+            //Debug.Log("Tap Time L: " + Controller.instance.loopPlayheadInSeconds);
 
+            // Loop through leftBeats list
+            for (int i = 0; i < leftBeats.Count; i++)
+            {
+                //beat being processed
+                float beatNumber = leftBeats[i];
+                float timeOfBeat = Mathf.Abs((beatNumber - 1) * Controller.instance.secondsPerBeat);
+                float tapTime = Controller.instance.loopPlayheadInSeconds;
+                float timeDiff = Mathf.Abs(timeOfBeat - tapTime);
+                //if approaching complete loop set timeDiff to fraction of sec before beat 1.
+                if ((barInSeconds - timeDiff) < poorThreshold)
+                {
+                    timeDiff = barInSeconds - timeDiff;
+                    //Debug.Log("R Near end of loop. timeDiff: " + timeDiff);
+                }
+                if (!beatsProcessed[i])
+                {
+                    if (timeDiff <= perfectThreshold)
+                    {
+                        Debug.Log("Perfect L: timeDiff: " + timeDiff);
+                        SetColorAndReset(1);
+                        beatsProcessed[i] = true; //Stop Multiple click on same beat
+                    }
+                    else
+                    if (timeDiff <= goodThreshold)
+                    {
+                        Debug.Log("Good L: timeDiff: " + timeDiff);
+                        SetColorAndReset(2);
+                        beatsProcessed[i] = true; //Stop Multiple click on same beat
+                    }
+                    else
+                    if (timeDiff <= poorThreshold)
+                    {
+                        Debug.Log("Poor L: timeDiff: " + timeDiff);
+                        SetColorAndReset(3);
+                        beatsProcessed[i] = true; //Stop Multiple click on same beat
+                    }
+                    else
+                    {
+                        //Debug.Log("L Not on beat: " + beatNumber);
+                    }
+                }
             }
         }
     }
@@ -81,14 +122,12 @@ public class TapLeft : MonoBehaviour
     {
         //set colour of the circle if tap is perfect(1), good(2), poor(3)
         svgImage.color = colors[colorIndex];
-        //diallow other taps this rotation until reset
-        isTappedThisRotation = true;
         //reet colour after fraction of a second
         StartCoroutine(ResetColour());
     }
     IEnumerator ResetColour()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         svgImage.color = colors[0];
     }
 

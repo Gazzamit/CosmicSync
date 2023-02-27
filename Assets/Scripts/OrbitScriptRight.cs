@@ -6,6 +6,8 @@ public class OrbitScriptRight : MonoBehaviour
 {
     [Header("REQUIRED")]
     public float radius = 3.0f;
+    [Range(0,1)]
+    public float StartOffsetUnit; //0 to 1
 
     void Update()
     {
@@ -13,7 +15,7 @@ public class OrbitScriptRight : MonoBehaviour
         float loopPosition = Controller.instance.loopPlayheadNormalised;
 
         //set angle to Radians +90 degrees to start from top
-        float angle = (loopPosition * 360 + 270) * Mathf.Deg2Rad;
+        float angle = (loopPosition * 360 + StartOffsetUnit * 360) * Mathf.Deg2Rad;
 
         //loopPosition is already adjusted for offset by adding bars until its positive in Contoller
         transform.rotation = Quaternion.Euler(0,0,Mathf.Lerp(0, 360, loopPosition));
