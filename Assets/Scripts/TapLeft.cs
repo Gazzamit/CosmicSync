@@ -25,6 +25,12 @@ public class TapLeft : MonoBehaviour
 
     private bool resetLoop = false;
 
+    public static bool isPerfectHit = false;
+    public static bool isGoodHit = false;
+    public static bool isPoorHit = false;
+    public static bool isMissHit = false;
+    
+
     void Awake()
     {
         //Shared leftBeats to other script (to draw indicators based on beats
@@ -100,6 +106,7 @@ public class TapLeft : MonoBehaviour
                         //Debug.Log("Perfect L: timeDiff: " + timeDiff);
                         SetColorAndReset(1);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        isPerfectHit = true; // for spaceship Controls
                     }
                     else
                     if (timeDiff <= goodThreshold)
@@ -107,6 +114,7 @@ public class TapLeft : MonoBehaviour
                         //Debug.Log("Good L: timeDiff: " + timeDiff);
                         SetColorAndReset(2);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        isGoodHit = true; // for spaceship Controls
                     }
                     else
                     if (timeDiff <= poorThreshold)
@@ -114,6 +122,7 @@ public class TapLeft : MonoBehaviour
                         //Debug.Log("Poor L: timeDiff: " + timeDiff);
                         SetColorAndReset(3);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        isPoorHit = true; // for spaceship Controls
                     }
                     else
                     {

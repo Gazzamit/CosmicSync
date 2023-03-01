@@ -24,6 +24,10 @@ public class TapRight : MonoBehaviour
     private float barInSeconds;
 
     private bool resetLoop = false;
+    public static bool isPerfectHit = false;
+    public static bool isGoodHit = false;
+    public static bool isPoorHit = false;
+    public static bool isMissHit = false;
 
     void Awake()
     {
@@ -100,6 +104,7 @@ public class TapRight : MonoBehaviour
                         //Debug.Log("Perfect R: timeDiff: " + timeDiff);
                         SetColorAndReset(1);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        isPerfectHit = true; // for spaceship Controls
                     }
                     else
                     if (timeDiff <= goodThreshold)
@@ -107,6 +112,7 @@ public class TapRight : MonoBehaviour
                         //Debug.Log("Good R: timeDiff: " + timeDiff);
                         SetColorAndReset(2);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        isGoodHit = true; // for spaceship Controls
                     }
                     else
                     if (timeDiff <= poorThreshold)
@@ -114,6 +120,7 @@ public class TapRight : MonoBehaviour
                         //Debug.Log("Poor R: timeDiff: " + timeDiff);
                         SetColorAndReset(3);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        isPoorHit = true; // for spaceship Controls
                     }
                     else
                     {
