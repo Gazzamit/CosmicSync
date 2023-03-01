@@ -13,7 +13,7 @@ public class Controller : MonoBehaviour
     public float beatsInLoop = 4;
     
     //Start of son Offset
-    public float startOffset;
+    public float startOfSongOffset;
 
     //Song
     public AudioSource audioSource;
@@ -66,7 +66,7 @@ public class Controller : MonoBehaviour
     void FixedUpdate()
     {
         //playhead seconds from first beat (after start offset)
-        playheadInSeconds = (float)(AudioSettings.dspTime - dspTimeAtStart - startOffset);
+        playheadInSeconds = (float)(AudioSettings.dspTime - dspTimeAtStart - startOfSongOffset);
 
         //playhead beats from first beat (after start offset)
         playheadInBeats = playheadInSeconds / secondsPerBeat;

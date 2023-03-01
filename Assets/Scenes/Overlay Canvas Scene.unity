@@ -159,7 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tempo: 95
   beatsInLoop: 4
-  startOffset: 2.63
+  startOfSongOffset: 0
   audioSource: {fileID: 1190500756}
   perfectTapThereshold: 0.05
   goodTapThreshold: 0.15
@@ -225,7 +225,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105404564}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -449,7 +449,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192626544}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -648,8 +648,8 @@ GameObject:
   m_Component:
   - component: {fileID: 110015127}
   - component: {fileID: 262212371}
-  - component: {fileID: 262212370}
   - component: {fileID: 262212368}
+  - component: {fileID: 262212370}
   - component: {fileID: 262212372}
   m_Layer: 5
   m_Name: Left Ring
@@ -676,8 +676,8 @@ MonoBehaviour:
   - {r: 1, g: 0.6431373, b: 0, a: 1}
   - {r: 1, g: 0, b: 0.40135288, a: 1}
   leftBeats:
-  - 1
-  - 3
+  - 1.5
+  - 3.5
   startOffsetUnit: 0
 --- !u!114 &262212370
 MonoBehaviour:
@@ -915,6 +915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 214.5
   StartOffsetUnit: 0.75
+  TapIndicatorPrefab: {fileID: 1444925238361660172, guid: bcbe2e5ca9cc9473db41cfa6e2dd037a, type: 3}
 --- !u!114 &457878339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,7 +984,7 @@ GameObject:
   m_Component:
   - component: {fileID: 602611354}
   m_Layer: 5
-  m_Name: Targeting
+  m_Name: Targeting Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1035,7 +1036,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 2.11
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.802082
@@ -1151,7 +1152,7 @@ Transform:
   - {fileID: 438668464}
   - {fileID: 727341362}
   - {fileID: 602611354}
-  - {fileID: 954957550}
+  - {fileID: 1826665849}
   m_Father: {fileID: 2039181208}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1277,7 +1278,7 @@ GameObject:
   - component: {fileID: 905727657}
   - component: {fileID: 905727656}
   m_Layer: 5
-  m_Name: SVG Image
+  m_Name: SVG Image Square Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1346,7 +1347,7 @@ GameObject:
   - component: {fileID: 954957552}
   - component: {fileID: 954957551}
   m_Layer: 5
-  m_Name: SVG Image
+  m_Name: SVG Image Moving Radar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1359,12 +1360,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 954957549}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.48, y: 0.48, z: 0.48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 725975776}
+  m_Father: {fileID: 1826665849}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1384,8 +1385,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3bbcafec83640d9809346a51ae54ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 105404568}
-  radius: 50
+  shipTransform: {fileID: 4416352273081699}
+  targetPosition: {x: 0, y: 0, z: 0}
+  radius: 450
+  flashInterval: 0.3
+  flashColourSlow: {r: 0, g: 0, b: 0, a: 0}
+  flashColourFast: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &954957552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1399,7 +1404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9607843, g: 0.9526138, b: 0, a: 0.3137255}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1617,7 +1622,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084600496}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -1925,7 +1930,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1787753451}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -1995,6 +2000,43 @@ Transform:
   m_Father: {fileID: 1510169586}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1826665848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1826665849}
+  m_Layer: 5
+  m_Name: Targetnig Radar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1826665849
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826665848}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.47999987, y: 0.47999987, z: 0.47999987}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 954957550}
+  m_Father: {fileID: 725975776}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 700, y: 700}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &1854735302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4211523380435964, guid: 46b44d60b1f0369449bf47d8ef9e2fc3, type: 3}
@@ -2092,9 +2134,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2058865898}
   - component: {fileID: 2058865902}
+  - component: {fileID: 2058865903}
   - component: {fileID: 2058865901}
   - component: {fileID: 2058865904}
-  - component: {fileID: 2058865903}
   m_Layer: 5
   m_Name: Right Ring
   m_TagString: Untagged
@@ -2538,6 +2580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 214.5
   StartOffsetUnit: 0.25
+  TapIndicatorPrefab: {fileID: 1444925238361660172, guid: bcbe2e5ca9cc9473db41cfa6e2dd037a, type: 3}
 --- !u!114 &2146460582
 MonoBehaviour:
   m_ObjectHideFlags: 0

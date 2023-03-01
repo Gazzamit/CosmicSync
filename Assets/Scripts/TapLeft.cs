@@ -14,19 +14,25 @@ public class TapLeft : MonoBehaviour
     [SerializeField] private Color[] colors;
 
     public List<float> leftBeats; //beats entered in inspector
+
+    public static List<float> leftBeatsStaticVar;
     private bool[] beatsProcessed; //track beats processed to avoid double tap on beat
 
     public float startOffsetUnit; //0 to 1
 
-    private float loopPlayheadInSeconds; 
+    private float loopPlayheadInSeconds;
     private float barInSeconds;
 
     private bool resetLoop = false;
 
+    void Awake()
+    {
+        //Shared leftBeats to other script (to draw indicators based on beats
+        leftBeatsStaticVar = leftBeats;
+    }
+
     void Start()
     {
-        //leftBeats.AddRange(new float[] { 1, 3});
-
         svgImage = GetComponent<SVGImage>();
 
         perfectThreshold = Controller.instance.perfectTapThereshold;
@@ -48,7 +54,7 @@ public class TapLeft : MonoBehaviour
         {
             if (Controller.instance.loopPlayheadInSeconds > Controller.instance.secondsPerBeat * 2)
             {
-                Debug.Log("Sec Per beat: " + Controller.instance.secondsPerBeat + " Playhead: " + Controller.instance.loopPlayheadInSeconds);
+                //Debug.Log("Sec Per beat: " + Controller.instance.secondsPerBeat + " Playhead: " + Controller.instance.loopPlayheadInSeconds);
                 Time.timeScale = 0.0f; // Stop time
                 AudioListener.pause = true;
             }
@@ -62,7 +68,7 @@ public class TapLeft : MonoBehaviour
             Array.Clear(beatsProcessed, 0, beatsProcessed.Length);
             resetLoop = false;
         }
-        if ( !resetLoop && loopPlayheadInSeconds > poorThreshold && loopPlayheadInSeconds < poorThreshold + 0.05f) resetLoop = true;
+        if (!resetLoop && loopPlayheadInSeconds > poorThreshold && loopPlayheadInSeconds < poorThreshold + 0.05f) resetLoop = true;
     }
 
     public void AnyKeyPressed(InputAction.CallbackContext context)
@@ -91,21 +97,21 @@ public class TapLeft : MonoBehaviour
                 {
                     if (timeDiff <= perfectThreshold)
                     {
-                        Debug.Log("Perfect L: timeDiff: " + timeDiff);
+                        //Debug.Log("Perfect L: timeDiff: " + timeDiff);
                         SetColorAndReset(1);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
                     }
                     else
                     if (timeDiff <= goodThreshold)
                     {
-                        Debug.Log("Good L: timeDiff: " + timeDiff);
+                        //Debug.Log("Good L: timeDiff: " + timeDiff);
                         SetColorAndReset(2);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
                     }
                     else
                     if (timeDiff <= poorThreshold)
                     {
-                        Debug.Log("Poor L: timeDiff: " + timeDiff);
+                        //Debug.Log("Poor L: timeDiff: " + timeDiff);
                         SetColorAndReset(3);
                         beatsProcessed[i] = true; //Stop Multiple click on same beat
                     }
