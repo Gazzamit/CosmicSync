@@ -7,39 +7,39 @@ public class Controller : MonoBehaviour
 
     [Header("REQUIRED")]
     //Song beats per minute
-    public float tempo;
+    public float _tempo;
 
     //beats per each loop (4/4 - top numnber of time signature)
-    public float beatsInLoop = 4;
-    
+    public float _beatsInLoop = 4;
+
     //Start of son Offset
-    public float startOfSongOffset;
+    public float _startOfSongOffset;
 
     //Song
-    public AudioSource audioSource;
+    public AudioSource _audioSource;
 
     //tap accuracy -perfect, good, poor etc
-    public float perfectTapThereshold, goodTapThreshold, poorTapThreshold;
+    public float _perfectTapThereshold, _goodTapThreshold, _poorTapThreshold;
 
     [Header("FOR REFERENCE")]
     //dspTime at start of song
-    public float dspTimeAtStart;
-    
+    public float _dspTimeAtStart;
+
     //beat length in seconds; playhead position in seconds
-    public float secondsPerBeat, playheadInSeconds;
+    public float _secondsPerBeat, _playheadInSeconds;
 
     //playhead in beats; playhead in the loop
-    public float playheadInBeats, loopPlayheadInBeats, loopPlayheadInSeconds;
+    public float _playheadInBeats, _loopPlayheadInBeats, _loopPlayheadInSeconds;
 
     //loop counter
-    public int loopCount = 0;
+    public int _loopCount = 0;
 
     //The current relative position of the song within the loop measured between 0 and 1.
     //Used for normalised 0 to 1 movement / lerp in other scripts
-    public float loopPlayheadNormalised;
+    public float _loopPlayheadNormalised;
 
     //check for AV sync
-    public bool stopOnBeatSyncCheck = false;
+    public bool _stopOnBeatSyncCheck = false;
 
     //Conductor static instance so can be referenced in other scripts
     public static Controller instance;
@@ -54,40 +54,40 @@ public class Controller : MonoBehaviour
     void Start()
     {
         //Calculate seconds for each beat
-        secondsPerBeat = 60f / tempo;
+        _secondsPerBeat = 60f / _tempo;
 
         //Start the music
-        audioSource.Play();
+        _audioSource.Play();
 
         //Log the time when the music starts
-        dspTimeAtStart = (float)AudioSettings.dspTime;
+        _dspTimeAtStart = (float)AudioSettings.dspTime;
     }
 
     void FixedUpdate()
     {
         //playhead seconds from first beat (after start offset)
-        playheadInSeconds = (float)(AudioSettings.dspTime - dspTimeAtStart - startOfSongOffset);
+        _playheadInSeconds = (float)(AudioSettings.dspTime - _dspTimeAtStart - _startOfSongOffset);
 
         //playhead beats from first beat (after start offset)
-        playheadInBeats = playheadInSeconds / secondsPerBeat;
+        _playheadInBeats = _playheadInSeconds / _secondsPerBeat;
 
         //count numbner of loops
-        if (playheadInBeats >= (loopCount + 1) * beatsInLoop)
-            loopCount++;
+        if (_playheadInBeats >= (_loopCount + 1) * _beatsInLoop)
+            _loopCount++;
 
         //playhead beats within current loop
-        loopPlayheadInBeats = playheadInBeats - loopCount * beatsInLoop;
+        _loopPlayheadInBeats = _playheadInBeats - _loopCount * _beatsInLoop;
 
         //offset may make loop value negative, so keep adding bars until cycled through to positive number
-        while (loopPlayheadInBeats < 0)
+        while (_loopPlayheadInBeats < 0)
         {
-            loopPlayheadInBeats += beatsInLoop;
+            _loopPlayheadInBeats += _beatsInLoop;
         }
 
         //Current playhead position in seconds within the loop (for Tap scripts)
-        loopPlayheadInSeconds = loopPlayheadInBeats * secondsPerBeat;
+        _loopPlayheadInSeconds = _loopPlayheadInBeats * _secondsPerBeat;
 
         //Normalised playhead beats within current loop (for other scripts)
-        loopPlayheadNormalised = loopPlayheadInBeats / beatsInLoop;
+        _loopPlayheadNormalised = _loopPlayheadInBeats / _beatsInLoop;
     }
 }

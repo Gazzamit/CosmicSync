@@ -13,16 +13,16 @@ public class SpaceshipControls : MonoBehaviour
 
     //show private floats in inspector to allow game play adjustments like how fast to Yaw / Pitch etc
     [SerializeField]
-    private float _yawTorque = 250f, _pitchTorque = 1000f, _rollTorque = 250f, _thrust = 1000f, _upThrust = 250f, _strafeThrust = 250f, _maxSpaceshipVelocityMagnitude = 180f;
+    private float _yawTorque = 250f, _pitchTorque = 1000f, _rollTorque = 250f, _thrust = 1000f, _upThrust = 250f, _strafeThrust = 250f, _maxSpaceshipMagnitude = 180f;
 
     //Show in ispector, limit range, glide controls
     [SerializeField, Range(.01f, .99f)]
     private float _thrustGlideReduction = .5f, _upDownGllideReduction = .5f, _leftRightGlideReduction = .5f;
     private float _glide, _verticalGlide, _horizontalGlide = 0f;
 
-    public float tapMultiplier = 1, perfectTapMultiplier = 1f, goodTapMultiplier = 0.6f, poorTapMultiplier = 0.2f;
+    public float _tapMultiplier = 1, _perfectTapMultiplier = 1f, _goodTapMultiplier = 0.6f, _poorTapMultiplier = 0.2f;
 
-    [SerializeField] private GameObject laserLeft, laserRight;
+    [SerializeField] private GameObject _laserLeft, _laserRight;
 
     //spaceship
     Rigidbody _rbSpaceShip;
@@ -37,7 +37,10 @@ public class SpaceshipControls : MonoBehaviour
     //Rocket1
     private float _fire1;
     private float _readyToFire1 = 1f;
-    private float readyToFireLaser = 1f;
+    private float _readyToFireLaser = 1f;
+    private float _turnOffInOneHalfBeat;
+
+    private bool _allowMovement = false;
 
     void Awake()
 
@@ -48,13 +51,18 @@ public class SpaceshipControls : MonoBehaviour
         //_rbSpaceShip.AddRelativeForce(Vector3.forward  * 1000);   
     }
 
+    void Start()
+    {
+        _turnOffInOneHalfBeat = Controller.instance._secondsPerBeat / 2f;
+        //Debug.Log("turnOffInOneHalfBeat: " + turnOffInOneHalfBeat);
+    }
+
     // FixedUpdate so that its framerate independant
     void FixedUpdate()
     {
         Movement();
         //Fire1();
         FireLaser();
-
     }
 
     /*
@@ -81,14 +89,14 @@ public class SpaceshipControls : MonoBehaviour
     void FireLaser()
     {
         //reset fire when key / button released 
-        if (_fire1 < 0.1f && readyToFireLaser == 0)
-            readyToFireLaser = 1;
+        if (_fire1 < 0.1f && _readyToFireLaser == 0)
+            _readyToFireLaser = 1;
         //fire
-        if (_fire1 > 0.1f && readyToFireLaser == 1)
+        if (_fire1 > 0.1f && _readyToFireLaser == 1)
         {
-            laserLeft.SetActive(true);
-            laserRight.SetActive(true);
-            readyToFireLaser = 0;
+            _laserLeft.SetActive(true);
+            _laserRight.SetActive(true);
+            _readyToFireLaser = 0;
             StartCoroutine(TurnOffLasers());
         }
     }
@@ -102,8 +110,12 @@ public class SpaceshipControls : MonoBehaviour
         _localVelocity = transform.InverseTransformDirection(_rbSpaceShip.velocity);
         //Debug.Log("Local Velocity: " + _localVelocity.ToString());     
 
-        //roll (QE) Roll over axis * buttonpress (±1) * how fast * deltaTime)
-        _rbSpaceShip.AddRelativeTorque(Vector3.back * _roll1D * _rollTorque * Time.deltaTime);
+        if (_allowMovement)
+        {
+            //roll (QE) Roll over axis * buttonpress (±1) * how fast * deltaTime)
+            _rbSpaceShip.AddRelativeTorque(Vector3.back * _roll1D * _rollTorque * Time.deltaTime);
+        }
+
         //pitch (UP/Down Mouse delta) (clamp to prevent exceed 1)
         _rbSpaceShip.AddRelativeTorque(Vector3.right * Mathf.Clamp(-_pitchYaw.y, -1f, 1f) * _pitchTorque * Time.deltaTime);
         // Yaw (LR) (clamp to prevent exceed 1)
@@ -111,14 +123,14 @@ public class SpaceshipControls : MonoBehaviour
 
         // THRUST - if pressing a thrust key or move controller slightly above minimum amount
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100, Color.red);
-        if (_thrust1D > 0.1f || _thrust1D < -0.1f)
+        if (_allowMovement && _thrust1D > 0.1f || _thrust1D < -0.1f)
         {
-            float currentThrust = _thrust;
-            _rbSpaceShip.AddRelativeForce(Vector3.forward * _thrust1D * currentThrust * Time.deltaTime);
+            float _currentThrust = _thrust;
+            _rbSpaceShip.AddRelativeForce(Vector3.forward * _thrust1D * _currentThrust * Time.deltaTime);
 
             //Clamp Velocity Magnitude
-            if (_rbSpaceShip.velocity.magnitude > _maxSpaceshipVelocityMagnitude)
-                _rbSpaceShip.velocity = Vector3.ClampMagnitude(_rbSpaceShip.velocity, _maxSpaceshipVelocityMagnitude);
+            if (_rbSpaceShip.velocity.magnitude > _maxSpaceshipMagnitude)
+                _rbSpaceShip.velocity = Vector3.ClampMagnitude(_rbSpaceShip.velocity, _maxSpaceshipMagnitude);
 
             //_glide = _thrust;
         }
@@ -139,7 +151,7 @@ public class SpaceshipControls : MonoBehaviour
         _magnitude = Mathf.Round(_localVelocity.magnitude);
 
         // UP / DOWN - if pressing a up/down key or move controller slightly above minimum amount
-        if (_upDown1D > 0.1f || _upDown1D < -0.1f)
+        if (_allowMovement && _upDown1D > 0.1f || _upDown1D < -0.1f)
         {
 
             _rbSpaceShip.AddRelativeForce(Vector3.up * _upDown1D * _upThrust * Time.fixedDeltaTime);
@@ -154,7 +166,7 @@ public class SpaceshipControls : MonoBehaviour
 
 
         // STRAFE - if pressing a strafe key or move controller slightly above minimum amount
-        if (_strafe1D > 0.1f || _strafe1D < -0.1f)
+        if (_allowMovement && _strafe1D > 0.1f || _strafe1D < -0.1f)
         {
             _rbSpaceShip.AddRelativeForce(Vector3.right * _strafe1D * _strafeThrust * Time.fixedDeltaTime);
             _horizontalGlide = _strafe1D * _strafeThrust;
@@ -169,74 +181,91 @@ public class SpaceshipControls : MonoBehaviour
 
     //pass through values from buttons / controller
     #region Input Methods
-    public void onThrust(InputAction.CallbackContext context)
+    public void onThrust(InputAction.CallbackContext _context)
     {
-        setTapMultiuplier();
-        _thrust1D = context.ReadValue<float>() * tapMultiplier;
+        setTapMultiuplier(); //perfect/good/poor
+        _thrust1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
         //Debug.Log("thrust");
+
     }
-    public void onStrafe(InputAction.CallbackContext context)
+    public void onStrafe(InputAction.CallbackContext _context)
     {
-        setTapMultiuplier();
-        _strafe1D = context.ReadValue<float>() * tapMultiplier;
+        setTapMultiuplier(); //perfect/good/poor
+        _strafe1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
         //Debug.Log("strafe");
     }
-    public void onUpDown(InputAction.CallbackContext context)
+    public void onUpDown(InputAction.CallbackContext _context)
     {
 
-        setTapMultiuplier();
-        _upDown1D = context.ReadValue<float>() * tapMultiplier;
+        setTapMultiuplier(); //perfect/good/poor
+        _upDown1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
         //Debug.Log("upDown");
     }
-    public void onRoll(InputAction.CallbackContext context)
+    public void onRoll(InputAction.CallbackContext _context)
     {
-        setTapMultiuplier();
-        _roll1D = context.ReadValue<float>() * tapMultiplier;
+        setTapMultiuplier(); //perfect/good/poor
+        _roll1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
         //Debug.Log("roll");
     }
-    public void onPitchYaw(InputAction.CallbackContext context)
+    public void onPitchYaw(InputAction.CallbackContext _context)
     {
-        _pitchYaw = context.ReadValue<Vector2>();
+        _pitchYaw = _context.ReadValue<Vector2>();
         //Debug.Log("pitchYaw: " + _pitchYaw);
     }
-    public void onFire1(InputAction.CallbackContext context)
+    public void onFire1(InputAction.CallbackContext _context)
     {
-        _fire1 = context.ReadValue<float>();
+        _fire1 = _context.ReadValue<float>();
         //Debug.Log("Fire1");
     }
     #endregion 
 
     private void setTapMultiuplier()
     {
-        if (TapLeft.isPerfectHit || TapRight.isPerfectHit)
+        _allowMovement = true;
+        if (TapLeft._isPerfectHit || TapRight._isPerfectHit)
         {
-            tapMultiplier = perfectTapMultiplier; //perfect
-            Debug.Log("SC - Perfect Multiplier");
+            _tapMultiplier = _perfectTapMultiplier; //perfect
+            //Debug.Log("SC - Perfect Multiplier");
         }
-        else if (TapLeft.isGoodHit || TapRight.isGoodHit)
+        else if (TapLeft._isGoodHit || TapRight._isGoodHit)
         {
-            tapMultiplier = goodTapMultiplier; //good
-            Debug.Log("SC - Good Multiplier");
+            _tapMultiplier = _goodTapMultiplier; //good
+            //Debug.Log("SC - Good Multiplier");
         }
-        else if (TapLeft.isPoorHit || TapRight.isPoorHit)
+        else if (TapLeft._isPoorHit || TapRight._isPoorHit)
         {
-            tapMultiplier = poorTapMultiplier; //poor
-            Debug.Log("SC - Poor Multiplier");
+            _tapMultiplier = _poorTapMultiplier; //poor
+            //Debug.Log("SC - Poor Multiplier");
         }
-        TapLeft.isPerfectHit = false;
-        TapLeft.isGoodHit = false;
-        TapLeft.isPoorHit = false;
-        TapLeft.isMissHit = false;
-        TapRight.isPerfectHit = false;
-        TapRight.isGoodHit = false;
-        TapRight.isPoorHit = false;
-        TapRight.isMissHit = false;
+        TapLeft._isPerfectHit = false;
+        TapLeft._isGoodHit = false;
+        TapLeft._isPoorHit = false;
+        TapLeft._isMissHit = false;
+        TapRight._isPerfectHit = false;
+        TapRight._isGoodHit = false;
+        TapRight._isPoorHit = false;
+        TapRight._isMissHit = false;
     }
+
     IEnumerator TurnOffLasers()
     {
         yield return new WaitForSeconds(.8f);
-        laserLeft.SetActive(false);
-        laserRight.SetActive(false);
-        readyToFireLaser = 0;
+        _laserLeft.SetActive(false);
+        _laserRight.SetActive(false);
+        _readyToFireLaser = 0;
+    }
+
+    IEnumerator TurnOffMovement()
+    {
+        yield return new WaitForSeconds(_turnOffInOneHalfBeat);
+        _thrust1D = 0;
+        _strafe1D = 0;
+        _upDown1D = 0;
+        _roll1D = 0;
+        _allowMovement = false;
     }
 }

@@ -7,47 +7,47 @@ using System;
 
 public class TapRight : MonoBehaviour
 {
-    private SVGImage svgImage;
+    private SVGImage _svgImage;
 
-    private float perfectThreshold, goodThreshold, poorThreshold;
+    private float _perfectThreshold, _goodThreshold, _poorThreshold;
     [Header("REQUIRED")]
-    [SerializeField] private Color[] colors;
+    [SerializeField] private Color[] _colors;
 
-    public List<float> rightBeats; //beats entered in inspector
+    public List<float> _rightBeats; //beats entered in inspector
 
-    public static List<float> rightBeatsStaticVar;
-    private bool[] beatsProcessed; //track beats processed to avoid double tap on beat
+    public static List<float> _rightBeatsStaticVar;
+    private bool[] _beatsProcessed; //track beats processed to avoid double tap on beat
 
-    public float startOffsetUnit; //0 to 1
+    public float _startOffsetUnit; //0 to 1
 
-    private float loopPlayheadInSeconds;
-    private float barInSeconds;
+    private float _loopPlayheadInSeconds;
+    private float _barInSeconds;
 
-    private bool resetLoop = false;
-    public static bool isPerfectHit = false;
-    public static bool isGoodHit = false;
-    public static bool isPoorHit = false;
-    public static bool isMissHit = false;
+    private bool _resetLoop = false;
+    public static bool _isPerfectHit = false;
+    public static bool _isGoodHit = false;
+    public static bool _isPoorHit = false;
+    public static bool _isMissHit = false;
 
     void Awake()
     {
         //Shared leftBeats to other script (to draw indicators based on beats
-        rightBeatsStaticVar = rightBeats;
+        _rightBeatsStaticVar = _rightBeats;
     }
 
     void Start()
     {
-        svgImage = GetComponent<SVGImage>();
+        _svgImage = GetComponent<SVGImage>();
 
-        perfectThreshold = Controller.instance.perfectTapThereshold;
-        goodThreshold = Controller.instance.goodTapThreshold;
-        poorThreshold = Controller.instance.poorTapThreshold;
+        _perfectThreshold = Controller.instance._perfectTapThereshold;
+        _goodThreshold = Controller.instance._goodTapThreshold;
+        _poorThreshold = Controller.instance._poorTapThreshold;
 
         // Initialize beatsProcessed array with the same size as leftBeats array
-        beatsProcessed = new bool[rightBeats.Count];
+        _beatsProcessed = new bool[_rightBeats.Count];
 
         //length in seconds of one bar of 'x' beats
-        barInSeconds = Controller.instance.beatsInLoop * Controller.instance.secondsPerBeat;
+        _barInSeconds = Controller.instance._beatsInLoop * Controller.instance._secondsPerBeat;
 
     }
 
@@ -55,9 +55,9 @@ public class TapRight : MonoBehaviour
     {
 
         //stop on beat one AV sync check
-        if (Controller.instance.stopOnBeatSyncCheck == true)
+        if (Controller.instance._stopOnBeatSyncCheck == true)
         {
-            if (Controller.instance.loopPlayheadInSeconds > Controller.instance.secondsPerBeat * 2)
+            if (Controller.instance._loopPlayheadInSeconds > Controller.instance._secondsPerBeat * 2)
             {
                 //Debug.Log("Sec Per beat: " + Controller.instance.secondsPerBeat + " Playhead: " + Controller.instance.loopPlayheadInSeconds);
                 Time.timeScale = 0.0f; // Stop time
@@ -66,82 +66,82 @@ public class TapRight : MonoBehaviour
         }
 
         //reset beatsProcessed array ready for next loop
-        loopPlayheadInSeconds = Controller.instance.loopPlayheadInSeconds;
-        if (resetLoop && loopPlayheadInSeconds >= (barInSeconds - poorThreshold - 0.05f))
+        _loopPlayheadInSeconds = Controller.instance._loopPlayheadInSeconds;
+        if (_resetLoop && _loopPlayheadInSeconds >= (_barInSeconds - _poorThreshold - 0.05f))
         {
             //Debug.Log("R Array clear at: " + loopPlayheadInSeconds + " / " + barInSeconds);
-            Array.Clear(beatsProcessed, 0, beatsProcessed.Length);
-            resetLoop = false;
+            Array.Clear(_beatsProcessed, 0, _beatsProcessed.Length);
+            _resetLoop = false;
         }
-        if (!resetLoop && loopPlayheadInSeconds > poorThreshold && loopPlayheadInSeconds < poorThreshold + 0.05f) resetLoop = true;
+        if (!_resetLoop && _loopPlayheadInSeconds > _poorThreshold && _loopPlayheadInSeconds < _poorThreshold + 0.05f) _resetLoop = true;
     }
-    public void AnyKeyPressed(InputAction.CallbackContext context)
+    public void AnyKeyPressed(InputAction.CallbackContext _context)
     {
-        //Debug.Log("Callback Triggered R: " + context.phase);
+        //Debug.Log("Callback Triggered R: " + _context.phase);
 
-        if (context.performed)
+        if (_context.performed)
         {
-            //Debug.Log("Tap Time R: " + Controller.instance.loopPlayheadInSeconds);
+            //Debug.Log("Tap Time R: " + Controller.instance._loopPlayheadInSeconds);
 
-            // Loop through leftBeats list
-            for (int i = 0; i < rightBeats.Count; i++)
+            // Loop through rightBeats list
+            for (int i = 0; i < _rightBeats.Count; i++)
             {
                 //beat being processed
-                float beatNumber = rightBeats[i];
-                float timeOfBeat = Mathf.Abs((beatNumber - 1) * Controller.instance.secondsPerBeat);
-                float tapTime = Controller.instance.loopPlayheadInSeconds;
-                float timeDiff = Mathf.Abs(timeOfBeat - tapTime);
+                float _beatNumber = _rightBeats[i];
+                float _timeOfBeat = Mathf.Abs((_beatNumber - 1) * Controller.instance._secondsPerBeat);
+                float _tapTime = Controller.instance._loopPlayheadInSeconds;
+                float _timeDiff = Mathf.Abs(_timeOfBeat - _tapTime);
                 //if approaching complete loop set timeDiff to fraction of sec before beat 1.
-                if ((barInSeconds - timeDiff) < poorThreshold)
+                if ((_barInSeconds - _timeDiff) < _poorThreshold)
                 {
-                    timeDiff = barInSeconds - timeDiff;
-                    //Debug.Log("R Near end of loop. timeDiff: " + timeDiff);
+                    _timeDiff = _barInSeconds - _timeDiff;
+                    //Debug.Log("R Near end of loop. timeDiff: " + _timeDiff);
                 }
-                if (!beatsProcessed[i])
+                if (!_beatsProcessed[i])
                 {
-                    if (timeDiff <= perfectThreshold)
+                    if (_timeDiff <= _perfectThreshold)
                     {
-                        //Debug.Log("Perfect R: timeDiff: " + timeDiff);
+                        //Debug.Log("Perfect R: timeDiff: " + _timeDiff);
                         SetColorAndReset(1);
-                        beatsProcessed[i] = true; //Stop Multiple click on same beat
-                        isPerfectHit = true; // for spaceship Controls
+                        _beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        _isPerfectHit = true; // for spaceship Controls
                     }
                     else
-                    if (timeDiff <= goodThreshold)
+                    if (_timeDiff <= _goodThreshold)
                     {
-                        //Debug.Log("Good R: timeDiff: " + timeDiff);
+                        //Debug.Log("Good R: timeDiff: " + _timeDiff);
                         SetColorAndReset(2);
-                        beatsProcessed[i] = true; //Stop Multiple click on same beat
-                        isGoodHit = true; // for spaceship Controls
+                        _beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        _isGoodHit = true; // for spaceship Controls
                     }
                     else
-                    if (timeDiff <= poorThreshold)
+                    if (_timeDiff <= _poorThreshold)
                     {
-                        //Debug.Log("Poor R: timeDiff: " + timeDiff);
+                        //Debug.Log("Poor R: timeDiff: " + _timeDiff);
                         SetColorAndReset(3);
-                        beatsProcessed[i] = true; //Stop Multiple click on same beat
-                        isPoorHit = true; // for spaceship Controls
+                        _beatsProcessed[i] = true; //Stop Multiple click on same beat
+                        _isPoorHit = true; // for spaceship Controls
                     }
                     else
                     {
-                        //Debug.Log("R Not on beat: " + beatNumber);
+                        //Debug.Log("R Not on beat: " + _beatNumber);
                     }
                 }
             }
         }
     }
 
-    private void SetColorAndReset(int colorIndex)
+    private void SetColorAndReset(int _colorIndex)
     {
         //set colour of the circle if tap is perfect(1), good(2), poor(3)
-        svgImage.color = colors[colorIndex];
+        _svgImage.color = _colors[_colorIndex];
         //reet colour after fraction of a second
         StartCoroutine(ResetColour());
     }
     IEnumerator ResetColour()
     {
         yield return new WaitForSeconds(0.2f);
-        svgImage.color = colors[0];
+        _svgImage.color = _colors[0];
     }
 
 }

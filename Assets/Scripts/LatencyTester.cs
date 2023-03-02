@@ -4,27 +4,27 @@ using UnityEngine.InputSystem;
 
 public class LatencyTester : MonoBehaviour
 {
-    private double lastInputTime;
-    private StreamWriter writer;
+    private double _lastInputTime;
+    private StreamWriter _writer;
 
     private void OnEnable()
     {
-        var inputAction = new InputAction(binding: "<keyboard>/p");
-        inputAction.performed += OnInputAction;
-        inputAction.Enable();
+        var _inputAction = new InputAction(binding: "<keyboard>/p");
+        _inputAction.performed += OnInputAction;
+        _inputAction.Enable();
 
         // Open file for writing
-        writer = new StreamWriter("LatencyLog.txt", false);
+        _writer = new StreamWriter("LatencyLog.txt", false);
     }
 
     private void OnDisable()
     {
-        var inputAction = new InputAction(binding: "<keyboard>/p");
-        inputAction.performed -= OnInputAction;
-        inputAction.Disable();
+        var _inputAction = new InputAction(binding: "<keyboard>/p");
+        _inputAction.performed -= OnInputAction;
+        _inputAction.Disable();
 
         // Close file
-        writer.Close();
+        _writer.Close();
     }
 
     private void OnInputAction(InputAction.CallbackContext context)
@@ -34,6 +34,6 @@ public class LatencyTester : MonoBehaviour
         Debug.Log("Latency: " + latency + " ms");
 
         // Write latency to file
-        writer.WriteLine("Latency: " + latency + " ms");
+        _writer.WriteLine("Latency: " + latency + " ms");
     }
 }
