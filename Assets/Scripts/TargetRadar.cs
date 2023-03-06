@@ -35,9 +35,12 @@ public class TargetRadar : MonoBehaviour
 
     private void Update()
     {
-        //Get the next target from collision coltroller script list
-        _targetPosition = TargetCollisionController._targetPositionsStaticVar[TargetCollisionController._nextTargetIndex];
-        //Debug.Log("targetPosition: " + TargetCollisionController._nextTargetIndex + ": " + targetPosition);
+        //if (TargetCollisionController._nextTargetIndex > 1)
+        {
+            //Get the next target from collision coltroller script list
+            _targetPosition = TargetCollisionController._targetPositionsStaticVar[TargetCollisionController._nextTargetIndex];
+            //Debug.Log("targetPosition: " + TargetCollisionController._nextTargetIndex + ": " + targetPosition);
+        }
 
         // Convert target position as viewport space
         Vector3 _targetPos = _cam.WorldToViewportPoint(_targetPosition);

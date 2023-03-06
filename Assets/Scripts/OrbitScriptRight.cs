@@ -5,10 +5,10 @@ using UnityEngine.InputSystem;
 public class OrbitScriptRight : MonoBehaviour
 {
     [Header("REQUIRED")]
-    public float _radius = 3.0f;
+    public float _radius = 215.5f;
     [Range(0, 1)]
     public float _startOffsetUnit; //0 to 1
-    public GameObject _TapIndicatorPrefab;
+    public GameObject _tapIndicatorPrefab;
 
     void Start()
     {
@@ -18,10 +18,10 @@ public class OrbitScriptRight : MonoBehaviour
         for (int i = 0; i < _rightBeats.Count; i++)
         {
             // Instantiate the indicator
-            GameObject _indicator = Instantiate(_TapIndicatorPrefab, transform.parent);
+            GameObject _indicator = Instantiate(_tapIndicatorPrefab, transform.parent);
 
             float _rightBeatPosition = (_rightBeats[i] - 1) / _beatsInLoop;
-            // Get the position of the quarter indicator
+            // Get the position of the indicator
             float _angle = (_rightBeatPosition * 360 + _startOffsetUnit * 360) * Mathf.Deg2Rad;
             float x = _radius * Mathf.Cos(_angle);
             float y = _radius * Mathf.Sin(_angle);

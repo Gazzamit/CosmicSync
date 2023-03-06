@@ -45,7 +45,8 @@ public class SpaceshipControls : MonoBehaviour
     void Awake()
 
     {
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         _rbSpaceShip = GetComponent<Rigidbody>();
         //_rbSpaceShip.AddRelativeForce(Vector3.forward  * 1000);   

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class OrbitScriptLeft : MonoBehaviour
 {
     [Header("REQUIRED")]
-    public float _radius = 3.0f;
+    public float _radius = 215.5f;
     [Range(0, 1)]
     public float _startOffsetUnit; //0 to 1
     public GameObject _tapIndicatorPrefab;
@@ -23,9 +23,9 @@ public class OrbitScriptLeft : MonoBehaviour
             float _leftBeatPosition = (_leftBeats[i] - 1) / _beatsInLoop;
             // Get the position of the indicator
             float _angle = (_leftBeatPosition * 360 + _startOffsetUnit * 360) * Mathf.Deg2Rad;
-            float _x = _radius * Mathf.Cos(_angle);
-            float _y = _radius * Mathf.Sin(_angle);
-            Vector3 _indicatorPosition = new Vector3(_x, _y, -0.1f);
+            float x = _radius * Mathf.Cos(_angle);
+            float y = _radius * Mathf.Sin(_angle);
+            Vector3 _indicatorPosition = new Vector3(x, y, -0.1f);
 
             // Set the position of the indicator
             // Set the position / rotation of the position to tap indicator
