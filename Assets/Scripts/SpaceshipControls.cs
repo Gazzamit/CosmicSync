@@ -20,13 +20,14 @@ public class SpaceshipControls : MonoBehaviour
     private float _thrustGlideReduction = .5f, _upDownGllideReduction = .5f, _leftRightGlideReduction = .5f;
     private float _glide, _verticalGlide, _horizontalGlide = 0f;
 
-    public float _tapMultiplier = 1, _perfectTapMultiplier = 1f, _goodTapMultiplier = 0.6f, _poorTapMultiplier = 0.2f;
+    public float _perfectTapMultiplier = 8f, _goodTapMultiplier = 4f, _poorTapMultiplier = 2f;
+    private float _tapMultiplier = 1;
 
     [SerializeField] private GameObject _laserLeft, _laserRight;
 
     //spaceship
     Rigidbody _rbSpaceShip;
-    Vector3 _localVelocity;
+    public static Vector3 _localVelocity;
     public static Vector3 _Vector3Spaceship;
     public static float _magnitude;
 
@@ -40,7 +41,8 @@ public class SpaceshipControls : MonoBehaviour
     private float _readyToFireLaser = 1f;
     private float _turnOffInOneHalfBeat;
 
-    private bool _allowMovement = false;
+    //limit spaceship movement to beats    
+    public static bool _allowMovement = false;
 
     void Awake()
 
@@ -54,6 +56,7 @@ public class SpaceshipControls : MonoBehaviour
 
     void Start()
     {
+        //prevent control activation after 0.5 beats
         _turnOffInOneHalfBeat = Controller.instance._secondsPerBeat / 2f;
         //Debug.Log("turnOffInOneHalfBeat: " + turnOffInOneHalfBeat);
     }
@@ -113,7 +116,7 @@ public class SpaceshipControls : MonoBehaviour
 
         if (_allowMovement)
         {
-            //roll (QE) Roll over axis * buttonpress (±1) * how fast * deltaTime)
+            //roll (AD) Roll over axis * buttonpress (±1) * how fast * deltaTime)
             _rbSpaceShip.AddRelativeTorque(Vector3.back * _roll1D * _rollTorque * Time.deltaTime);
         }
 
@@ -166,7 +169,7 @@ public class SpaceshipControls : MonoBehaviour
         }
 
 
-        // STRAFE - if pressing a strafe key or move controller slightly above minimum amount
+        // STRAFE - (QE) if pressing a strafe key or move controller slightly above minimum amount
         if (_allowMovement && _strafe1D > 0.1f || _strafe1D < -0.1f)
         {
             _rbSpaceShip.AddRelativeForce(Vector3.right * _strafe1D * _strafeThrust * Time.fixedDeltaTime);

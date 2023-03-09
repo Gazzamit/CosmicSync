@@ -32,7 +32,7 @@ public class BreakApart : MonoBehaviour
         {
             float t = (Time.time - _startTime) / _breakApartTime;
 
-            Debug.Log("Breaking Apart");
+            //Debug.Log("Breaking Apart");
 
             foreach (Transform child in _spaceshipChildObjects)
             {
@@ -59,7 +59,7 @@ public class BreakApart : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Laser Collider");
+        //Debug.Log("Laser Collider");
         if (!_isBreakingApart)
         {
             if (other.gameObject.CompareTag("Laser")) // check if the collision was with an explosion object

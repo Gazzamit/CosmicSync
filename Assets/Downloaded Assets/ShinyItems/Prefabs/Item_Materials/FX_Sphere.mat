@@ -137,14 +137,14 @@ Material:
     - _CullModeForward: 1
     - _DepthOffsetEnable: 0
     - _Disortion_Weight: 0.1
-    - _Distortiion_Scale: 1.2
+    - _Distortiion_Scale: 10
     - _Distortion_Amount: 0.1
     - _Distortion_Fresnel: 0.72
     - _Distortion_Fresnel_Direction: 1
     - _Distortion_Fresnel_Power: 5.09
     - _Distortion_Power: 0.4
     - _Distortion_Strength: 0.05
-    - _Distortion_Weight: 0.15
+    - _Distortion_Weight: 0
     - _DoubleSidedEnable: 0
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
@@ -183,7 +183,7 @@ Material:
     - _Pulsing_Speed: 6
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Reflection_Scale: 9.6
+    - _Reflection_Scale: 1.64
     - _Refraction_Amount: 0.1
     - _Refraction_Blur: 0
     - _Refraction_Distortion: -0.7
@@ -233,14 +233,14 @@ Material:
     - _Fresnel_Edge: {r: 0.4716981, g: 0, b: 0, a: 0}
     - _Max: {r: 0.084905684, g: 0.084905684, b: 0.084905684, a: 0}
     - _Min: {r: 0, g: 0.050680146, b: 0.1981132, a: 0}
-    - _Reflection_Tint: {r: 47.937256, g: 47.937256, b: 47.937256, a: 0}
+    - _Reflection_Tint: {r: 0.8666667, g: 0.9372549, b: 0.03137255, a: 0}
     - _RefractionTint: {r: 170.89003, g: 170.89003, b: 170.89003, a: 0}
     - _Refraction_Intensity_Tint: {r: 1, g: 1, b: 1, a: 1}
     - _Refraction_Tint: {r: 0, g: 0, b: 0, a: 0}
     - _Tranlucense_Center: {r: 1, g: 1, b: 1, a: 0}
     - _Tranlucense_Edge: {r: 0, g: 0, b: 0, a: 0}
     - _Translucense_Center: {r: 0, g: 0.09511185, b: 1, a: 0}
-    - _Translucense_Center_Tint: {r: 1.5638341, g: 1.179964, b: 0.26200357, a: 0}
+    - _Translucense_Center_Tint: {r: 0.33334994, g: 0.67058825, b: 0.15686275, a: 0}
     - _Translucense_Edge: {r: 0.4716981, g: 0, b: 0, a: 0}
     - _Translucense_Edge_Tint: {r: 0, g: 0, b: 0, a: 0}
     - _Translucense_Intensity_Tint: {r: 0, g: 0, b: 0, a: 0}

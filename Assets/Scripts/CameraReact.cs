@@ -28,7 +28,7 @@ public class CameraReact : MonoBehaviour
 
     private void HandleRoll()
     {
-        Vector3 spaceshipLocalVelocity = _spaceshipTransform.InverseTransformDirection(_spaceshipTransform.GetComponent<Rigidbody>().velocity);
+        Vector3 spaceshipLocalVelocity = SpaceshipControls._localVelocity;
 
         // Calculate roll angle based on spaceship's local velocity
         float rollAngle = Mathf.Clamp(Mathf.Rad2Deg * Mathf.Atan2(spaceshipLocalVelocity.z, spaceshipLocalVelocity.x), -_rollMaxAngle, _rollMaxAngle);
@@ -42,19 +42,25 @@ public class CameraReact : MonoBehaviour
 
     private void HandleThrust()
     {
-        Vector3 spaceshipLocalVelocity = _spaceshipTransform.InverseTransformDirection(_spaceshipTransform.GetComponent<Rigidbody>().velocity);
+        //Slowly lerp ship back to original position so each thrust in time has some movement
+        if (SpaceshipControls._allowMovement == false)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, _originalLocalPosition, 0.001f);
+        }
+        else //ship controls activated 'in-time' with beat so move ship
+        {
+            // Calculate offset based on local velocity
+            Vector3 offset = -Vector3.ClampMagnitude(SpaceshipControls._localVelocity, _thrustMaxOffset);
 
-        // Calculate offset based on local velocity
-        Vector3 offset = -Vector3.ClampMagnitude(spaceshipLocalVelocity, _thrustMaxOffset);
+            // Add offset to target position
+            _targetLocalPosition = _originalLocalPosition + offset;
 
-        // Add offset to target position
-        _targetLocalPosition = _originalLocalPosition + offset;
+            // Lerp to target position using animation curve
+            float lerpAmount = _thrustLerpCurve.Evaluate(_thrustLerpSpeed);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, _targetLocalPosition, lerpAmount);
 
-        // Lerp to target position using animation curve
-        float lerpAmount = _thrustLerpCurve.Evaluate(_thrustLerpSpeed);
-        transform.localPosition = Vector3.Lerp(transform.localPosition, _targetLocalPosition, lerpAmount);
-
-        // Update rotation to target rotation
-        transform.localRotation = _targetLocalRotation;
+            // Update rotation to target rotation
+            transform.localRotation = _targetLocalRotation;
+        }
     }
 }

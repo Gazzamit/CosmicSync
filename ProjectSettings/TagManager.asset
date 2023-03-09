@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Spaceship
   - Target
+  - Laser
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Target Layer
   - Water
   - UI
   - 

@@ -17,6 +17,8 @@ public class TargetRadar : MonoBehaviour
     private RectTransform _rectTransformUIIndicator; // UI indicator
     private RectTransform _parentRectTransform; // UI parent object
 
+    private Vector2 _indicatorPos; //UI indicator position
+
     private bool _isFlashing = false;
     private Coroutine _flashCoroutine = null;
 
@@ -32,6 +34,7 @@ public class TargetRadar : MonoBehaviour
         // Store the color of the indicator and original colour
         _originalColour = _rectTransformUIIndicator.GetComponent<SVGImage>().color;
     }
+
 
     private void Update()
     {
@@ -76,7 +79,10 @@ public class TargetRadar : MonoBehaviour
             float _maxY = _parentRectTransform.rect.height * 0.5f - _rectTransformUIIndicator.rect.height * 0.5f;
             float _maxX = _parentRectTransform.rect.width * 0.5f - _rectTransformUIIndicator.rect.width * 0.5f;
 
-            // Place indicator on correct side of square depending upon sign
+
+            //Debug.Log("Max(x,y): ()" + _maxX.ToString("F1") + "," + _maxY.ToString("F1") + ")");
+
+            // Limit indicator to the size of the square (take sign and apply to max)
             if (Mathf.Abs(x) > _maxX)
             {
                 x = Mathf.Sign(x) * _maxX;
@@ -86,20 +92,25 @@ public class TargetRadar : MonoBehaviour
                 y = Mathf.Sign(y) * _maxY;
             }
 
-            _indicatorPos = new Vector2(x, y);
-
-            //check if target is behind the ship. Direction is ship to target
+            //check if target is BEHIND the ship. Direction is ship to target
             Vector3 _directionShipToTarget = (_targetPosition - _shipTransform.position).normalized;
             //dot produc of directio to target and ship forward
             float _dot = Vector3.Dot(_directionShipToTarget, _shipTransform.forward);
-            //negative dot product means target ois behind the ship
+            //negative dot product means target is behind the ship
+            //Debug.Log("Dot(x,y): " + _dot.ToString("F1") + "(" + x.ToString("F1") + "," + y.ToString("F1") + ")");
+
             if (_dot < 0)
             {
+                //invert x, y if target on other side of camera o indicator correctly positioned
+                x *= -1f;
+                y *= -1f;
+                //set fast flash Rate
                 _flashInterval = 0.1f;
                 _flashColourSelect = _flashColourFast;
             }
             else
             {
+                //set slow flash rate
                 _flashInterval = 0.3f;
                 _flashColourSelect = _flashColourSlow;
             }
@@ -110,6 +121,8 @@ public class TargetRadar : MonoBehaviour
                 // Start the flashing coroutine and store a reference to it
                 _flashCoroutine = StartCoroutine(FlashCoroutine());
             }
+
+            _indicatorPos = new Vector2(x, y);
 
         }
         // Set the position of the UI indicator
