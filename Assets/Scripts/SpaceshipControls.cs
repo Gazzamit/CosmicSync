@@ -24,7 +24,7 @@ public class SpaceshipControls : MonoBehaviour
     public float _perfectTapMultiplier = 8f, _goodTapMultiplier = 4f, _poorTapMultiplier = 2f;
     private float _tapMultiplier = 1;
 
-    public Slider _speed;
+    public Slider _speedRight, _speedLeft;
 
     [SerializeField] private GameObject _laserLeft, _laserRight;
 
@@ -71,7 +71,8 @@ public class SpaceshipControls : MonoBehaviour
         //Fire1();
         FireLaser();
 
-        _speed.value = _magnitude / 200f; //200 set as max speed
+        _speedRight.value = _magnitude / 200f; //200 set as max speed
+        _speedLeft.value = _magnitude / 200f; //200 set as max speed
     }
 
     /*
