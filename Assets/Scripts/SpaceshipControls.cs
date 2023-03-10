@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class SpaceshipControls : MonoBehaviour
@@ -23,13 +24,15 @@ public class SpaceshipControls : MonoBehaviour
     public float _perfectTapMultiplier = 8f, _goodTapMultiplier = 4f, _poorTapMultiplier = 2f;
     private float _tapMultiplier = 1;
 
+    public Slider _speed;
+
     [SerializeField] private GameObject _laserLeft, _laserRight;
 
     //spaceship
     Rigidbody _rbSpaceShip;
     public static Vector3 _localVelocity;
     public static Vector3 _Vector3Spaceship;
-    public static float _magnitude;
+    public static float _magnitude = 0f;
 
     //Input Values for controller / keyboard
     private float _thrust1D, _upDown1D, _strafe1D, _roll1D;
@@ -57,7 +60,7 @@ public class SpaceshipControls : MonoBehaviour
     void Start()
     {
         //prevent control activation after 0.5 beats
-        _turnOffInOneHalfBeat = Controller.instance._secondsPerBeat / 2f;
+        _turnOffInOneHalfBeat = BeatController.instance._secondsPerBeat / 2f;
         //Debug.Log("turnOffInOneHalfBeat: " + turnOffInOneHalfBeat);
     }
 
@@ -67,6 +70,8 @@ public class SpaceshipControls : MonoBehaviour
         Movement();
         //Fire1();
         FireLaser();
+
+        _speed.value = _magnitude / 200f; //200 set as max speed
     }
 
     /*
@@ -183,50 +188,6 @@ public class SpaceshipControls : MonoBehaviour
         }
     }
 
-    //pass through values from buttons / controller
-    #region Input Methods
-    public void onThrust(InputAction.CallbackContext _context)
-    {
-        setTapMultiuplier(); //perfect/good/poor
-        _thrust1D = _context.ReadValue<float>() * _tapMultiplier;
-        StartCoroutine(TurnOffMovement());
-        //Debug.Log("thrust");
-
-    }
-    public void onStrafe(InputAction.CallbackContext _context)
-    {
-        setTapMultiuplier(); //perfect/good/poor
-        _strafe1D = _context.ReadValue<float>() * _tapMultiplier;
-        StartCoroutine(TurnOffMovement());
-        //Debug.Log("strafe");
-    }
-    public void onUpDown(InputAction.CallbackContext _context)
-    {
-
-        setTapMultiuplier(); //perfect/good/poor
-        _upDown1D = _context.ReadValue<float>() * _tapMultiplier;
-        StartCoroutine(TurnOffMovement());
-        //Debug.Log("upDown");
-    }
-    public void onRoll(InputAction.CallbackContext _context)
-    {
-        setTapMultiuplier(); //perfect/good/poor
-        _roll1D = _context.ReadValue<float>() * _tapMultiplier;
-        StartCoroutine(TurnOffMovement());
-        //Debug.Log("roll");
-    }
-    public void onPitchYaw(InputAction.CallbackContext _context)
-    {
-        _pitchYaw = _context.ReadValue<Vector2>();
-        //Debug.Log("pitchYaw: " + _pitchYaw);
-    }
-    public void onFire1(InputAction.CallbackContext _context)
-    {
-        _fire1 = _context.ReadValue<float>();
-        //Debug.Log("Fire1");
-    }
-    #endregion 
-
     private void setTapMultiuplier()
     {
         _allowMovement = true;
@@ -272,4 +233,48 @@ public class SpaceshipControls : MonoBehaviour
         _roll1D = 0;
         _allowMovement = false;
     }
+    
+    //pass through values from buttons / controller
+    #region Input Methods
+    public void onThrust(InputAction.CallbackContext _context)
+    {
+        setTapMultiuplier(); //perfect/good/poor
+        _thrust1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
+        //Debug.Log("thrust");
+
+    }
+    public void onStrafe(InputAction.CallbackContext _context)
+    {
+        setTapMultiuplier(); //perfect/good/poor
+        _strafe1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
+        //Debug.Log("strafe");
+    }
+    public void onUpDown(InputAction.CallbackContext _context)
+    {
+
+        setTapMultiuplier(); //perfect/good/poor
+        _upDown1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
+        //Debug.Log("upDown");
+    }
+    public void onRoll(InputAction.CallbackContext _context)
+    {
+        setTapMultiuplier(); //perfect/good/poor
+        _roll1D = _context.ReadValue<float>() * _tapMultiplier;
+        StartCoroutine(TurnOffMovement());
+        //Debug.Log("roll");
+    }
+    public void onPitchYaw(InputAction.CallbackContext _context)
+    {
+        _pitchYaw = _context.ReadValue<Vector2>();
+        //Debug.Log("pitchYaw: " + _pitchYaw);
+    }
+    public void onFire1(InputAction.CallbackContext _context)
+    {
+        _fire1 = _context.ReadValue<float>();
+        //Debug.Log("Fire1");
+    }
+    #endregion 
 }

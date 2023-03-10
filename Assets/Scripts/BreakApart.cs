@@ -3,19 +3,24 @@ using System.Collections.Generic;
 
 public class BreakApart : MonoBehaviour
 {
+    // Public variables 
     public float _breakApartTime = 5f;
     public float _explosionForce = 10f;
     public float _constantForce = 5f;
 
+    // A list of all the child objects that will be broken apart
     private List<Transform> _spaceshipChildObjects;
+
+    // The time at which the object starts breaking apart
     private float _startTime;
     private bool _isBreakingApart = false;
+    public static bool _finalTargetDestroyed = false;
 
     void Start()
     {
         _spaceshipChildObjects = new List<Transform>();
 
-        //add child and grandchild transforms
+        // Add each child and grandchild transform to the list
         foreach (Transform child in transform)
         {
             _spaceshipChildObjects.Add(child);
@@ -30,23 +35,26 @@ public class BreakApart : MonoBehaviour
     {
         if (_isBreakingApart)
         {
+            // Calculate how far along the breaking apart process is (0-1)
             float t = (Time.time - _startTime) / _breakApartTime;
 
-            //Debug.Log("Breaking Apart");
-
+            // Move each child object away from the spaceship's center
             foreach (Transform child in _spaceshipChildObjects)
             {
                 Vector3 direction = child.position - transform.position;
                 float distance = direction.magnitude;
                 Vector3 moveAmount = direction.normalized * (distance * t);
                 child.position += moveAmount * Time.deltaTime;
-                child.Rotate(Random.insideUnitSphere * Time.deltaTime * 100f); // add some random rotation to the objects
 
+                // Add some random rotation to the objects
+                child.Rotate(Random.insideUnitSphere * Time.deltaTime * 100f); 
+
+                // Apply a constant force to push the objects apart
                 Vector3 forceDirection = direction.normalized;
                 child.GetComponent<Rigidbody>().AddForce(forceDirection * _constantForce * Time.deltaTime, ForceMode.Impulse);
             }
 
-            // disable the objects after 15 seconds
+            // Disable the objects after 15 seconds
             if (Time.time - _startTime > 15f)
             {
                 foreach (Transform child in _spaceshipChildObjects)
@@ -59,20 +67,24 @@ public class BreakApart : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Laser Collider");
         if (!_isBreakingApart)
         {
-            if (other.gameObject.CompareTag("Laser")) // check if the collision was with an explosion object
+            // Check if the collision was with a laser fired by the player's spaceship
+            if (other.gameObject.CompareTag("Laser"))
             {
+                // Mark the spaceship as breaking apart
                 _isBreakingApart = true;
                 _startTime = Time.time;
+                _finalTargetDestroyed = true;
 
-                //ad rb so that force can be applied. No Gravity required.
+                // Add a Rigidbody component to allow addforce. No Gravity required.
                 foreach (Transform child in _spaceshipChildObjects)
                 {
-                    Rigidbody rb = child.gameObject.AddComponent<Rigidbody>();
-                    rb.useGravity = false;
-                    rb.AddExplosionForce(_explosionForce, transform.position, 10f); // add explosive force
+                    Rigidbody _rb = child.gameObject.AddComponent<Rigidbody>();
+                    _rb.useGravity = false;
+
+                    // Add an explosive force to child objects 
+                    _rb.AddExplosionForce(_explosionForce, transform.position, 10f); 
                 }
             }
         }

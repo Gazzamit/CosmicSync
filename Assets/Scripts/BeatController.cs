@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Controller : MonoBehaviour
+public class BeatController : MonoBehaviour
 {
 
     [Header("REQUIRED")]
@@ -42,11 +42,11 @@ public class Controller : MonoBehaviour
     public bool _stopOnBeatSyncCheck = false;
 
     //Conductor static instance so can be referenced in other scripts
-    public static Controller instance;
+    public static BeatController instance;
 
     void Awake()
     {
-        //Create static instance of Controller;
+        //Create static instance of BeatController;
         instance = this;
     }
 

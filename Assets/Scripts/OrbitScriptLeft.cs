@@ -12,7 +12,9 @@ public class OrbitScriptLeft : MonoBehaviour
 
     void Start()
     {
-        float _beatsInLoop = Controller.instance._beatsInLoop;
+        gameObject.SetActive(true);
+        
+        float _beatsInLoop = BeatController.instance._beatsInLoop;
         List<float> _leftBeats = TapLeft._leftBeatsStaticVar;
 
         for (int i = 0; i < _leftBeats.Count; i++)
@@ -37,7 +39,7 @@ public class OrbitScriptLeft : MonoBehaviour
     void Update()
     {
         //0 to 1 of position within the current loop
-        float _loopPosition = Controller.instance._loopPlayheadNormalised;
+        float _loopPosition = BeatController.instance._loopPlayheadNormalised;
 
         //set angle to Radians +90 degrees to start from top
         float _angle = (_loopPosition * 360 + _startOffsetUnit * 360) * Mathf.Deg2Rad;

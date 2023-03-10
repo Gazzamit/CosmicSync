@@ -7,6 +7,7 @@ TagManager:
   - Spaceship
   - Target
   - Laser
+  - SpaceshipTarget
   layers:
   - Default
   - TransparentFX
@@ -43,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: New Layer 1
+    uniqueID: 776790285
+    locked: 0
+  - name: New Layer 2
+    uniqueID: 4214937941
     locked: 0

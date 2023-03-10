@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.VectorGraphics;
 using System;
+using UnityEngine.UI;
 
 public class TapRight : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class TapRight : MonoBehaviour
     private bool[] _beatsProcessed; //track beats processed to avoid double tap on beat
 
     public float _startOffsetUnit; //0 to 1
+
+    public Slider _rightSlider;
 
     private float _loopPlayheadInSeconds;
     private float _barInSeconds;
@@ -39,15 +42,15 @@ public class TapRight : MonoBehaviour
     {
         _svgImage = GetComponent<SVGImage>();
 
-        _perfectThreshold = Controller.instance._perfectTapThereshold;
-        _goodThreshold = Controller.instance._goodTapThreshold;
-        _poorThreshold = Controller.instance._poorTapThreshold;
+        _perfectThreshold = BeatController.instance._perfectTapThereshold;
+        _goodThreshold = BeatController.instance._goodTapThreshold;
+        _poorThreshold = BeatController.instance._poorTapThreshold;
 
         // Initialize beatsProcessed array with the same size as leftBeats array
         _beatsProcessed = new bool[_rightBeats.Count];
 
         //length in seconds of one bar of 'x' beats
-        _barInSeconds = Controller.instance._beatsInLoop * Controller.instance._secondsPerBeat;
+        _barInSeconds = BeatController.instance._beatsInLoop * BeatController.instance._secondsPerBeat;
 
     }
 
@@ -55,18 +58,18 @@ public class TapRight : MonoBehaviour
     {
 
         //stop on beat one AV sync check
-        if (Controller.instance._stopOnBeatSyncCheck == true)
+        if (BeatController.instance._stopOnBeatSyncCheck == true)
         {
-            if (Controller.instance._loopPlayheadInSeconds > Controller.instance._secondsPerBeat * 2)
+            if (BeatController.instance._loopPlayheadInSeconds > BeatController.instance._secondsPerBeat * 2)
             {
-                //Debug.Log("Sec Per beat: " + Controller.instance.secondsPerBeat + " Playhead: " + Controller.instance.loopPlayheadInSeconds);
+                //Debug.Log("Sec Per beat: " + BeatController.instance.secondsPerBeat + " Playhead: " + BeatController.instance.loopPlayheadInSeconds);
                 Time.timeScale = 0.0f; // Stop time
                 AudioListener.pause = true;
             }
         }
 
         //reset beatsProcessed array ready for next loop
-        _loopPlayheadInSeconds = Controller.instance._loopPlayheadInSeconds;
+        _loopPlayheadInSeconds = BeatController.instance._loopPlayheadInSeconds;
         if (_resetLoop && _loopPlayheadInSeconds >= (_barInSeconds - _poorThreshold - 0.05f))
         {
             //Debug.Log("R Array clear at: " + loopPlayheadInSeconds + " / " + barInSeconds);
@@ -81,15 +84,15 @@ public class TapRight : MonoBehaviour
 
         if (_context.performed)
         {
-            //Debug.Log("Tap Time R: " + Controller.instance._loopPlayheadInSeconds);
+            //Debug.Log("Tap Time R: " + BeatController.instance._loopPlayheadInSeconds);
 
             // Loop through rightBeats list
             for (int i = 0; i < _rightBeats.Count; i++)
             {
                 //beat being processed
                 float _beatNumber = _rightBeats[i];
-                float _timeOfBeat = Mathf.Abs((_beatNumber - 1) * Controller.instance._secondsPerBeat);
-                float _tapTime = Controller.instance._loopPlayheadInSeconds;
+                float _timeOfBeat = Mathf.Abs((_beatNumber - 1) * BeatController.instance._secondsPerBeat);
+                float _tapTime = BeatController.instance._loopPlayheadInSeconds;
                 float _timeDiff = Mathf.Abs(_timeOfBeat - _tapTime);
                 //if approaching complete loop set timeDiff to fraction of sec before beat 1.
                 if ((_barInSeconds - _timeDiff) < _poorThreshold)
@@ -105,6 +108,7 @@ public class TapRight : MonoBehaviour
                         SetColorAndReset(1);
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isPerfectHit = true; // for spaceship Controls
+                        _rightSlider.value += 0.01f;
                     }
                     else
                     if (_timeDiff <= _goodThreshold)

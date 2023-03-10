@@ -7,7 +7,9 @@ public class TargetCollisionController : MonoBehaviour
     private List<Vector3> _targetPositions;
     public static List<Vector3> _targetPositionsStaticVar;
     public static int _nextTargetIndex;
+
     //public LayerMask _spaceshipLayer, _targetLeyer;
+
 
     // Populate the targetPositions list with the positions of the child objects of the targetParent
     void Start()
@@ -27,49 +29,49 @@ public class TargetCollisionController : MonoBehaviour
 
     }
 
-    
-        // Check if the collided object is the expected target and update the nextTargetIndex accordingly
-        void OnTriggerEnter(Collider _collision)
-        {        
-            if (_collision.gameObject.CompareTag("Target"))
+
+    // Check if the collided object is the expected target and update the nextTargetIndex accordingly
+    void OnTriggerEnter(Collider _collision)
+    {
+        if (_collision.gameObject.CompareTag("Target"))
+        {
+            //Debug.Log("Collider. Tag: Target");
+            Transform _collidedTarget = _collision.transform;
+
+            // Check if the collided target is a child of the targetParent
+            if (_collidedTarget.parent == _targetParent.transform)
             {
-                //Debug.Log("Collider. Tag: Target");
-                Transform _collidedTarget = _collision.transform;
+                //Object set inactive if hit. 
+                Transform _expectedTarget = _targetParent.transform.GetChild(_nextTargetIndex);
 
-                // Check if the collided target is a child of the targetParent
-                if (_collidedTarget.parent == _targetParent.transform)
+                // Check if the collided target is the expected target
+                if (_collidedTarget == _expectedTarget)
                 {
-                    //Object set inactive if hit. 
-                    Transform _expectedTarget = _targetParent.transform.GetChild(_nextTargetIndex);
 
-                    // Check if the collided target is the expected target
-                    if (_collidedTarget == _expectedTarget)
+                    // First, Check if all targets have been hit ( ==1 as last target)
+                    if (_targetParent.transform.childCount <= 1)
                     {
-
-                        // First, Check if all targets have been hit ( ==1 as last target)
-                        if (_targetParent.transform.childCount <= 1)
-                        {
-                            Debug.Log("All targets have been hit!");
-                        }
-                        else
-                        {
-                            _nextTargetIndex++;
-                            Debug.Log("_nextTargetIndex: " + _nextTargetIndex);
-                        }
-
-                        //make hit object inactive
-                        _collidedTarget.gameObject.SetActive(false);
-
-                        //Debug.Log("Correct Target. Remaining Targets: " + _targetParent.transform.childCount);
+                        Debug.Log("All targets have been hit!");
                     }
                     else
                     {
-                        //Debug.Log("Wrong target");
-                        //Debug.Log("Expected Target:  " +  _expectedTarget);
-                        //Debug.Log("Collided Target:  " +  _collidedTarget);
-
+                        _nextTargetIndex++;
+                        Debug.Log("_nextTargetIndex: " + _nextTargetIndex);
                     }
+
+                    //make hit object inactive
+                    _collidedTarget.gameObject.SetActive(false);
+
+                    //Debug.Log("Correct Target. Remaining Targets: " + _targetParent.transform.childCount);
+                }
+                else
+                {
+                    //Debug.Log("Wrong target");
+                    //Debug.Log("Expected Target:  " +  _expectedTarget);
+                    //Debug.Log("Collided Target:  " +  _collidedTarget);
+
                 }
             }
         }
+    }
 }
