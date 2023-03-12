@@ -8,7 +8,7 @@ public class TargetRadar : MonoBehaviour
     public Transform _shipTransform; //for calculating if target is behind ship
     public Vector3 _targetPosition; // The target to track
     public float _radius = 300.0f; // The radius of the radar
-    public float _flashInterval = 0.5f;
+    private float _flashInterval = 0.5f;
     public Color _flashColourSlow, _flashColourFast; // When target is off screen
     private Color _flashColourSelect;
 

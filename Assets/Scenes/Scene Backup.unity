@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.24116093, g: 0.040610228, b: 0.0040389365, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -522,6 +522,7 @@ MonoBehaviour:
   - 1
   - 2.5
   _startOffsetUnit: 0.5
+  _leftSlider: {fileID: 0}
 --- !u!114 &262212370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,7 +1247,6 @@ MonoBehaviour:
   _shipTransform: {fileID: 4416352273081699}
   _targetPosition: {x: 0, y: 0, z: 0}
   _radius: 300
-  _flashInterval: 0.5
   _flashColourSlow: {r: 0, g: 0, b: 0, a: 0}
   _flashColourFast: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &954957552
@@ -3715,6 +3715,7 @@ MonoBehaviour:
   - 2
   - 4.5
   _startOffsetUnit: 0.75
+  _rightSlider: {fileID: 0}
 --- !u!114 &2058865904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4803,6 +4804,8 @@ MonoBehaviour:
   _perfectTapMultiplier: 8
   _goodTapMultiplier: 4
   _poorTapMultiplier: 2
+  _speedRight: {fileID: 0}
+  _speedLeft: {fileID: 0}
   _laserLeft: {fileID: 548086024}
   _laserRight: {fileID: 237089560}
 --- !u!54 &4416352273081701
@@ -4847,12 +4850,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetParent: {fileID: 1510169585}
-  _spaceshipLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  _targetLeyer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!1001 &597703687641523688
 PrefabInstance:
   m_ObjectHideFlags: 0
