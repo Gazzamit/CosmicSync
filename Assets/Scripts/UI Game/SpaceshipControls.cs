@@ -7,6 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class SpaceshipControls : MonoBehaviour
 {
+    public bool _DEV_AllowLaserFire = false;
     //add header to inspector
     [Header("REQUIRED SETTINGS")]
 
@@ -25,7 +26,7 @@ public class SpaceshipControls : MonoBehaviour
     private float _tapMultiplier = 1;
 
     public Slider _speedRight, _speedLeft;
-
+    public float _laserPulseLength = 0.4f;
     [SerializeField] private GameObject _laserLeft, _laserRight;
 
     //spaceship
@@ -36,15 +37,21 @@ public class SpaceshipControls : MonoBehaviour
 
     //Input Values for controller / keyboard
     private float _thrust1D, _upDown1D, _strafe1D, _roll1D;
-    private Vector2 _pitchYaw;
+    public static Vector2 _pitchYaw;
 
     //Rocket1
     private float _fire1;
     private float _readyToFire1 = 1f;
-    private float _readyToFireLaser = 1f;
+
+    //Laser
+    private bool _readyToFireLaser = true;
+    public static bool _laserFiringLeft = false, _laserFiringRight = false;
+    public ParticleSystem[] _laserParticleSystems;
+    
+    //stop input triggers after every half beat
     private float _turnOffInOneHalfBeat;
 
-    //limit spaceship movement to beats    
+    //limit spaceship movement to tapped beats    
     public static bool _allowMovement = false;
 
     void Awake()
@@ -99,17 +106,39 @@ public class SpaceshipControls : MonoBehaviour
     void FireLaser()
     {
         //reset fire when key / button released 
-        if (_fire1 < 0.1f && _readyToFireLaser == 0)
-            _readyToFireLaser = 1;
+        if (_fire1 < 0.1f && _readyToFireLaser == false)
+            _readyToFireLaser = true;
         //fire
-        if (_fire1 > 0.1f && _readyToFireLaser == 1)
+        if (_fire1 > 0.1f && _readyToFireLaser == true)
         {
-            _laserLeft.SetActive(true);
-            _laserRight.SetActive(true);
-            _readyToFireLaser = 0;
-            StartCoroutine(TurnOffLasers());
+            if (_DEV_AllowLaserFire || TapLeft._leftSliderValue >= 0.25f || TapRight._rightSliderValue >= 0.25f) //fire when either quater full
+            {
+                _laserFiringLeft = true; //for Tap scripts (reduce Laser value)
+                _laserFiringRight = true; //for Tap scripts (reduce Laser value)
+                _laserLeft.SetActive(true);
+                _laserRight.SetActive(true);
+                StartCoroutine(FireLaserParticleSystems());
+                _readyToFireLaser = false;
+                StartCoroutine(TurnOffLasers());
+            }
+            else
+            {
+                //can't fire
+            }
         }
     }
+
+
+    IEnumerator FireLaserParticleSystems()
+    {
+        foreach (ParticleSystem ps in _laserParticleSystems)
+        {
+            ps.Stop();//Stop in case it is still playing
+            ps.Play();
+        }
+        yield return null;
+    }
+
 
     void Movement()
     {
@@ -133,7 +162,7 @@ public class SpaceshipControls : MonoBehaviour
 
         // THRUST - if pressing a thrust key or move controller slightly above minimum amount
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100, Color.red);
-        if (_allowMovement && _thrust1D > 0.1f || _thrust1D < -0.1f)
+        if (_allowMovement && (_thrust1D > 0.1f || _thrust1D < -0.1f))
         {
             float _currentThrust = _thrust;
             _rbSpaceShip.AddRelativeForce(Vector3.forward * _thrust1D * _currentThrust * Time.deltaTime);
@@ -161,7 +190,7 @@ public class SpaceshipControls : MonoBehaviour
         _magnitude = Mathf.Round(_localVelocity.magnitude);
 
         // UP / DOWN - if pressing a up/down key or move controller slightly above minimum amount
-        if (_allowMovement && _upDown1D > 0.1f || _upDown1D < -0.1f)
+        if (_allowMovement && (_upDown1D > 0.1f || _upDown1D < -0.1f))
         {
 
             _rbSpaceShip.AddRelativeForce(Vector3.up * _upDown1D * _upThrust * Time.fixedDeltaTime);
@@ -176,7 +205,7 @@ public class SpaceshipControls : MonoBehaviour
 
 
         // STRAFE - (QE) if pressing a strafe key or move controller slightly above minimum amount
-        if (_allowMovement && _strafe1D > 0.1f || _strafe1D < -0.1f)
+        if (_allowMovement && (_strafe1D > 0.1f || _strafe1D < -0.1f))
         {
             _rbSpaceShip.AddRelativeForce(Vector3.right * _strafe1D * _strafeThrust * Time.fixedDeltaTime);
             _horizontalGlide = _strafe1D * _strafeThrust;
@@ -191,20 +220,22 @@ public class SpaceshipControls : MonoBehaviour
 
     private void setTapMultiuplier()
     {
-        _allowMovement = true;
         if (TapLeft._isPerfectHit || TapRight._isPerfectHit)
         {
             _tapMultiplier = _perfectTapMultiplier; //perfect
+            _allowMovement = true;
             //Debug.Log("SC - Perfect Multiplier");
         }
         else if (TapLeft._isGoodHit || TapRight._isGoodHit)
         {
             _tapMultiplier = _goodTapMultiplier; //good
+            _allowMovement = true;
             //Debug.Log("SC - Good Multiplier");
         }
         else if (TapLeft._isPoorHit || TapRight._isPoorHit)
         {
             _tapMultiplier = _poorTapMultiplier; //poor
+            _allowMovement = true;
             //Debug.Log("SC - Poor Multiplier");
         }
         TapLeft._isPerfectHit = false;
@@ -219,10 +250,10 @@ public class SpaceshipControls : MonoBehaviour
 
     IEnumerator TurnOffLasers()
     {
-        yield return new WaitForSeconds(.8f);
+        yield return new WaitForSeconds(_laserPulseLength);
         _laserLeft.SetActive(false);
         _laserRight.SetActive(false);
-        _readyToFireLaser = 0;
+        _readyToFireLaser = false;
     }
 
     IEnumerator TurnOffMovement()
@@ -234,7 +265,7 @@ public class SpaceshipControls : MonoBehaviour
         _roll1D = 0;
         _allowMovement = false;
     }
-    
+
     //pass through values from buttons / controller
     #region Input Methods
     public void onThrust(InputAction.CallbackContext _context)
@@ -277,5 +308,17 @@ public class SpaceshipControls : MonoBehaviour
         _fire1 = _context.ReadValue<float>();
         //Debug.Log("Fire1");
     }
+
+    public void onCancel(InputAction.CallbackContext _context)
+    {
+        //_cancel = _context.ReadValue<float>();
+        if (_context.performed)
+        {
+            //Debug.Log("Cancel");
+            InputMapSwitch._switchInputMaps = true; //switch to UI / SpaceshipControls
+        }
+    }
+
+    //anykeypressed callbacks are in target scripts.
     #endregion 
 }

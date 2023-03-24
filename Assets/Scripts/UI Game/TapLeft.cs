@@ -5,23 +5,27 @@ using UnityEngine.InputSystem;
 using Unity.VectorGraphics;
 using System;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class TapLeft : MonoBehaviour
 {
-    private SVGImage _svgImage;
+    public List<float> _leftBeats; //beats entered in inspector
+    //public float _startOffsetUnit; //0 to 1
+
+    private SVGImage _svgImageRing, _svgImageCharge;
+    private Image _laserSlider;
 
     private float _perfectThreshold, _goodThreshold, _poorThreshold;
     [Header("REQUIRED")]
-    [SerializeField] private Color[] _colors;
+    [SerializeField] private Color[] _colours; //normal, good, poor, miss
 
-    public List<float> _leftBeats; //beats entered in inspector
+    [SerializeField] private float _perfectLaserBoost = 0.06f, _goodLaserBoost = 0.04f, _poorLaserBoost = 0.02f;
 
     public static List<float> _leftBeatsStaticVar;
     private bool[] _beatsProcessed; //track beats processed to avoid double tap on beat
 
-    public float _startOffsetUnit; //0 to 1
-
-    public Slider _leftSlider;
+    public Slider _leftSlider; //track power of laser charge
+    public static float _leftSliderValue = 0f; //shared to tap scripts
 
     private float _loopPlayheadInSeconds;
     private float _barInSeconds;
@@ -32,18 +36,20 @@ public class TapLeft : MonoBehaviour
     public static bool _isGoodHit = false;
     public static bool _isPoorHit = false;
     public static bool _isMissHit = false;
-    
+    public ParticleSystem _anyHitLeft;
 
     void Awake()
     {
-        //Shared leftBeats to other script (to draw indicators based on beats
+        //Shared leftBeats to other script (to draw indicators based on beats)
         _leftBeatsStaticVar = _leftBeats;
     }
 
     void Start()
     {
-        _svgImage = GetComponent<SVGImage>();
-
+        _svgImageRing = GetComponent<SVGImage>();
+        _svgImageCharge = transform.parent.GetChild(2).GetChild(0).gameObject.GetComponent<SVGImage>();
+        _laserSlider = transform.parent.GetChild(2).GetChild(0).GetChild(0).GetChild(0).gameObject.GetComponent<Image>();
+        
         _perfectThreshold = BeatController.instance._perfectTapThereshold;
         _goodThreshold = BeatController.instance._goodTapThreshold;
         _poorThreshold = BeatController.instance._poorTapThreshold;
@@ -57,6 +63,8 @@ public class TapLeft : MonoBehaviour
 
     void Update()
     {
+        _leftSlider.value = _leftSliderValue; //update slider (from pefect, good, poor hits)
+
 
         //stop on beat one AV sync check
         if (BeatController.instance._stopOnBeatSyncCheck == true)
@@ -78,6 +86,51 @@ public class TapLeft : MonoBehaviour
             _resetLoop = false;
         }
         if (!_resetLoop && _loopPlayheadInSeconds > _poorThreshold && _loopPlayheadInSeconds < _poorThreshold + 0.05f) _resetLoop = true;
+
+        if (SpaceshipControls._laserFiringLeft == true)
+        {
+            SpaceshipControls._laserFiringLeft = false;
+            StartCoroutine(LaserFiring());
+            StartCoroutine(LerpLaserSliders());
+        }
+    }
+
+
+    IEnumerator LaserFiring()
+    {
+        //set Laser Charge SVG to pink
+        _svgImageCharge.color = _colours[4];
+        // transition back to blue
+        _svgImageCharge.DOColor(_colours[0], 0.2f).SetEase(Ease.InExpo);
+
+        yield return null;
+    }
+
+    IEnumerator LerpLaserSliders()
+    {
+        //while reducing value change laser slider colour
+        _laserSlider.color = _colours[4];
+
+        //lerp the laser values down over 0.2s laser firing time
+        float _leftSliderValueStart = _leftSliderValue;
+        
+        float _targetValue = _leftSliderValue - 0.25f;
+
+        float t = 0f;
+        float _duration = 0.2f;
+
+        while (t < _duration)
+        {
+            t += Time.deltaTime;
+            float _newSliderValue = Mathf.Lerp(_leftSliderValueStart, _targetValue, t / _duration);
+            _leftSliderValue = _newSliderValue;
+            yield return null; //run other code
+        }
+
+        //After laser fired reset colour of slider
+        _laserSlider.color = _colours[5];
+
+        //Debug.Log("Target Val : Actual Value : " + _targetValue + " : " + _leftSliderValue);
     }
 
     public void AnyKeyPressed(InputAction.CallbackContext _context)
@@ -86,8 +139,10 @@ public class TapLeft : MonoBehaviour
 
         if (_context.performed)
         {
-            //Debug.Log("Tap Time L: " + BeatController.instance.loopPlayheadInSeconds);
+            _leftSliderValue = _leftSlider.value; //update laser slider value variable
 
+            //Debug.Log("Tap Time L: " + BeatController.instance.loopPlayheadInSeconds);
+            //Debug.Log("Left Slider: " + _leftSlider.value);
             // Loop through leftBeats list
             for (int i = 0; i < _leftBeats.Count; i++)
             {
@@ -110,7 +165,7 @@ public class TapLeft : MonoBehaviour
                         SetColorAndReset(1);
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isPerfectHit = true; // for spaceship Controls
-                        _leftSlider.value += 0.01f;
+                        _leftSliderValue += _perfectLaserBoost;
                     }
                     else
                     if (_timeDiff <= _goodThreshold)
@@ -119,6 +174,7 @@ public class TapLeft : MonoBehaviour
                         SetColorAndReset(2);
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isGoodHit = true; // for spaceship Controls
+                        _leftSliderValue += _goodLaserBoost;
                     }
                     else
                     if (_timeDiff <= _poorThreshold)
@@ -127,6 +183,7 @@ public class TapLeft : MonoBehaviour
                         SetColorAndReset(3);
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isPoorHit = true; // for spaceship Controls
+                        _leftSliderValue += _poorLaserBoost;
                     }
                     else
                     {
@@ -137,17 +194,37 @@ public class TapLeft : MonoBehaviour
         }
     }
 
-    private void SetColorAndReset(int _colorIndex)
+    private void SetColorAndReset(int _colourIndex)
     {
         //set colour of the circle if tap is perfect(1), good(2), poor(3)
-        _svgImage.color = _colors[_colorIndex];
+        _svgImageRing.color = _colours[_colourIndex];
+        _svgImageCharge.color = _colours[_colourIndex];
+
+        StartCoroutine(AnyHitEffectLeft(_colourIndex)); // start particle effect
         //reet colour after fraction of a second
         StartCoroutine(ResetColour());
     }
+
     IEnumerator ResetColour()
     {
+
         yield return new WaitForSeconds(0.2f);
-        _svgImage.color = _colors[0];
+        _svgImageRing.color = _colours[0];
+        _svgImageCharge.color = _colours[0];
+
+    }
+
+    IEnumerator AnyHitEffectLeft(int _colourIndex)
+    {
+        //start particle effect on perfect.goog.poor hits
+        ParticleSystem.ColorOverLifetimeModule colorModule = _anyHitLeft.colorOverLifetime;
+        ParticleSystem.MinMaxGradient color = colorModule.color;
+        color = new ParticleSystem.MinMaxGradient(_colours[_colourIndex]);
+        colorModule.color = color;
+        //Debug.Log("Colour L : " + _colourIndex);
+        _anyHitLeft.Stop();//Sto in case it is still playing
+        _anyHitLeft.Play();
+        yield return null;
     }
 
 }

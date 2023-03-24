@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Laser-Beam
+  m_Name: CS_Shader Graphs_Laser-Beam
   m_Shader: {fileID: -6465566751694194690, guid: 06e41b15ddc884285b034c5fd4e7bed8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

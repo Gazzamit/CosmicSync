@@ -9,11 +9,23 @@ public class SVGFlickerTween : MonoBehaviour
 
     void Start()
     {
+        //First run fx
         StartFlashSequence();
     }
+
+    void LateUpdate()
+    {
+        //run seq on HUD change to Menu
+        if (InputMapSwitch._switchHUD == true) 
+        {
+            StartFlashSequence();
+            Debug.Log("HUD Switch Flicker Tween");
+        }
+    }
+
     private void StartFlashSequence()
     {
-        Unity.VectorGraphics.SVGImage svgImage = gameObject.GetComponent<SVGImage>();
+        SVGImage svgImage = gameObject.GetComponent<SVGImage>();
 
         // Create the fade sequence
         Sequence fadeSequence = DOTween.Sequence()

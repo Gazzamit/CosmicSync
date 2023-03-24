@@ -2,7 +2,7 @@
     "name": "PlayerControls",
     "maps": [
         {
-            "name": "UI",
+            "name": "UIControls",
             "id": "393477be-23d1-475b-a48c-b3008226ee47",
             "actions": [
                 {
@@ -583,6 +583,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "4d97f5c4-52dc-47c5-b4e4-c2017904b6cb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -980,6 +989,17 @@
                     "groups": "",
                     "action": "AnyKey",
                     "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2654649a-a3d6-4971-9420-1ef891f711bf",
+                    "path": "*/{Cancel}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
+                    "action": "Cancel",
+                    "isComposite": false,
                     "isPartOfComposite": false
                 }
             ]

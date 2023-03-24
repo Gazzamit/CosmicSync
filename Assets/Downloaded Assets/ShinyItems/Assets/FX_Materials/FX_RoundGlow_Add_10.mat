@@ -108,7 +108,7 @@ Material:
     - ENUM_E2BEC7F2117445D0994DBA912C417B18: 0
     - SURFACEMATERIALOPTIONS_ZWRITE: 0
     - SURFACEMATERIALOPTIONS_ZWRITE_OFF_: 1
-    - Vector1_7347b5aed4cd4d23a7d2c807e74baa02: 13.11
+    - Vector1_7347b5aed4cd4d23a7d2c807e74baa02: 0.3
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaCutoffEnable: 0

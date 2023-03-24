@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class CameraReact : MonoBehaviour
 {
-    [SerializeField] private float _thrustMaxOffset = 0.01f;
-    [SerializeField] private float _thrustLerpSpeed = 0.01f;
-    [SerializeField] private float _rollLerpSpeed = 0.01f;
+    [SerializeField] private float _thrustMaxOffset = 0.1f;
+    [SerializeField] private float _thrustLerpSpeed = 0.1f;
+    [SerializeField] private float _rollLerpSpeed = 0.1f;
     [SerializeField] private float _rollMaxAngle = 15f;
     [SerializeField] private AnimationCurve _thrustLerpCurve;
 
@@ -22,25 +22,10 @@ public class CameraReact : MonoBehaviour
 
     private void LateUpdate()
     {
-        //HandleRoll();
-        HandleThrust();
+        HandleMovement();
     }
 
-    private void HandleRoll()
-    {
-        Vector3 spaceshipLocalVelocity = SpaceshipControls._localVelocity;
-
-        // Calculate roll angle based on spaceship's local velocity
-        float rollAngle = Mathf.Clamp(Mathf.Rad2Deg * Mathf.Atan2(spaceshipLocalVelocity.z, spaceshipLocalVelocity.x), -_rollMaxAngle, _rollMaxAngle);
-
-        // Calculate rotation based on roll angle
-        Quaternion rollRotation = Quaternion.Euler(0f, -rollAngle, 0f);
-
-        // Lerp to target rotation
-        _targetLocalRotation = Quaternion.Lerp(_targetLocalRotation, rollRotation, _rollLerpSpeed);
-    }
-
-    private void HandleThrust()
+    private void HandleMovement()
     {
         //Slowly lerp ship back to original position so each thrust in time has some movement
         if (SpaceshipControls._allowMovement == false)

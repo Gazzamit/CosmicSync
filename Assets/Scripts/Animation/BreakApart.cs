@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class BreakApart : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class BreakApart : MonoBehaviour
     public float _breakApartTime = 5f;
     public float _explosionForce = 10f;
     public float _constantForce = 5f;
+    public GameObject particlePrefab; // the particle effect prefab
+
 
     // A list of all the child objects that will be broken apart
     private List<Transform> _spaceshipChildObjects;
@@ -35,31 +38,37 @@ public class BreakApart : MonoBehaviour
     {
         if (_isBreakingApart)
         {
+            StartCoroutine(AddExplosionEffect());
+
             // Calculate how far along the breaking apart process is (0-1)
             float t = (Time.time - _startTime) / _breakApartTime;
-
-            // Move each child object away from the spaceship's center
-            foreach (Transform child in _spaceshipChildObjects)
-            {
-                Vector3 direction = child.position - transform.position;
-                float distance = direction.magnitude;
-                Vector3 moveAmount = direction.normalized * (distance * t);
-                child.position += moveAmount * Time.deltaTime;
-
-                // Add some random rotation to the objects
-                child.Rotate(Random.insideUnitSphere * Time.deltaTime * 100f); 
-
-                // Apply a constant force to push the objects apart
-                Vector3 forceDirection = direction.normalized;
-                child.GetComponent<Rigidbody>().AddForce(forceDirection * _constantForce * Time.deltaTime, ForceMode.Impulse);
-            }
 
             // Disable the objects after 15 seconds
             if (Time.time - _startTime > 15f)
             {
+
                 foreach (Transform child in _spaceshipChildObjects)
                 {
                     child.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                // Move each child object away from the spaceship's center
+                foreach (Transform child in _spaceshipChildObjects)
+                {
+                    Vector3 _direction = child.position - transform.position;
+                    float _distance = _direction.magnitude;
+                    Vector3 moveAmount = _direction.normalized * (_distance * t);
+
+                    child.position += moveAmount * Time.deltaTime;
+
+                    // Add some random rotation to the objects
+                    child.Rotate(Random.insideUnitSphere * Time.deltaTime * 100f);
+
+                    // Apply a constant force to push the objects apart
+                    Vector3 forceDirection = _direction.normalized;
+                    child.GetComponent<Rigidbody>().AddForce(forceDirection * _constantForce * Time.deltaTime, ForceMode.Impulse);
                 }
             }
         }
@@ -84,9 +93,31 @@ public class BreakApart : MonoBehaviour
                     _rb.useGravity = false;
 
                     // Add an explosive force to child objects 
-                    _rb.AddExplosionForce(_explosionForce, transform.position, 10f); 
+                    _rb.AddExplosionForce(_explosionForce + Random.Range(20f,-20f), transform.position, 10f);
                 }
             }
         }
     }
+
+    IEnumerator AddExplosionEffect()
+    {
+        // Cycle through the children of this object and enable a particle effect on each child
+        foreach (Transform child in transform)
+        {
+            // Instantiate the particle effect prefab as a child of the current child object
+            GameObject particleObject = Instantiate(particlePrefab, child);
+            particleObject.transform.localPosition = Vector3.zero;
+
+            // Enable the particle effect component on the particle object
+            ParticleSystem particleSystem = particleObject.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                particleSystem.Play();
+            }
+
+            //gradually add explosion effects
+            yield return new WaitForSeconds(0.8f);
+        }
+    }
+
 }
