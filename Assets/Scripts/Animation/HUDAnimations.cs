@@ -37,15 +37,17 @@ public class HUDAnimations : MonoBehaviour
 
     void Update()
     {
-        if (InputMapSwitch._isGame == false && InputMapSwitch._switchHUD == true)
+        //_isGame is false when menu called
+        if (InputMapSwitch._isGame == false && InputMapSwitch._switchingHUD == true)
         {
             MoveHUDGameToMenu();
-            InputMapSwitch._switchHUD = false;
+            InputMapSwitch._switchingHUD = false;
         }
-        else if (InputMapSwitch._isGame == true && InputMapSwitch._switchHUD == true && _firstRun == false)
+        //isGame is true if Game called
+        else if (InputMapSwitch._isGame == true && InputMapSwitch._switchingHUD == true && _firstRun == false)
         {
             MoveHUDMenuToGame();
-            InputMapSwitch._switchHUD = false;
+            InputMapSwitch._switchingHUD = false;
         }
     }
 

@@ -47,7 +47,7 @@ public class SpaceshipControls : MonoBehaviour
     private bool _readyToFireLaser = true;
     public static bool _laserFiringLeft = false, _laserFiringRight = false;
     public ParticleSystem[] _laserParticleSystems;
-    
+
     //stop input triggers after every half beat
     private float _turnOffInOneHalfBeat;
 
@@ -68,7 +68,7 @@ public class SpaceshipControls : MonoBehaviour
     {
         //prevent control activation after 0.5 beats
         _turnOffInOneHalfBeat = BeatController.instance._secondsPerBeat / 2f;
-        //Debug.Log("turnOffInOneHalfBeat: " + turnOffInOneHalfBeat);
+        //Debug.Log("Start() turnOffInOneHalfBeat: " + _turnOffInOneHalfBeat);
     }
 
     // FixedUpdate so that its framerate independant
@@ -149,10 +149,11 @@ public class SpaceshipControls : MonoBehaviour
         _localVelocity = transform.InverseTransformDirection(_rbSpaceShip.velocity);
         //Debug.Log("Local Velocity: " + _localVelocity.ToString());     
 
-        if (_allowMovement)
+        if (_allowMovement && (_roll1D > 0.1f || _roll1D < -0.1f))
         {
             //roll (AD) Roll over axis * buttonpress (±1) * how fast * deltaTime)
             _rbSpaceShip.AddRelativeTorque(Vector3.back * _roll1D * _rollTorque * Time.deltaTime);
+            // Debug.Log("Allow Roll: " + Time.deltaTime);
         }
 
         //pitch (UP/Down Mouse delta) (clamp to prevent exceed 1)
@@ -165,6 +166,7 @@ public class SpaceshipControls : MonoBehaviour
         if (_allowMovement && (_thrust1D > 0.1f || _thrust1D < -0.1f))
         {
             float _currentThrust = _thrust;
+            // Debug.Log("Allow Thrust");
             _rbSpaceShip.AddRelativeForce(Vector3.forward * _thrust1D * _currentThrust * Time.deltaTime);
 
             //Clamp Velocity Magnitude
@@ -176,6 +178,7 @@ public class SpaceshipControls : MonoBehaviour
         else //nothing pressed
         {
             //add negative velocity relative force to all three vertex over glide time
+            //Debug.Log("Slow Down");
             _rbSpaceShip.AddRelativeForce(Vector3.forward * -_localVelocity.z * _thrustGlideReduction);
             _rbSpaceShip.AddRelativeForce(Vector3.right * -_localVelocity.x * _thrustGlideReduction);
             _rbSpaceShip.AddRelativeForce(Vector3.up * -_localVelocity.y * _thrustGlideReduction);
@@ -192,7 +195,7 @@ public class SpaceshipControls : MonoBehaviour
         // UP / DOWN - if pressing a up/down key or move controller slightly above minimum amount
         if (_allowMovement && (_upDown1D > 0.1f || _upDown1D < -0.1f))
         {
-
+            // Debug.Log("Allow up/down thrust");
             _rbSpaceShip.AddRelativeForce(Vector3.up * _upDown1D * _upThrust * Time.fixedDeltaTime);
             _verticalGlide = _upDown1D * _upThrust;
         }
@@ -207,6 +210,7 @@ public class SpaceshipControls : MonoBehaviour
         // STRAFE - (QE) if pressing a strafe key or move controller slightly above minimum amount
         if (_allowMovement && (_strafe1D > 0.1f || _strafe1D < -0.1f))
         {
+            // Debug.Log("Allow Strafe");
             _rbSpaceShip.AddRelativeForce(Vector3.right * _strafe1D * _strafeThrust * Time.fixedDeltaTime);
             _horizontalGlide = _strafe1D * _strafeThrust;
         }
@@ -224,19 +228,19 @@ public class SpaceshipControls : MonoBehaviour
         {
             _tapMultiplier = _perfectTapMultiplier; //perfect
             _allowMovement = true;
-            //Debug.Log("SC - Perfect Multiplier");
+            // Debug.Log("SC - Perfect Multiplier");
         }
         else if (TapLeft._isGoodHit || TapRight._isGoodHit)
         {
             _tapMultiplier = _goodTapMultiplier; //good
             _allowMovement = true;
-            //Debug.Log("SC - Good Multiplier");
+            // Debug.Log("SC - Good Multiplier");
         }
         else if (TapLeft._isPoorHit || TapRight._isPoorHit)
         {
             _tapMultiplier = _poorTapMultiplier; //poor
             _allowMovement = true;
-            //Debug.Log("SC - Poor Multiplier");
+            // Debug.Log("SC - Poor Multiplier");
         }
         TapLeft._isPerfectHit = false;
         TapLeft._isGoodHit = false;
@@ -264,6 +268,7 @@ public class SpaceshipControls : MonoBehaviour
         _upDown1D = 0;
         _roll1D = 0;
         _allowMovement = false;
+        // Debug.Log("MOVEMENT END");
     }
 
     //pass through values from buttons / controller
@@ -306,7 +311,7 @@ public class SpaceshipControls : MonoBehaviour
     public void onFire1(InputAction.CallbackContext _context)
     {
         _fire1 = _context.ReadValue<float>();
-        //Debug.Log("Fire1");
+        // Debug.Log("Fire1");
     }
 
     public void onCancel(InputAction.CallbackContext _context)
@@ -314,7 +319,7 @@ public class SpaceshipControls : MonoBehaviour
         //_cancel = _context.ReadValue<float>();
         if (_context.performed)
         {
-            //Debug.Log("Cancel");
+            // Debug.Log("Cancel - _switchInputMaps = true");
             InputMapSwitch._switchInputMaps = true; //switch to UI / SpaceshipControls
         }
     }

@@ -8,9 +8,7 @@ public class TargetCollisionController : MonoBehaviour
     public static List<Vector3> _targetPositionsStaticVar;
     public static int _nextTargetIndex;
 
-    //public LayerMask _spaceshipLayer, _targetLeyer;
-
-
+    //Script is on Spaceship
     // Populate the targetPositions list with the positions of the child objects of the targetParent
     void Start()
     {
@@ -29,12 +27,15 @@ public class TargetCollisionController : MonoBehaviour
 
     }
 
-
     // Check if the collided object is the expected target and update the nextTargetIndex accordingly
     void OnTriggerEnter(Collider _collision)
     {
-        if (_collision.gameObject.CompareTag("Target"))
+        //check that not triggered by laser, but by spaceship/portal collision
+        if (_collision.gameObject.CompareTag("Target") && PortalTrigger._spaceshipInPortal)
         {
+            //reset bool ready for necxt portal
+            PortalTrigger._spaceshipInPortal = false;
+            
             //Debug.Log("Collider. Tag: Target");
             Transform _collidedTarget = _collision.transform;
 

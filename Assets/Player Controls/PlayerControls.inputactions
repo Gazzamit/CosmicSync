@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Cancel",
+                    "name": "CancelinUI",
                     "type": "Button",
                     "id": "9d4322c6-69db-410f-83e8-78911f94cba7",
                     "expectedControlType": "Button",
@@ -374,12 +374,23 @@
                 },
                 {
                     "name": "",
+                    "id": "c6e74747-860c-48eb-b4a6-17a994607859",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "82627dcc-3b13-4ba9-841d-e4b746d6553e",
                     "path": "*/{Cancel}",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
-                    "action": "Cancel",
+                    "action": "CancelinUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

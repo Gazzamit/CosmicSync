@@ -4882,7 +4882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8222673884518619902}
   m_Layer: 0
-  m_Name: LaserBeam
+  m_Name: LaserBeam Shader Graph
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -227,4 +227,10 @@ public class TapMenu : MonoBehaviour
         yield return null;
     }
 
+    public void _P_Pressed(InputAction.CallbackContext _context)
+    {
+        //submit acion key P pressed in UI Menu mode
+        Debug.Log("P Pressed - works only in UI Menu mode");
+    }
+
 }

@@ -49,7 +49,7 @@ public class TapRight : MonoBehaviour
         _svgImageRing = GetComponent<SVGImage>();
         _svgImageCharge = transform.parent.GetChild(2).GetChild(0).gameObject.GetComponent<SVGImage>();
         _laserSlider = transform.parent.GetChild(2).GetChild(0).GetChild(0).GetChild(0).gameObject.GetComponent<Image>();
-        
+
         _perfectThreshold = BeatController.instance._perfectTapThereshold;
         _goodThreshold = BeatController.instance._goodTapThreshold;
         _poorThreshold = BeatController.instance._poorTapThreshold;
@@ -63,38 +63,40 @@ public class TapRight : MonoBehaviour
 
     void Update()
     {
-        _rightSlider.value = _rightSliderValue; //update slider (from pefect, good, poor hits)
-
-
-        //stop on beat one AV sync check
-        if (BeatController.instance._stopOnBeatSyncCheck == true)
+        if (InputMapSwitch._isGame == true)
         {
-            if (BeatController.instance._loopPlayheadInSeconds > BeatController.instance._secondsPerBeat * 2)
+            _rightSlider.value = _rightSliderValue; //update slider (from pefect, good, poor hits)
+
+
+            //stop on beat one AV sync check
+            if (BeatController.instance._stopOnBeatSyncCheck == true)
             {
-                //Debug.Log("Sec Per beat: " + BeatController.instance.secondsPerBeat + " Playhead: " + BeatController.instance.loopPlayheadInSeconds);
-                Time.timeScale = 0.0f; // Stop time
-                AudioListener.pause = true;
+                if (BeatController.instance._loopPlayheadInSeconds > BeatController.instance._secondsPerBeat * 2)
+                {
+                    //Debug.Log("Sec Per beat: " + BeatController.instance.secondsPerBeat + " Playhead: " + BeatController.instance.loopPlayheadInSeconds);
+                    Time.timeScale = 0.0f; // Stop time
+                    AudioListener.pause = true;
+                }
+            }
+
+            //reset beatsProcessed array ready for next loop
+            _loopPlayheadInSeconds = BeatController.instance._loopPlayheadInSeconds;
+            if (_resetLoop && _loopPlayheadInSeconds >= (_barInSeconds - _poorThreshold - 0.05f))
+            {
+                //Debug.Log("L Array clear at: " + loopPlayheadInSeconds + " / " + barInSeconds);
+                Array.Clear(_beatsProcessed, 0, _beatsProcessed.Length);
+                _resetLoop = false;
+            }
+            if (!_resetLoop && _loopPlayheadInSeconds > _poorThreshold && _loopPlayheadInSeconds < _poorThreshold + 0.05f) _resetLoop = true;
+
+            if (SpaceshipControls._laserFiringRight == true)
+            {
+                SpaceshipControls._laserFiringRight = false;
+                StartCoroutine(LaserFiring());
+                StartCoroutine(LerpLaserSliders());
             }
         }
-
-        //reset beatsProcessed array ready for next loop
-        _loopPlayheadInSeconds = BeatController.instance._loopPlayheadInSeconds;
-        if (_resetLoop && _loopPlayheadInSeconds >= (_barInSeconds - _poorThreshold - 0.05f))
-        {
-            //Debug.Log("L Array clear at: " + loopPlayheadInSeconds + " / " + barInSeconds);
-            Array.Clear(_beatsProcessed, 0, _beatsProcessed.Length);
-            _resetLoop = false;
-        }
-        if (!_resetLoop && _loopPlayheadInSeconds > _poorThreshold && _loopPlayheadInSeconds < _poorThreshold + 0.05f) _resetLoop = true;
-
-        if (SpaceshipControls._laserFiringRight == true)
-        {
-            SpaceshipControls._laserFiringRight = false;
-            StartCoroutine(LaserFiring());
-            StartCoroutine(LerpLaserSliders());
-        }
     }
-
 
     IEnumerator LaserFiring()
     {
@@ -113,7 +115,7 @@ public class TapRight : MonoBehaviour
 
         //lerp the laser values down over 0.2s laser firing time
         float _rightSliderValueStart = _rightSliderValue;
-        
+
         float _targetValue = _rightSliderValue - 0.25f;
 
         float t = 0f;

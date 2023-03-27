@@ -16,10 +16,10 @@ public class SVGFlickerTween : MonoBehaviour
     void LateUpdate()
     {
         //run seq on HUD change to Menu
-        if (InputMapSwitch._switchHUD == true) 
+        if (InputMapSwitch._switchingHUD == true) 
         {
             StartFlashSequence();
-            Debug.Log("HUD Switch Flicker Tween");
+            // Debug.Log("HUD Switch Flicker Tween");
         }
     }
 
@@ -29,10 +29,10 @@ public class SVGFlickerTween : MonoBehaviour
 
         // Create the fade sequence
         Sequence fadeSequence = DOTween.Sequence()
-            .Append(svgImage.DOFade(0.5f, 0.08f))
-            .AppendInterval(Random.Range(0.08f, 0.15f))
-            .Append(svgImage.DOFade(0, 0.12f))
-            .SetLoops(2, LoopType.Yoyo);
+            .Append(svgImage.DOFade(1, 0.04f)) //to black
+            .AppendInterval(Random.Range(0.01f, 0.04f))
+            .Append(svgImage.DOFade(0, 0.04f)) //to black
+            .SetLoops(4, LoopType.Yoyo);
 
         // Start the sequence
         fadeSequence.Play();
