@@ -177,17 +177,17 @@ public class BreakApart : MonoBehaviour
     IEnumerator AddExplosion2Effect()
     {
         // Instantiate the particle effect prefab 
-        GameObject _particleObject = Instantiate(_explosion2ParticlePrefab, transform);
-        _particleObject.transform.localPosition = Vector3.zero;
+        GameObject _particleObject2 = Instantiate(_explosion2ParticlePrefab, transform);
+        _particleObject2.transform.localPosition = Vector3.zero;
 
         // Enable the particle effect component on the particle object
-        ParticleSystem _particleSystem = _particleObject.GetComponent<ParticleSystem>();
-        if (_particleSystem != null)
+        ParticleSystem _particleSystem2 = _particleObject2.GetComponent<ParticleSystem>();
+        if (_particleSystem2 != null)
         {
-            _particleSystem.Play();
+            _particleSystem2.Play();
         }
         yield return new WaitForSeconds(2f);
-        _particleSystem.Stop();
+        _particleSystem2.Stop();
     }
 }
 

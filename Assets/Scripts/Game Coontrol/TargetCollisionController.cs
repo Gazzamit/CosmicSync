@@ -49,7 +49,7 @@ public class TargetCollisionController : MonoBehaviour
                 if (_collidedTarget == _expectedTarget)
                 {
 
-                    // First, Check if all targets have been hit ( ==1 as last target)
+                    // First, Check if all targets have been hit
                     if (BreakApart._finalTargetDestroyed == true)
                     {
                         Debug.Log("All targets have been hit!");
