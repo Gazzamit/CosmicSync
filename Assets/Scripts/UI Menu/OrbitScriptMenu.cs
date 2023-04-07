@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using System.Collections;
+using Unity.VectorGraphics;
 
 public class OrbitScriptMenu : MonoBehaviour
 {
@@ -9,7 +12,12 @@ public class OrbitScriptMenu : MonoBehaviour
     [Range(0, 1)]
     public float _startOffsetUnit; //0 to 1
     public GameObject _tapIndicatorPrefab;
+    [SerializeField] private Color[] _colours; //normal, flash
+    [SerializeField] private Image _yellowIndicator;
+    [SerializeField] private SVGImage _blueCircle;
 
+    [SerializeField] private int _currentBeatPosition, _lastBeatPosition;
+    private bool _isFlashingIndicator = false;
     void Start()
     {
         gameObject.SetActive(true);
@@ -19,7 +27,7 @@ public class OrbitScriptMenu : MonoBehaviour
 
         for (int i = 0; i < _menuBeats.Count; i++)
         {
-            // Instantiate the indicator
+            // Instantiate the RED indicator
             GameObject _indicator = Instantiate(_tapIndicatorPrefab, transform.parent);
 
             float _menuBeatPosition = (_menuBeats[i] - 1) / _beatsInLoop;
@@ -44,6 +52,7 @@ public class OrbitScriptMenu : MonoBehaviour
 
     void Update()
     {
+        //Yellow rotating indicator
         //0 to 1 of position within the current loop
         float _loopPosition = BeatController.instance._loopPlayheadNormalised;
 
@@ -51,18 +60,18 @@ public class OrbitScriptMenu : MonoBehaviour
         float _angle = (_loopPosition * 360 + _startOffsetUnit * 360) * Mathf.Deg2Rad;
         float x = _radius * Mathf.Cos(_angle);
         float y = _radius * Mathf.Sin(_angle);
-        Vector3 _indicatorPosition = new Vector3(x, y, -0.1f);
+        Vector3 _indicatorPosition = new Vector3(x, y, -0.2f);
 
         // Direction towards the center of circle
         Vector3 _dirToCenter = -_indicatorPosition.normalized;
 
         // Calculate angle to centre
         float _angleToCenter = Mathf.Atan2(_dirToCenter.y, _dirToCenter.x) * Mathf.Rad2Deg;
+        //Debug.Log("Angle to centre: " + _angleToCenter);
 
         // Set the position / rotation of the position to tap indicator
         transform.localPosition = _indicatorPosition;
         transform.localRotation = Quaternion.Euler(0, 0, _angleToCenter + 90); // rotate around z-axis
-
 
     }
 

@@ -42,6 +42,7 @@ public class TapLeft : MonoBehaviour
     {
         //Shared leftBeats to other script (to draw indicators based on beats)
         _leftBeatsStaticVar = _leftBeats;
+        _leftSliderValue = 0f; 
     }
 
     void Start()
@@ -64,8 +65,8 @@ public class TapLeft : MonoBehaviour
     void Update()
     {
         //menu disable gameplay wrapper
-        if (InputMapSwitch._isGame == true)
-
+        //if (GameManagerDDOL._isGame == true)
+        if(GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
             _leftSlider.value = _leftSliderValue; //update slider (from pefect, good, poor hits)
 
@@ -91,9 +92,9 @@ public class TapLeft : MonoBehaviour
             }
             if (!_resetLoop && _loopPlayheadInSeconds > _poorThreshold && _loopPlayheadInSeconds < _poorThreshold + 0.05f) _resetLoop = true;
 
-            if (SpaceshipControls._laserFiringLeft == true)
+            if (SpaceshipControls._laserFiringLeftReduceValue == true)
             {
-                SpaceshipControls._laserFiringLeft = false;
+                SpaceshipControls._laserFiringLeftReduceValue = false;
                 StartCoroutine(LaserFiring());
                 StartCoroutine(LerpLaserSliders());
             }
@@ -160,7 +161,7 @@ public class TapLeft : MonoBehaviour
                 if ((_barInSeconds - _timeDiff) < _poorThreshold)
                 {
                     _timeDiff = _barInSeconds - _timeDiff;
-                    //Debug.Log("R Near end of loop. timeDiff: " + timeDiff);
+                    // Debug.Log("L Near end of loop. timeDiff: " + _timeDiff);
                 }
                 if (!_beatsProcessed[i])
                 {

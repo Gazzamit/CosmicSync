@@ -2,28 +2,31 @@ using UnityEngine;
 
 public class PitchYawReact : MonoBehaviour
 {
-    // Thrust spaceship control
-    public Transform _joystick;
-    public float lerpSpeed = 10f; // smoothness
+    private Transform _cameraTransform;
+    public float _lerpSpeed = 10f, _clampRotation = 30f; // smoothness, clamp
 
-    public float multiplier = 1f; //enhance pitchYaw movement
+    public float _multiplier = 1f; //enhance pitchYaw movement
 
     void Start()
     {
-        _joystick = transform;
+        _cameraTransform = transform;
     }
 
-void Update()
-{
-    // Get the pitchYaw values for x, y
-    float _pitch = SpaceshipControls._pitchYaw.y;
-    float _yaw = SpaceshipControls._pitchYaw.x;
+    void Update()
+    {
+        // Get the pitchYaw values for x, y
+        float _pitch = SpaceshipControls._pitchYaw.y;
+        float _yaw = SpaceshipControls._pitchYaw.x;
 
-    // Calculate rotation based on x, y
-    Vector3 joystickRotation = new Vector3(_pitch * multiplier, 0f, -_yaw * multiplier);
-    Quaternion targetRotation = Quaternion.Euler(joystickRotation);
+        // Clamp pitch and yaw 
+        _pitch = Mathf.Clamp(_pitch, -_clampRotation, _clampRotation);
+        _yaw = Mathf.Clamp(_yaw, -_clampRotation, _clampRotation);
 
-    // Lerp joystick
-    _joystick.localRotation = Quaternion.Lerp(_joystick.localRotation, targetRotation, Time.deltaTime * lerpSpeed);
-}
+        // Calculate rotation based on x, y
+        Vector3 _cameraRotation = new Vector3(_pitch * _multiplier, 0f, -_yaw * _multiplier);
+        Quaternion _targetRotation = Quaternion.Euler(_cameraRotation);
+
+        // Lerp camera to new location
+        _cameraTransform.localRotation = Quaternion.Lerp(_cameraTransform.localRotation, _targetRotation, Time.deltaTime * _lerpSpeed);
+    }
 }

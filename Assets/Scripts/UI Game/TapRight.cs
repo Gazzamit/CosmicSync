@@ -42,6 +42,7 @@ public class TapRight : MonoBehaviour
     {
         //Shared rightBeats to other script (to draw indicators based on beats)
         _rightBeatsStaticVar = _rightBeats;
+        _rightSliderValue = 0f;
     }
 
     void Start()
@@ -63,7 +64,8 @@ public class TapRight : MonoBehaviour
 
     void Update()
     {
-        if (InputMapSwitch._isGame == true)
+        //if (GameManagerDDOL._isGame == true)
+        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
             _rightSlider.value = _rightSliderValue; //update slider (from pefect, good, poor hits)
 
@@ -89,9 +91,9 @@ public class TapRight : MonoBehaviour
             }
             if (!_resetLoop && _loopPlayheadInSeconds > _poorThreshold && _loopPlayheadInSeconds < _poorThreshold + 0.05f) _resetLoop = true;
 
-            if (SpaceshipControls._laserFiringRight == true)
+            if (SpaceshipControls._laserFiringRightReduceValue == true)
             {
-                SpaceshipControls._laserFiringRight = false;
+                SpaceshipControls._laserFiringRightReduceValue = false;
                 StartCoroutine(LaserFiring());
                 StartCoroutine(LerpLaserSliders());
             }
@@ -157,7 +159,7 @@ public class TapRight : MonoBehaviour
                 if ((_barInSeconds - _timeDiff) < _poorThreshold)
                 {
                     _timeDiff = _barInSeconds - _timeDiff;
-                    //Debug.Log("R Near end of loop. timeDiff: " + timeDiff);
+                    //Debug.Log("R Near end of loop. timeDiff: " + _timeDiff);
                 }
                 if (!_beatsProcessed[i])
                 {

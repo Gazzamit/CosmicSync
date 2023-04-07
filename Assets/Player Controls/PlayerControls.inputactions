@@ -94,6 +94,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Timing",
+                    "type": "PassThrough",
+                    "id": "b9b60e23-921c-4074-a722-8edba514d0a7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Quit",
+                    "type": "PassThrough",
+                    "id": "79917ef5-7d51-4be8-9826-feca64ac3e66",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PitchYaw",
+                    "type": "PassThrough",
+                    "id": "87a9adac-9f06-4850-867e-bcb458eb7a14",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -266,7 +293,7 @@
                     "name": "Keyboard",
                     "id": "ff527021-f211-4c02-933e-5976594c46ed",
                     "path": "2DVector",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
                     "action": "Navigate",
@@ -368,17 +395,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
-                    "action": "Submit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c6e74747-860c-48eb-b4a6-17a994607859",
-                    "path": "<Keyboard>/p",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
                     "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -523,6 +539,72 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "OP Keys",
+                    "id": "a2976d98-9061-4cfc-aaa3-10e513b0088c",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Timing",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "42df8364-0750-4829-86f4-54df8a4161ca",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Timing",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "9361c506-2427-436a-adec-dd5a0a957539",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Timing",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ca0e2e7d-d758-4f17-9dda-9d1b860a3838",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=0.2,y=0.2)",
+                    "groups": "",
+                    "action": "PitchYaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a995cd7d-03bc-4ae1-8c3e-e0dadb3cc4a4",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PitchYaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a231443-e697-4bdd-9c64-26641213ae9e",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Quit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -717,9 +799,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Negative",
-                    "id": "66b51376-8d02-4551-9c0a-14478ecdd909",
-                    "path": "<Keyboard>/leftMeta",
+                    "name": "positive",
+                    "id": "5d7186da-936b-4943-8c3b-9299cd922b93",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -728,8 +810,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Positive",
-                    "id": "5d7186da-936b-4943-8c3b-9299cd922b93",
+                    "name": "negative",
+                    "id": "3baedaea-bcef-4ddc-8619-da256b584640",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -842,7 +924,7 @@
                     "id": "103e112c-5ecb-4a24-8be3-76a404d3d1b1",
                     "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.2,y=0.2)",
                     "groups": "",
                     "action": "PitchYaw",
                     "isComposite": false,
@@ -853,7 +935,7 @@
                     "id": "b6d1e2ec-2f95-4f12-a351-861298d5cd1e",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=0.2,y=0.2)",
+                    "processors": "",
                     "groups": "",
                     "action": "PitchYaw",
                     "isComposite": false,
@@ -950,7 +1032,7 @@
                 {
                     "name": "Negative",
                     "id": "fe61c23b-ba27-4801-bbe3-c9b20e08f3d1",
-                    "path": "<Keyboard>/leftMeta",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
