@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class TargetCollisionController : MonoBehaviour
 {
-    public GameObject _targetParent; //holds the targets
+    private GameObject _targetParent; //holds the targets
     private List<Vector3> _targetPositions;
     public static List<Vector3> _targetPositionsStaticVar;
     public static int _nextTargetIndex;
@@ -16,6 +16,7 @@ public class TargetCollisionController : MonoBehaviour
     {
         //Physics.IgnoreLayerCollision(_spaceshipLayer, _targetLeyer, true);
 
+        _targetParent = GameObject.FindGameObjectWithTag("TargetHolder");
         _targetPositions = new List<Vector3>();
 
         foreach (Transform child in _targetParent.transform)
@@ -26,6 +27,21 @@ public class TargetCollisionController : MonoBehaviour
         _targetPositionsStaticVar = _targetPositions;
 
         _nextTargetIndex = 0;
+
+    }
+
+    void Update()
+    {
+        // Get position of last element - spaceship / final target
+        Vector3 _finalObjectPosition = _targetPositions[_targetPositions.Count - 1];
+
+        // Check if position has changed
+        if (_finalObjectPosition != _targetParent.transform.GetChild(_targetPositions.Count - 1).position)
+        {
+            // Update the position in list (last element)
+            _targetPositions[_targetPositions.Count - 1] = _targetParent.transform.GetChild(_targetPositions.Count - 1).position;
+            //Debug.Log("Updated last target position: ");
+        }
 
     }
 
@@ -53,8 +69,8 @@ public class TargetCollisionController : MonoBehaviour
                     //int _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
                     //if (_currentSceneIndex > 0)
                     //{
-                        // Debug.Log("Adding portal Turbulance");
-                        _addPortalTurbulanceNow = true;
+                    // Debug.Log("Adding portal Turbulance");
+                    _addPortalTurbulanceNow = true;
                     //}
                     // First, Check if all targets have been hit
                     if (BreakApart._finalTargetDestroyed == true)

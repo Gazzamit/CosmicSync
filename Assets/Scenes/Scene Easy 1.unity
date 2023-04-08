@@ -47627,7 +47627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _leftRing: {fileID: 438668464}
   _rightRing: {fileID: 727341362}
-  _target: {fileID: 602611354}
+  _targetSquare: {fileID: 602611354}
   _menuRingBlue: {fileID: 1886291172}
   _settingsRingBlue: {fileID: 872157884848855153}
   _easeType: 3
@@ -85382,7 +85382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2255704432294010042, guid: ab6caa08f46dc48bd83ea55dd3b2447d, type: 3}
       propertyPath: m_Name
-      value: TargetHolder
+      value: TargetHolderL1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab6caa08f46dc48bd83ea55dd3b2447d, type: 3}

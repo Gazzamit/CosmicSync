@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7119441194012036768}
   m_Layer: 0
-  m_Name: TargetHolder L2
-  m_TagString: Untagged
+  m_Name: TargetHolderL2
+  m_TagString: TargetHolder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

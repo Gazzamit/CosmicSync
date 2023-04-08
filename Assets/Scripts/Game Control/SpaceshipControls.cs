@@ -370,7 +370,6 @@ public class SpaceshipControls : MonoBehaviour
     public void onCancel(InputAction.CallbackContext _context)
     {
         //if in game
-        //if (GameManagerDDOL._isGame == true)
         if(GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
             if (_context.performed)

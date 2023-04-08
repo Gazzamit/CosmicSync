@@ -9,7 +9,7 @@ public class HUDAnimations : MonoBehaviour
 
     private GameObject _mainMenu, _spaceshipHolder, _targetHolder, _mainInGameUI, _targetingSVG, _settings;
 
-    public Transform _leftRing, _rightRing, _target, _menuRingBlue, _settingsRingBlue;
+    public Transform _leftRing, _rightRing, _targetSquare, _menuRingBlue, _settingsRingBlue;
 
     public Ease _easeType;
     private Vector3 _leftRingStartPos, _rightRingStartPos, _targetStartPos, _menuRingStartPos, _settingsRingStartPos;
@@ -21,7 +21,7 @@ public class HUDAnimations : MonoBehaviour
         //for set active / inactive
         _mainMenu = GameObject.Find("MainMenu");
         _spaceshipHolder = GameObject.Find("SpaceShipHolder");
-        _targetHolder = GameObject.Find("TargetHolder");
+        _targetHolder = GameObject.FindGameObjectWithTag("TargetHolder");
         _mainInGameUI = GameObject.Find("MainInGameUI");
         _targetingSVG = GameObject.Find("TargetingSVG");
         _settings = GameObject.Find("Settings");
@@ -31,7 +31,7 @@ public class HUDAnimations : MonoBehaviour
         //Get original Vector3 Locations;
         _leftRingStartPos = _leftRing.localPosition;
         _rightRingStartPos = _rightRing.localPosition;
-        _targetStartPos = _target.localPosition;
+        _targetStartPos = _targetSquare.localPosition;
         _menuRingStartPos = _menuRingBlue.localPosition;
         _settingsRingStartPos = _settingsRingBlue.localPosition;
 
@@ -41,7 +41,7 @@ public class HUDAnimations : MonoBehaviour
         //move right ring off to the right
         _rightRing.localPosition = new Vector3(2000, 0, 0);
         //move target below screen
-        _target.localPosition = new Vector3(0, -1500, 0);
+        _targetSquare.localPosition = new Vector3(0, -1500, 0);
         //move menu Ring off top of screen
         _menuRingBlue.localPosition = new Vector3(0, 1500, 0);
         //move settings Ring off the bottom of the screen
@@ -104,7 +104,7 @@ public class HUDAnimations : MonoBehaviour
         Debug.Log("MoveHUDGameToMenu");
         _leftRing.DOLocalMove(_leftRing.localPosition + new Vector3(-2000, 0, 0), .3f).SetEase(_easeType);
         _rightRing.DOLocalMove(_rightRing.localPosition + new Vector3(2000, 0, 0), .3f).SetEase(_easeType);
-        _target.DOLocalMove(_target.localPosition + new Vector3(0, -1500, 0), .3f).SetEase(_easeType);
+        _targetSquare.DOLocalMove(_targetSquare.localPosition + new Vector3(0, -1500, 0), .3f).SetEase(_easeType);
         _menuRingBlue.DOLocalMove(_menuRingStartPos, .3f).SetEase(_easeType);
     }
 
@@ -113,7 +113,7 @@ public class HUDAnimations : MonoBehaviour
         Debug.Log("MoveHUDMenuToGame");
         _leftRing.DOLocalMove(_leftRingStartPos, .3f).SetEase(_easeType);
         _rightRing.DOLocalMove(_rightRingStartPos, .3f).SetEase(_easeType);
-        _target.DOLocalMove(_targetStartPos, .3f).SetEase(_easeType);
+        _targetSquare.DOLocalMove(_targetStartPos, .3f).SetEase(_easeType);
         _menuRingBlue.DOLocalMove(_menuRingBlue.localPosition + new Vector3(0, 1500, 0), .3f).SetEase(_easeType);
     }
 

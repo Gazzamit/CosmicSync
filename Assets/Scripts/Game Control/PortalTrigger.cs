@@ -5,7 +5,7 @@ using UnityEngine;
 public class PortalTrigger : MonoBehaviour
 {
     //for targetCollisionControl
-    public static bool _spaceshipInPortal = false, _triggerWhiteFlash = false;
+    public static bool _spaceshipInPortal = false;//, _triggerWhiteFlash = false;
 
 
     void OnTriggerEnter(Collider _collision)
@@ -13,7 +13,7 @@ public class PortalTrigger : MonoBehaviour
         if (_collision.gameObject.CompareTag("Spaceship"))
         {
             _spaceshipInPortal = true;
-            _triggerWhiteFlash = true;
+            //_triggerWhiteFlash = true;
         }
     }
 
