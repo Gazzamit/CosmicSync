@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BeatController : MonoBehaviour
 {
+    //Static instance so can be referenced in other scripts
+    public static BeatController instance;
 
     [Header("REQUIRED")]
     //Song beats per minute
@@ -43,9 +45,6 @@ public class BeatController : MonoBehaviour
 
     //check for AV sync
     public bool _stopOnBeatSyncCheck = false;
-
-    //Conductor static instance so can be referenced in other scripts
-    public static BeatController instance;
 
     void Awake()
     {

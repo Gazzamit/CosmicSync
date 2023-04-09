@@ -9,6 +9,8 @@ TagManager:
   - Laser
   - SpaceshipTarget
   - TargetHolder
+  - Score
+  - TargetsRemaining
   layers:
   - Default
   - TransparentFX

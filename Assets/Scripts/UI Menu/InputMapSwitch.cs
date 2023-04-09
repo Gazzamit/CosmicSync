@@ -55,7 +55,7 @@ public class InputMapSwitch : MonoBehaviour
         }
 
         //end of level, activate menu controls
-        if (BreakApart._finalTargetDestroyed == true)
+        if (ScoreManager._finalTargetDestroyed == true)
         {
             if (_endOfLevel == false)
             {

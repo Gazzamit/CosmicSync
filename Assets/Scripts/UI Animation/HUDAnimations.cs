@@ -25,6 +25,12 @@ public class HUDAnimations : MonoBehaviour
         _mainInGameUI = GameObject.Find("MainInGameUI");
         _targetingSVG = GameObject.Find("TargetingSVG");
         _settings = GameObject.Find("Settings");
+        
+        //if inactive in editor
+        _mainMenu.SetActive(true);
+        _mainInGameUI.SetActive(true);
+        _settings.SetActive(true);
+
     }
     private void Start()
     {
@@ -51,7 +57,7 @@ public class HUDAnimations : MonoBehaviour
         if (GameManagerDDOL._init == true)
         {
             StartCoroutine(ActivateMenuObjects());
-            MoveHUDGameStart();
+            MoveHUDGameLauncher();
             GameManagerDDOL._init = false;
         }
     }
@@ -92,16 +98,16 @@ public class HUDAnimations : MonoBehaviour
         }
     }
 
-    public void MoveHUDGameStart()
+    public void MoveHUDGameLauncher()
     {
-        Debug.Log("MoveHUDGameStart");
+        Debug.Log("HA - MoveHUDGameLauncher");
         _menuRingBlue.DOLocalMove(new Vector3(0, 0, 0), .3f).SetEase(_easeType);
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
     }
 
     public void MoveHUDGameToMenu()
     {
-        Debug.Log("MoveHUDGameToMenu");
+        Debug.Log("HA - MoveHUDGameToMenu");
         _leftRing.DOLocalMove(_leftRing.localPosition + new Vector3(-2000, 0, 0), .3f).SetEase(_easeType);
         _rightRing.DOLocalMove(_rightRing.localPosition + new Vector3(2000, 0, 0), .3f).SetEase(_easeType);
         _targetSquare.DOLocalMove(_targetSquare.localPosition + new Vector3(0, -1500, 0), .3f).SetEase(_easeType);
@@ -110,7 +116,7 @@ public class HUDAnimations : MonoBehaviour
 
     public void MoveHUDMenuToGame()
     {
-        Debug.Log("MoveHUDMenuToGame");
+        Debug.Log("HA - MoveHUDMenuToGame");
         _leftRing.DOLocalMove(_leftRingStartPos, .3f).SetEase(_easeType);
         _rightRing.DOLocalMove(_rightRingStartPos, .3f).SetEase(_easeType);
         _targetSquare.DOLocalMove(_targetStartPos, .3f).SetEase(_easeType);
@@ -119,7 +125,7 @@ public class HUDAnimations : MonoBehaviour
 
     public void MoveHUDMenuToSettings()
     {
-        Debug.Log("MoveHUDMenuToSettings");
+        Debug.Log("HA - MoveHUDMenuToSettings");
         _menuRingBlue.DOLocalMove(_menuRingBlue.localPosition + new Vector3(0, 1500, 0), .3f).SetEase(_easeType);
         _settingsRingBlue.DOLocalMove(_settingsRingStartPos, .3f).SetEase(_easeType);
     }

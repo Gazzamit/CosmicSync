@@ -24,6 +24,8 @@ public class TargetRadar : MonoBehaviour
 
     private Color _originalColour; // Store original color of the indicator
 
+    private int _debugIndexCurrent, _debugIndexPrevious = -1;
+
     private void Awake()
     {
         // Get references to the camera and RectTransforms
@@ -38,13 +40,18 @@ public class TargetRadar : MonoBehaviour
 
     private void Update()
     {
-        if (BreakApart._finalTargetDestroyed == false)
+        if (ScoreManager._finalTargetDestroyed == false)
         {
             //Get the next target from collision coltroller script list
-            _targetPosition = TargetCollisionController._targetPositionsStaticVar[TargetCollisionController._nextTargetIndex];
-            //Debug.Log("targetPosition: " + TargetCollisionController._nextTargetIndex + ": " + targetPosition);
+            _targetPosition = NextTargetIndex._targetPositionsStaticVar[NextTargetIndex._nextTargetIndex];
 
-
+            _debugIndexCurrent = NextTargetIndex._nextTargetIndex;
+            if (_debugIndexCurrent != _debugIndexPrevious)
+            {
+                Debug.Log("TR - Target index: " + _debugIndexCurrent + " . Position: " + _targetPosition);
+                _debugIndexPrevious = _debugIndexCurrent;
+            }
+            
             // Convert target position as viewport space
             Vector3 _targetPos = _cam.WorldToViewportPoint(_targetPosition);
             Vector2 _indicatorPos = Vector2.zero;
@@ -125,14 +132,16 @@ public class TargetRadar : MonoBehaviour
                 _indicatorPos = new Vector2(x, y);
 
             }
-           
+
             // Set the position of the UI indicator
             _rectTransformUIIndicator.anchoredPosition = _indicatorPos;
         }
         else
         {
             //all targets destroyed - zero position
-            _rectTransformUIIndicator.anchoredPosition = new Vector2(0f,0f);
+            //_rectTransformUIIndicator.anchoredPosition = new Vector2(0f,0f);
+            //Set inactive
+            _rectTransformUIIndicator.gameObject.SetActive(false);
         }
 
     }

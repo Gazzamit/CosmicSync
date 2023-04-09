@@ -68,8 +68,8 @@ public class SpaceshipControls : MonoBehaviour
     void Awake()
 
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         _rbSpaceShip = GetComponent<Rigidbody>();
         //_rbSpaceShip.AddRelativeForce(Vector3.forward  * 1000);   
@@ -239,10 +239,10 @@ public class SpaceshipControls : MonoBehaviour
         }
 
         //for scenes > 0   
-        if (TargetCollisionController._addPortalTurbulanceNow == true)
+        if (OnCollidePortal._addPortalTurbulanceNow == true)
         //if( _thrust1D != 0) //swap out for testing
         {
-            TargetCollisionController._addPortalTurbulanceNow = false;
+            OnCollidePortal._addPortalTurbulanceNow = false;
             AddPortalTurbulance();
             StartCoroutine(WhiteflashEffect());
         }

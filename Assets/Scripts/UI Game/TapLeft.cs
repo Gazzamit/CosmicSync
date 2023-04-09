@@ -42,7 +42,7 @@ public class TapLeft : MonoBehaviour
     {
         //Shared leftBeats to other script (to draw indicators based on beats)
         _leftBeatsStaticVar = _leftBeats;
-        _leftSliderValue = 0f; 
+        _leftSliderValue = 0f;
     }
 
     void Start()
@@ -66,7 +66,7 @@ public class TapLeft : MonoBehaviour
     {
         //menu disable gameplay wrapper
         //if (GameManagerDDOL._isGame == true)
-        if(GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
+        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
             _leftSlider.value = _leftSliderValue; //update slider (from pefect, good, poor hits)
 
@@ -172,6 +172,7 @@ public class TapLeft : MonoBehaviour
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isPerfectHit = true; // for spaceship Controls
                         _leftSliderValue += _perfectLaserBoost;
+                        ScoreManager._instance.AddPoints("perfect");
                     }
                     else
                     if (_timeDiff <= _goodThreshold)
@@ -181,6 +182,7 @@ public class TapLeft : MonoBehaviour
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isGoodHit = true; // for spaceship Controls
                         _leftSliderValue += _goodLaserBoost;
+                        ScoreManager._instance.AddPoints("good");
                     }
                     else
                     if (_timeDiff <= _poorThreshold)
@@ -190,6 +192,7 @@ public class TapLeft : MonoBehaviour
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isPoorHit = true; // for spaceship Controls
                         _leftSliderValue += _poorLaserBoost;
+                        ScoreManager._instance.AddPoints("poor");
                     }
                     else
                     {

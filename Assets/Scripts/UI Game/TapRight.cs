@@ -170,6 +170,7 @@ public class TapRight : MonoBehaviour
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isPerfectHit = true; // for spaceship Controls
                         _rightSliderValue += _perfectLaserBoost;
+                        ScoreManager._instance.AddPoints("perfect");
                     }
                     else
                     if (_timeDiff <= _goodThreshold)
@@ -179,6 +180,7 @@ public class TapRight : MonoBehaviour
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isGoodHit = true; // for spaceship Controls
                         _rightSliderValue += _goodLaserBoost;
+                        ScoreManager._instance.AddPoints("good");
                     }
                     else
                     if (_timeDiff <= _poorThreshold)
@@ -188,6 +190,7 @@ public class TapRight : MonoBehaviour
                         _beatsProcessed[i] = true; //Stop Multiple click on same beat
                         _isPoorHit = true; // for spaceship Controls
                         _rightSliderValue += _poorLaserBoost;
+                        ScoreManager._instance.AddPoints("poor");
                     }
                     else
                     {

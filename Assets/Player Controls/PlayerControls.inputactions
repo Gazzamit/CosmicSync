@@ -685,6 +685,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "EDITOR QUIT KEY",
+                    "type": "Button",
+                    "id": "fa8116d7-99aa-4842-9394-d8099e15de71",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -943,17 +952,6 @@
                 },
                 {
                     "name": "",
-                    "id": "25326187-a790-4437-9e5a-3ffb4ef2b8d7",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "91e44042-cdcf-4c15-9747-6f6a38ec5060",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -1092,6 +1090,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
                     "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b8eae123-9444-4fb0-9bd9-1a7901240c05",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
+                    "action": "EDITOR QUIT KEY",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

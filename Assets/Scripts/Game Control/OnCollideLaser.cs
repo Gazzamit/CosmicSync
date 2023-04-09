@@ -2,14 +2,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
-public class BreakApart : MonoBehaviour
+public class OnCollideLaser : MonoBehaviour
 {
     // Public variables 
-    public float _disableAfterTime = 15f;
-    public float _explosionForce = 10f;
-    public float _constantForce = 5f, _constantTorque = 5f;
-    public GameObject _explosionParticlePrefab; // the particle effect prefab
-    public GameObject _explosion2ParticlePrefab; // shorting out effect
+    [SerializeField] private float _disableAfterTime = 15f;
+    [SerializeField] private float _explosionForce = 10f;
+    [SerializeField] private float _constantForce = 5f, _constantTorque = 5f;
+    [SerializeField] private GameObject _explosionParticlePrefab; // the particle effect prefab
+    [SerializeField] private GameObject _explosion2ParticlePrefab; // shorting out effect
 
 
     // A list of all the child objects that will be broken apart
@@ -17,44 +17,35 @@ public class BreakApart : MonoBehaviour
 
     // The time at which the object starts breaking apart
     private float _startTime;
-    private bool _isBreakingApart = false;
-    public static bool _finalTargetDestroyed = false;
-
-    private bool _isHandled = false;
+    [SerializeField] private bool _isBreakingApart = false;
 
     void Awake()
     {
         _isBreakingApart = false;
-        _finalTargetDestroyed = false;
     }
 
     void Start()
     {
+        //list for target spaceship child and grandchild game objects
         _spaceshipChildObjects = new List<Transform>();
 
         // Add each child and grandchild transform to the list
         foreach (Transform _child in transform)
         {
-            // Check if the child has a MeshRenderer component
-            //MeshRenderer _meshRenderer0 = child.gameObject.GetComponent<MeshRenderer>();
-            // if (child.gameObject != null && _meshRenderer0 != null && child.gameObject.activeSelf)
             if (_child.gameObject != null && _child.gameObject.activeSelf)
 
             {
                 _spaceshipChildObjects.Add(_child);
-                //child.gameObject.SetActive(false);
+                //child.gameObject.SetActive(false); //for testing
             }
 
             foreach (Transform _grandchild in _child)
             {
-                // Check if the child has a MeshRenderer component
-                //MeshRenderer _meshRenderer1 = grandchild.gameObject.GetComponent<MeshRenderer>();
-                // if (grandchild.gameObject != null && _meshRenderer1 != null && grandchild.gameObject.activeSelf)
                 if (_grandchild.gameObject != null && _grandchild.gameObject.activeSelf)
 
                 {
                     _spaceshipChildObjects.Add(_grandchild);
-                    //grandchild.gameObject.SetActive(false);
+                    //grandchild.gameObject.SetActive(false); //for testing
                 }
             }
         }
@@ -62,41 +53,53 @@ public class BreakApart : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         // Check if the collision was with a laser fired by the player's spaceship
-        if (!_isBreakingApart && other.gameObject.CompareTag("Laser"))
+        if (_isBreakingApart == false && other.gameObject.CompareTag("Laser"))
         {
-            // Debug.Log("BA - Targat Spaceship is breaking Apart");
+            Debug.Log("OCL 0 - Laser Hit Trigger by collider");
             // Mark the spaceship as breaking apart
             _isBreakingApart = true;
-            _finalTargetDestroyed = true;
+            ScoreManager._instance.TargetDestroyed();
+
+            //Increment index if target already inactive, unless at end of game
+            //can only happen if destroyed in wrong order by players
+            if (transform.GetSiblingIndex() == NextTargetIndex._nextTargetIndex)
+            {
+                Debug.Log("OCL - laser Bool Set Destroyed: " + NextTargetIndex._nextTargetIndex);
+                //Log destroyed in bool and increment next target index
+                NextTargetIndex._targetsDestoryedStaticVar[NextTargetIndex._nextTargetIndex] = true;
+                NextTargetIndex._nextTargetIndex++;
+            }
+            else
+            {
+                //Log destroyed in bool and do not increment next target index
+                NextTargetIndex._targetsDestoryedStaticVar[transform.GetSiblingIndex()] = true;
+                Debug.Log("OCL - Laser Bool Set, but Target Destroyed Wrong Order: " + transform.GetSiblingIndex());
+                //could add a 'searching' message for next target, maybe a coroutine?
+            }
             StartCoroutine(HandleBreakingApart());
+
         }
     }
 
     IEnumerator HandleBreakingApart()
     {
-        if (_isHandled == false)
-        {
-            _isHandled = true;
-            
-            //Add particle effects first
-            StartCoroutine(AddExplosionEffect());
-            // Add a Rigidbody component to allow addforce. No Gravity required.
-            AddRigidbodies();
+        //Add particle effects first
+        StartCoroutine(AddExplosionEffect());
+        // Add a Rigidbody component to allow addforce. No Gravity required.
+        AddRigidbodies();
 
-            yield return new WaitForSeconds(2.5f);
-            PushObjectsApart();
+        yield return new WaitForSeconds(2.5f);
+        PushObjectsApart();
 
-            yield return new WaitForSeconds(0.5f);
-            StartCoroutine(AddExplosion2Effect());
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(AddExplosion2Effect());
 
-            yield return new WaitForSeconds(1f);
-            BigExplosionForce();
+        yield return new WaitForSeconds(1f);
+        BigExplosionForce();
 
-            _isBreakingApart = false;
-
-            yield return new WaitForSeconds(_disableAfterTime);
-            StartCoroutine(DisableObjects());
-        }
+        //this will also disable instantiated particle effects
+        yield return new WaitForSeconds(_disableAfterTime);
+        StartCoroutine(DisableObjects());
     }
 
     void AddRigidbodies()
@@ -137,30 +140,6 @@ public class BreakApart : MonoBehaviour
         }
     }
 
-    void BigExplosionForce()
-    {
-        // Add an explosive force to child objects 
-        foreach (Transform _child in _spaceshipChildObjects)
-        {
-            Rigidbody _rb = _child.gameObject.GetComponent<Rigidbody>();
-            if (_rb != null)
-            {
-                _rb.AddExplosionForce(_explosionForce + Random.Range(-20f, 20f), transform.position, 100f);
-
-            }
-        }
-    }
-
-    IEnumerator DisableObjects()
-    {
-        // Debug.Log("BA - Disable Objects");
-        foreach (Transform _obj in _spaceshipChildObjects)
-        {
-            yield return new WaitForSeconds(0.3f);
-            _obj.gameObject.SetActive(false);
-        }
-
-    }
     IEnumerator AddExplosionEffect()
     {
         // Cycle through the children of this object and enable a particle effect on each child
@@ -181,6 +160,20 @@ public class BreakApart : MonoBehaviour
             yield return new WaitForSeconds(0.4f);
         }
     }
+
+    void BigExplosionForce()
+    {
+        // Add an explosive force to child objects 
+        foreach (Transform _child in _spaceshipChildObjects)
+        {
+            Rigidbody _rb = _child.gameObject.GetComponent<Rigidbody>();
+            if (_rb != null)
+            {
+                _rb.AddExplosionForce(_explosionForce + Random.Range(-20f, 20f), transform.position, 100f);
+
+            }
+        }
+    }
     IEnumerator AddExplosion2Effect()
     {
         // Instantiate the particle effect prefab 
@@ -195,6 +188,26 @@ public class BreakApart : MonoBehaviour
         }
         yield return new WaitForSeconds(2f);
         _particleSystem2.Stop();
+    }
+    IEnumerator DisableObjects()
+    {
+        // Debug.Log("BA - Disable Objects");
+        foreach (Transform _obj in _spaceshipChildObjects)
+        {
+            yield return new WaitForSeconds(0.3f);
+            _obj.gameObject.SetActive(false);
+
+            //disable particle effects
+            ParticleSystem _particleSystem = _obj.gameObject.GetComponentInChildren<ParticleSystem>();
+            if (_particleSystem != null)
+            {
+                _particleSystem.Stop();
+                Destroy(_particleSystem.gameObject, _particleSystem.main.duration);
+            }
+        }
+        //disable parent spaceship after child objects disabled
+        gameObject.SetActive(false);
+
     }
 }
 

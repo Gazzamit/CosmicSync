@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PortalTrigger : MonoBehaviour
 {
-    //for targetCollisionControl
+    //for target collision control
+    //Script is on portals only
     public static bool _spaceshipInPortal = false;//, _triggerWhiteFlash = false;
 
 
@@ -16,8 +17,4 @@ public class PortalTrigger : MonoBehaviour
             //_triggerWhiteFlash = true;
         }
     }
-
-
-
-
 }
