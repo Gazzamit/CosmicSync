@@ -14,7 +14,6 @@ public class PortalTrigger : MonoBehaviour
         if (_collision.gameObject.CompareTag("Spaceship"))
         {
             _spaceshipInPortal = true;
-            //_triggerWhiteFlash = true;
         }
     }
 }

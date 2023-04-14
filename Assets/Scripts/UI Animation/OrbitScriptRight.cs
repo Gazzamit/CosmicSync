@@ -10,8 +10,12 @@ public class OrbitScriptRight : MonoBehaviour
     public float _startOffsetUnit; //0 to 1
     public GameObject _tapIndicatorPrefab;
 
+    private GameObject _rightRing;
+
     void Start()
     {
+        _rightRing = GameObject.FindGameObjectWithTag("RRBeatSelect");
+
         gameObject.SetActive(true);
 
         float _beatsInLoop = BeatController.instance._beatsInLoop;
@@ -42,7 +46,7 @@ public class OrbitScriptRight : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //0 to 1 of position within the current loop
         float _loopPosition = BeatController.instance._loopPlayheadNormalised;

@@ -50,7 +50,7 @@ public class OrbitScriptMenu : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Yellow rotating indicator
         //0 to 1 of position within the current loop

@@ -7,6 +7,8 @@ public class CanvasGroupFadeUp : MonoBehaviour
 
     // Reference to the object's CanvasGroup
     private CanvasGroup canvasGroup;
+
+    [SerializeField] private float _alpha;
     private float timer = 0f;
 
     private void Start()
@@ -24,6 +26,7 @@ public class CanvasGroupFadeUp : MonoBehaviour
 
             // Set the new alpha value with the calculated ratio
             canvasGroup.alpha = Mathf.Lerp(0f, 1f, timer / fadeInTime);
+            _alpha = canvasGroup.alpha;
         }
     }
 }

@@ -46,23 +46,30 @@ public class BeatController : MonoBehaviour
     //check for AV sync
     public bool _stopOnBeatSyncCheck = false;
 
+    private bool _init = true;
+
     void Awake()
     {
         //Create static instance of BeatController;
         instance = this;
-    
+
         //Calculate seconds for each beat
         _secondsPerBeat = 60f / _tempo;
 
-        //Start the music
-        _audioSource.Play();
-
-        //Log the time when the music starts
-        _dspTimeAtStart = (float)AudioSettings.dspTime;
     }
 
     void FixedUpdate()
     {
+        if (_init)
+        {
+            _init = false;
+
+            //Start the music
+            _audioSource.Play();
+
+            //Log the time when the music starts
+            _dspTimeAtStart = (float)AudioSettings.dspTime;
+        }
         // get AV sync offset from menu scene
         _avSyncOffset = GameManagerDDOL._timingSliderValue;
 

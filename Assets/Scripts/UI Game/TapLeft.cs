@@ -12,8 +12,7 @@ public class TapLeft : MonoBehaviour
     public List<float> _leftBeats; //beats entered in inspector
     //public float _startOffsetUnit; //0 to 1
 
-    private SVGImage _svgImageRing, _svgImageCharge;
-    private Image _laserSlider;
+    private SVGImage _svgImageRing;
 
     private float _perfectThreshold, _goodThreshold, _poorThreshold;
     [Header("REQUIRED")]
@@ -37,6 +36,8 @@ public class TapLeft : MonoBehaviour
     public static bool _isPoorHit = false;
     public static bool _isMissHit = false;
     public ParticleSystem _anyHitLeft;
+    [SerializeField] private SVGImage _svgImageCharge;
+    [SerializeField] private Image _laserSlider;
 
     void Awake()
     {
@@ -48,8 +49,6 @@ public class TapLeft : MonoBehaviour
     void Start()
     {
         _svgImageRing = GetComponent<SVGImage>();
-        _svgImageCharge = transform.parent.GetChild(2).GetChild(0).gameObject.GetComponent<SVGImage>();
-        _laserSlider = transform.parent.GetChild(2).GetChild(0).GetChild(0).GetChild(0).gameObject.GetComponent<Image>();
 
         _perfectThreshold = BeatController.instance._perfectTapThereshold;
         _goodThreshold = BeatController.instance._goodTapThreshold;
@@ -62,7 +61,7 @@ public class TapLeft : MonoBehaviour
         _barInSeconds = BeatController.instance._beatsInLoop * BeatController.instance._secondsPerBeat;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //menu disable gameplay wrapper
         //if (GameManagerDDOL._isGame == true)
@@ -225,7 +224,7 @@ public class TapLeft : MonoBehaviour
 
     IEnumerator AnyHitEffectLeft(int _colourIndex)
     {
-        //start particle effect on perfect.goog.poor hits
+        //start particle effect on perfect.good.poor hits
         ParticleSystem.ColorOverLifetimeModule colorModule = _anyHitLeft.colorOverLifetime;
         ParticleSystem.MinMaxGradient color = colorModule.color;
         color = new ParticleSystem.MinMaxGradient(_colours[_colourIndex]);

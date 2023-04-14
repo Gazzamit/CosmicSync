@@ -105,6 +105,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Look Sensitivity",
+                    "type": "PassThrough",
+                    "id": "fc71ed58-f93f-418d-8277-7558cd5e9b8e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Quit",
                     "type": "PassThrough",
                     "id": "79917ef5-7d51-4be8-9826-feca64ac3e66",
@@ -112,6 +121,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PressI",
+                    "type": "PassThrough",
+                    "id": "f482127c-c635-4439-8249-93871e1a5fb4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "PitchYaw",
@@ -605,6 +623,50 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Quit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "KL Keys",
+                    "id": "8fb53f61-1380-4e3e-9f14-5067891dcd3b",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look Sensitivity",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "23f13d84-f8b4-46c5-85c9-a3a83ba5d201",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look Sensitivity",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "51326d5b-5fc8-4593-8bcc-50c2daecfeeb",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look Sensitivity",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6dab2c73-7e0c-45f4-8498-7be4c906b750",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PressI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

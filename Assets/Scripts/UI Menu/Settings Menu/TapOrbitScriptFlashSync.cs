@@ -16,42 +16,41 @@ public class TapOrbitScriptFlashSync : MonoBehaviour
 
     [SerializeField] private int _currentBeatPosition, _lastBeatPosition;
 
+    [SerializeField] private float _flashOffset = -0.02f;
+
     void FixedUpdate()
     {
         // Calculate the beat and loop position from the BeatController
         //offset by -0.01 for slightly earlier 0.1s flash
-        _currentBeatPosition = Mathf.FloorToInt(BeatController.instance._playheadInBeats - 0.01f);
+        _currentBeatPosition = Mathf.FloorToInt(BeatController.instance._playheadInBeats + _flashOffset);
 
         // On increment flash the circle
         if (_currentBeatPosition != _lastBeatPosition)
         {
             // Flash the image
-            StartCoroutine(FlashIndicator());
+            _blueCircle.color = _colours[1];
+            StartCoroutine(ResetColour());
 
             _lastBeatPosition = _currentBeatPosition;
         }
     }
 
-    IEnumerator FlashIndicator()
+    IEnumerator ResetColour()
     {
-        //_yellowIndicator.color = _colours[1];
-        _blueCircle.color = _colours[1];
-
         yield return new WaitForSeconds(0.1f);
-
-        //_yellowIndicator.color = _colours[0];
         _blueCircle.color = _colours[0];
-        //_isFlashingIndicator = false;
     }
 
-    //on Cancel, retrun to Menu
+    //on ESC Cancel, retrun to Menu
     public void onReturnToMenu(InputAction.CallbackContext _context)
     {
         //if in Settings
         if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)
         {
-            if (_context.performed)
+            //as settings/menu active, transform used to check which input esc to use
+            if (_context.performed && gameObject.transform.position.y == 0)
             {
+                Debug.Log("TOSFS - ESC Pressed from Settings Menu");
                 HUDAnimations._switchingHUD = true; //for HUD animations
                 GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
             }
@@ -68,12 +67,12 @@ public class TapOrbitScriptFlashSync : MonoBehaviour
         {
             if (_context.performed)
             {
-                Debug.Log("Quitting Game");
-                #if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-                #else
+                Debug.Log("TOSFS - Quitting Game");
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
                     Application.Quit();
-                #endif
+#endif
             }
         }
 

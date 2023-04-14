@@ -15,11 +15,6 @@ public class AVSynchronisation : MonoBehaviour
         _slider.value = GameManagerDDOL._timingSliderValue;
     }
 
-    private void Update()
-    {
-
-    }
-
     public void onOP_Key(InputAction.CallbackContext _context)
     {
         _OP_Input = _context.ReadValue<float>();

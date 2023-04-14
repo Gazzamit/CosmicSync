@@ -38,7 +38,7 @@ public class TargetRadar : MonoBehaviour
     }
 
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (ScoreManager._finalTargetDestroyed == false)
         {

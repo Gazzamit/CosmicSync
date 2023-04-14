@@ -7,12 +7,6 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Scene Easy 1.unity
-    guid: 93c5b0e4eaa914635a591d63c424a6b4
-  - enabled: 1
-    path: Assets/Scenes/Scene Easy 2.unity
-    guid: 359efa0a142734f00934f4c62ee8fe84
-  - enabled: 1
-    path: Assets/Scenes/Scene Easy 3.unity
-    guid: ea5c63e191b884d55a8ae27024a0d917
+    guid: f8b3ec3fdb20c4d9992245291683a9f8
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: e01a006e5c15146cd90bfbe4316fe20b, type: 2}

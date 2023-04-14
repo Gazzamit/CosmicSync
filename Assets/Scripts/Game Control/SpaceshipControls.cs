@@ -68,8 +68,8 @@ public class SpaceshipControls : MonoBehaviour
     void Awake()
 
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
         _rbSpaceShip = GetComponent<Rigidbody>();
         //_rbSpaceShip.AddRelativeForce(Vector3.forward  * 1000);   
@@ -165,7 +165,7 @@ public class SpaceshipControls : MonoBehaviour
         _localVelocity = transform.InverseTransformDirection(_rbSpaceShip.velocity);
         //Debug.Log("Local Velocity: " + _localVelocity.ToString());     
 
-        if (_allowMovement && (_roll1D > 0.1f || _roll1D < -0.1f))
+        if (_allowMovement && (_roll1D > 0.05f || _roll1D < -0.05f))
         {
             //roll (AD) Roll over axis * buttonpress (±1) * how fast * deltaTime)
             _rbSpaceShip.AddRelativeTorque(Vector3.back * _roll1D * _rollTorque * Time.deltaTime);
@@ -246,6 +246,9 @@ public class SpaceshipControls : MonoBehaviour
             AddPortalTurbulance();
             StartCoroutine(WhiteflashEffect());
         }
+
+
+
     }
 
     void AddPortalTurbulance()
@@ -254,6 +257,11 @@ public class SpaceshipControls : MonoBehaviour
         _addPortalTurbulanceMultiplier = Mathf.Sign(Random.Range(-1, 1)) * Random.Range(_randomPortalTurbulance, 0.2f + _randomPortalTurbulance);
         // Debug.Log("Random Turbulance: " + _addPortalTurbulanceMultiplier);
         _allowMovement = true;
+        if (GameManagerDDOL._doWelcome == true)
+        {
+            _addPortalTurbulanceMultiplier = 0.06f;
+            _pitchYaw.y = 0.01f;
+        }
         _roll1D = _addPortalTurbulanceMultiplier;
         TurnOffMovement();
     }
@@ -261,7 +269,7 @@ public class SpaceshipControls : MonoBehaviour
     {
         // Debug.Log("White Flash Effect Called");
         GameObject _particleObject3 = Instantiate(_whiteFlashParticlePrefab, transform);
-        _particleObject3.transform.localPosition = new Vector3(0,0,100);
+        _particleObject3.transform.localPosition = new Vector3(0, 0, 100);
 
         // Enable the particle effect component on the particle object
         ParticleSystem _particleSystem3 = _particleObject3.GetComponent<ParticleSystem>();
@@ -270,7 +278,7 @@ public class SpaceshipControls : MonoBehaviour
             _particleSystem3.Play();
         }
         yield return new WaitForSeconds(2f);
-        //_particleSystem3.Stop();
+        Destroy(_particleSystem3.gameObject);
     }
 
     private void setTapMultiuplier()
@@ -370,11 +378,12 @@ public class SpaceshipControls : MonoBehaviour
     public void onCancel(InputAction.CallbackContext _context)
     {
         //if in game
-        if(GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
+        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
             if (_context.performed)
             {
                 // Debug.Log("_switchInputMaps = true");
+                //switching HUD is set to true in input map switch for HUD animations
                 InputMapSwitch._switchInputMaps = true; //switch to UI Menu
             }
         }

@@ -11,6 +11,29 @@ TagManager:
   - TargetHolder
   - Score
   - TargetsRemaining
+  - Welcome1
+  - Welcome2
+  - Welcome3
+  - MainMenu
+  - Welcome4
+  - Dialogue
+  - WelcomeSmoke
+  - WelcomeHaze
+  - LeftSVGImageCharge
+  - LeftLaserImage
+  - RightSVGImageCharge
+  - RightLaserImage
+  - RRBeatSelect
+  - RTimingIndicator
+  - LRBeatSelect
+  - LTimingIndicator
+  - MRBeatSelect
+  - MRTimingIndicator
+  - STimingIndicator
+  - SRToFlash
+  - UI
+  - Multiplier
+  - MultiplierX
   layers:
   - Default
   - TransparentFX

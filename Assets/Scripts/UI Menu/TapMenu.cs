@@ -52,7 +52,7 @@ public class TapMenu : MonoBehaviour
         _barInSeconds = BeatController.instance._beatsInLoop * BeatController.instance._secondsPerBeat;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //reset beatsProcessed array ready for next loop
         _loopPlayheadInSeconds = BeatController.instance._loopPlayheadInSeconds;
@@ -134,10 +134,12 @@ public class TapMenu : MonoBehaviour
         //if in Menu
         if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu)
         {
-            if (_context.performed)
+            //as settings/menu active, transform used to check which input esc to use
+            if (_context.performed && gameObject.transform.position.y == 0)
             {
-                HUDAnimations._switchingHUD = true; //for HUD animations
+                Debug.Log("TM - ESC pressed from Menu");
                 GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
+                HUDAnimations._switchingHUD = true; //for HUD animations
             }
         }
     }

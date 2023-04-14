@@ -37,7 +37,7 @@ public class CameraShake : MonoBehaviour
 
         while (Time.time < endTime && isShaking)
         {
-            Vector3 _targetPosition = initialPosition + new Vector3(Random.Range(-shakeIntensity, shakeIntensity), Random.Range(-shakeIntensity, shakeIntensity), 0f);
+            Vector3 _targetPosition = initialPosition + new Vector3(0f,0f,Random.Range(shakeIntensity, shakeIntensity*1.25f));
             _cameraTransform.localPosition = Vector3.Lerp(_cameraTransform.localPosition, _targetPosition, Time.deltaTime * shakeLerpSpeed);
 
             yield return null;

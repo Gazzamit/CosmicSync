@@ -7,34 +7,40 @@ using DG.Tweening;
 public class SVGFlickerTween : MonoBehaviour
 {
 
+    private SVGImage _svgImage;
+    //[SerializeField] SVGImage _svgImage;
     void Start()
     {
+        _svgImage = gameObject.GetComponent<SVGImage>();
         //First run fx
         StartFlashSequence();
     }
 
-    void LateUpdate()
+    //function directly called by HUDAnimatinos via List of Flicker Objects
+    public void StartFlashSequence()
     {
-        //run seq on HUD change to Menu
-        if (HUDAnimations._switchingHUD == true) 
-        {
-            StartFlashSequence();
-            // Debug.Log("HUD Switch Flicker Tween");
-        }
-    }
-
-    private void StartFlashSequence()
-    {
-        SVGImage svgImage = gameObject.GetComponent<SVGImage>();
-
+        //Debug.Log("Flicker Tween: " + gameObject.name);
         // Create the fade sequence
         Sequence fadeSequence = DOTween.Sequence()
-            .Append(svgImage.DOFade(1, 0.04f)) //to black
+            .Append(_svgImage.DOFade(1, 0.04f)) //to White
             .AppendInterval(Random.Range(0.01f, 0.04f))
-            .Append(svgImage.DOFade(0, 0.04f)) //to black
-            .SetLoops(4, LoopType.Yoyo);
+            .Append(_svgImage.DOFade(0, 0.04f)) //to black
+            .AppendInterval(Random.Range(0.01f, 0.04f))
+            .Append(_svgImage.DOFade(1, 0.04f)) //to white
+            .AppendInterval(Random.Range(0.01f, 0.04f))
+            .Append(_svgImage.DOFade(0, 0.04f)) //to black
+            .AppendInterval(Random.Range(0.01f, 0.04f))
+            .Append(_svgImage.DOFade(1, 0.04f)) //to white
+            .Append(_svgImage.DOFade(1, 0.04f)) //to white
+            .AppendInterval(Random.Range(0.01f, 0.04f))
+            .Append(_svgImage.DOFade(0, 0.04f)) //to black
+            .AppendInterval(Random.Range(0.01f, 0.04f))
+            .Append(_svgImage.DOFade(1, 0.04f)); //to white
+
 
         // Start the sequence
         fadeSequence.Play();
+        
+        // HUDAnimations._flickerTween = false;
     }
 }

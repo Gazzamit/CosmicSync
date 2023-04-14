@@ -42,7 +42,7 @@ public class OrbitScriptLeft : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //0 to 1 of position within the current loop
         float _loopPosition = BeatController.instance._loopPlayheadNormalised;

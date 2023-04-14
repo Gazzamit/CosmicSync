@@ -11,7 +11,6 @@ public class OnCollideLaser : MonoBehaviour
     [SerializeField] private GameObject _explosionParticlePrefab; // the particle effect prefab
     [SerializeField] private GameObject _explosion2ParticlePrefab; // shorting out effect
 
-
     // A list of all the child objects that will be broken apart
     private List<Transform> _spaceshipChildObjects;
 
@@ -166,12 +165,19 @@ public class OnCollideLaser : MonoBehaviour
         // Add an explosive force to child objects 
         foreach (Transform _child in _spaceshipChildObjects)
         {
-            Rigidbody _rb = _child.gameObject.GetComponent<Rigidbody>();
-            if (_rb != null)
-            {
-                _rb.AddExplosionForce(_explosionForce + Random.Range(-20f, 20f), transform.position, 100f);
+            Vector3 _direction = _child.position - transform.position;
+            float _distance = _direction.magnitude;
+            Vector3 moveAmount = _direction.normalized * (_distance * Time.deltaTime);
 
-            }
+            _child.position += moveAmount;
+
+            // Apply a constant torque to the objects
+            Vector3 torqueDirection = Random.insideUnitSphere.normalized;
+            _child.GetComponent<Rigidbody>().AddTorque(torqueDirection * _constantTorque * 2f, ForceMode.Impulse);
+
+            // Apply a constant force to push the objects apart
+            Vector3 forceDirection = _direction.normalized;
+            _child.GetComponent<Rigidbody>().AddForce(forceDirection * _explosionForce, ForceMode.Impulse);
         }
     }
     IEnumerator AddExplosion2Effect()

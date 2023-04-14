@@ -81,7 +81,7 @@ public class InputMapSwitch : MonoBehaviour
 
         //set bools for HUD
         HUDAnimations._switchingHUD = true; //for HUD animations
-        //GameManagerDDOL._isGame = false; //for menu HUD animation
+        Debug.Log("IMS - Activating Menu Controls");
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
         //Debug.Log("MainMenu Mode: " + GameManagerDDOL._currentMode);
     }
@@ -94,7 +94,7 @@ public class InputMapSwitch : MonoBehaviour
 
         //set bools for HUD
         HUDAnimations._switchingHUD = true; //for HUD animations
-        //GameManagerDDOL._isGame = true; //for menu HUD animation
+        Debug.Log("IMS - Activating Game Controls");
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
 
     }
