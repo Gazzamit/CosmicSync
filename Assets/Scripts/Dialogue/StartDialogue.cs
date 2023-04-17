@@ -1,27 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class StartDialogue : MonoBehaviour
 {
-    private Dialogue _welcome1, _welcome2, _welcome3, _welcome4;
+    private Dialogue _welcome1, _welcome2, _welcome3, _welcome4, _welcome5, _welcome6, _welcome7;
 
-    private GameObject _mainMenu, _dialoguePanel, _blackCanvasPanel, _UIObject;
+    private GameObject _mainMenu, _dialoguePanel, _blackCanvasPanel, _UIObject, _velocityObj, _mainInGameUI;
+    [SerializeField] private Color _skyboxWelcomeColor, _skyboxStartColour;
 
-    //    //[SerializeField] private GameObject _smoke, _haze;
+    private Material _skyboxMat;
+
+    [SerializeField] private GameObject _smoke;
+    void Awake()
+    {
+        _skyboxMat = RenderSettings.skybox;
+    }
 
     void Start()
     {
         _mainMenu = GameObject.FindGameObjectWithTag("MainMenu");
+        _velocityObj = GameObject.FindGameObjectWithTag("Velocity");
+        _mainInGameUI = GameObject.Find("MainInGameUI");
         _welcome1 = GameObject.FindGameObjectWithTag("Welcome1").GetComponent<DialogueTrigger>()._dialogue;
         _welcome2 = GameObject.FindGameObjectWithTag("Welcome2").GetComponent<DialogueTrigger>()._dialogue;
         _welcome3 = GameObject.FindGameObjectWithTag("Welcome3").GetComponent<DialogueTrigger>()._dialogue;
         _welcome4 = GameObject.FindGameObjectWithTag("Welcome4").GetComponent<DialogueTrigger>()._dialogue;
-
+        _welcome5 = GameObject.FindGameObjectWithTag("Welcome5").GetComponent<DialogueTrigger>()._dialogue;
+        _welcome6 = GameObject.FindGameObjectWithTag("Welcome6").GetComponent<DialogueTrigger>()._dialogue;
+        _welcome7 = GameObject.FindGameObjectWithTag("Welcome7").GetComponent<DialogueTrigger>()._dialogue;
 
         _UIObject = GameObject.FindGameObjectWithTag("UI");
-        //        //_smoke = GameObject.FindGameObjectWithTag("WelcomeSmoke");
-        //        //_haze = GameObject.FindGameObjectWithTag("WelcomeHaze");
+        _smoke = GameObject.FindGameObjectWithTag("WelcomeSmoke");
 
         StartCoroutine(WriteDialogueToDisk());
 
@@ -31,61 +42,94 @@ public class StartDialogue : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+
+    }
+
     IEnumerator StartWelcomeDialogues()
     {
         Debug.Log("SD - Do Welcome");
 
-
         // welcome 1
+        HUDAnimations._hideDialogue = true;
         //set to black at start
+        _skyboxMat.SetColor("_Tint", _skyboxWelcomeColor);
         HUDAnimations._fadeToBlack = true;
         //wait till black
         yield return new WaitForSeconds(1f);
         //fadeup from black
+        //add forwad thrust and fire lasers
+        SpaceshipControls._doWelcomeSpaceShipControls = true;
+        yield return new WaitForSeconds(0.3f);
         HUDAnimations._fadeFromBlack = true;
+        yield return new WaitForSeconds(8.8f);
+        //hide velocity in warp tunnel
+        _velocityObj.SetActive(false);
+
         //add temporary rotation to spaceship at start
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 40; i++)
         {
             OnCollidePortal._addPortalTurbulanceNow = true;
-            yield return new WaitForSeconds(0.2f);
+            if (i == 15) HUDAnimations._flickerHUD = true;
+            yield return new WaitForSeconds(0.25f);
         }
+
+        _skyboxMat.SetColor("_Tint", _skyboxStartColour);
         //add fx to spaceship
-        //        //_smoke.GetComponent<ParticleSystem>().Play();
-        //        //_haze.GetComponent<ParticleSystem>().Play();
-        //wait for menu flicker to end then...
+        _smoke.GetComponent<ParticleSystem>().Play();
+
+
+        //Welcome 1: RAI - hi Jamie....
         yield return new WaitForSeconds(2.0f);
-        //show dialogue box
-        HUDAnimations._showDialogue = true;
-        //begin dialogue 1
+        HUDAnimations._showDialogue = true;//show dialogue box
         yield return StartCoroutine(ProcessDialogue(_welcome1));
-        //hide dialogue box
-        HUDAnimations._hideDialogue = true;
-        //wait for a second
-        yield return new WaitForSeconds(1.0f);
+        HUDAnimations._hideDialogue = true;//hide dialogue box
+        yield return new WaitForSeconds(1.0f);//wait for a second
 
-        //welcome 2: Hello Jamie, my name is Rai
+        //welcome 2: r-a-i rebooted...
         HUDAnimations._showDialogue = true;
-        //stop smoke fx
-        //        //_smoke.GetComponent<ParticleSystem>().Stop();
-        //        //_haze.GetComponent<ParticleSystem>().Stop();
-        //begin dalogue 2
+        _smoke.GetComponent<ParticleSystem>().Stop();//stop smoke fx
         yield return StartCoroutine(ProcessDialogue(_welcome2));
-        // hide dialogue box
-        HUDAnimations._hideDialogue = true;
+        HUDAnimations._hideDialogue = true; // hide dialogue box
         yield return new WaitForSeconds(1.0f);
 
-        //welcome 3
+        //welcome 3: JENZI...
         HUDAnimations._showDialogue = true;
-        //activate main menu (set it to game forst so it will trigger change)
+        yield return StartCoroutine(ProcessDialogue(_welcome3));
+        HUDAnimations._hideDialogue = true; // hide dialogue box
+        yield return new WaitForSeconds(1.0f);
+
+        //welcome 4: RAI - creates log file... launching hud...
+        HUDAnimations._showDialogue = true;
+        yield return StartCoroutine(ProcessDialogue(_welcome4));
+        HUDAnimations._hideDialogue = true; // hide dialogue box
+        yield return new WaitForSeconds(1.0f);
+        //activate main menu (set it to game first so it will trigger change)
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
         HUDAnimations._switchingHUD = true; //adds flicker as well
-        yield return StartCoroutine(ProcessDialogue(_welcome3));
+        yield return new WaitForSeconds(0.5f); //wait for menu to be in place
+        _mainInGameUI.SetActive(true); // was inactive affter HUDFlicker
 
-        //move up dialogue mid sentence list
-        _UIObject.GetComponent<HUDAnimations>().MoveDialogueUp();
-        yield return StartCoroutine(ProcessDialogue(_welcome4));
+        //welcome5 : RAI - press escape
+        HUDAnimations._showDialogue = true;
+        yield return StartCoroutine(ProcessDialogue(_welcome5));
+        DialogueManager._instance._pauseAdvance = true; //stop I working
+        yield return new WaitUntil(() => Keyboard.current.escapeKey.wasPressedThisFrame); //press escape
+        //DialogueManager._instance.DisplayNextSentenceNow(); //call next sentance on escape 
+        DialogueManager._instance._pauseAdvance = false; //start I working
+        GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
+        HUDAnimations._switchingHUD = true; //adds flicker as well
 
+        // A/V sync
+        yield return StartCoroutine(ProcessDialogue(_welcome6));
+        _UIObject.GetComponent<HUDAnimations>().MoveDialogueUp();//move up dialogue
+        //Pitch/Yaw tweak
+        yield return StartCoroutine(ProcessDialogue(_welcome7));
+        
+
+        _velocityObj.SetActive(true);
         yield return null;
 
     }
@@ -100,44 +144,6 @@ public class StartDialogue : MonoBehaviour
     {
         StartCoroutine(StartWelcomeDialogues());
     }
-
-    // trigger abouve with
-    // StartDialogue startDialogueScript = GetComponent<StartDialogue>();
-    // startDialogueScript.TriggerWelcomeDialogues();
-
-    //not currently used
-    // IEnumerator AddSmokeEffect()
-    // {
-    //     // Instantiate the particle effect prefab 
-    //     GameObject _fx1 = Instantiate(_smoke, transform);
-    //     _fx1.transform.localPosition = Vector3.zero;
-
-    //     // Enable the particle effect component on the particle object
-    //     ParticleSystem _ps1 = _fx1.GetComponent<ParticleSystem>();
-    //     if (_ps1 != null)
-    //     {
-    //         _ps1.Play();
-    //     }
-    //     yield return new WaitForSeconds(2f);
-    //     //_ps1.Stop();
-    // }
-
-    // //not currently used
-    // IEnumerator AddHazeEffect()
-    // {
-    //     // Instantiate the particle effect prefab 
-    //     GameObject _fx2 = Instantiate(_haze, transform);
-    //     _fx2.transform.localPosition = Vector3.zero;
-
-    //     // Enable the particle effect component on the particle object
-    //     ParticleSystem _ps2 = _fx2.GetComponent<ParticleSystem>();
-    //     if (_ps2 != null)
-    //     {
-    //         _ps2.Play();
-    //     }
-    //     yield return new WaitForSeconds(2f);
-    //     //_ps1.Stop();
-    // }
 
     IEnumerator WriteDialogueToDisk()
     {

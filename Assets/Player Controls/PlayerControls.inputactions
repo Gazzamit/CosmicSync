@@ -1167,6 +1167,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "PressI",
+            "id": "8f9d5bcf-b6e1-48f4-b067-8246753120b2",
+            "actions": [
+                {
+                    "name": "PressI",
+                    "type": "PassThrough",
+                    "id": "32d8b44e-ce9c-4fa4-8155-4ec25754a0d1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "316b01f8-6e61-44dd-b6a4-f9675008e123",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PressI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

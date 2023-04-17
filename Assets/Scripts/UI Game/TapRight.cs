@@ -35,6 +35,7 @@ public class TapRight : MonoBehaviour
     public static bool _isGoodHit = false;
     public static bool _isPoorHit = false;
     public static bool _isMissHit = false;
+    private bool _hitCounts;
     public ParticleSystem _anyHitRight;
     [SerializeField] private SVGImage _svgImageCharge;
     [SerializeField] private Image _laserSlider;
@@ -170,6 +171,7 @@ public class TapRight : MonoBehaviour
                         _isPerfectHit = true; // for spaceship Controls
                         _rightSliderValue += _perfectLaserBoost;
                         ScoreManager._instance.AddPoints("perfect");
+                        _hitCounts = true; //so not a miss hit
                     }
                     else
                     if (_timeDiff <= _goodThreshold)
@@ -180,6 +182,7 @@ public class TapRight : MonoBehaviour
                         _isGoodHit = true; // for spaceship Controls
                         _rightSliderValue += _goodLaserBoost;
                         ScoreManager._instance.AddPoints("good");
+                        _hitCounts = true; //so not a miss hit
                     }
                     else
                     if (_timeDiff <= _poorThreshold)
@@ -190,6 +193,7 @@ public class TapRight : MonoBehaviour
                         _isPoorHit = true; // for spaceship Controls
                         _rightSliderValue += _poorLaserBoost;
                         ScoreManager._instance.AddPoints("poor");
+                        _hitCounts = true; //so not a miss hit
                     }
                     else
                     {
@@ -197,6 +201,12 @@ public class TapRight : MonoBehaviour
                     }
                 }
             }
+            //if the hit was not inside even the poor threshold for any beat
+            if (_hitCounts == false)
+            {
+                ScoreManager._instance.AddPoints("miss");  //minus value    
+            }
+            if (_hitCounts == true) _hitCounts = false; //reset for next key press
         }
     }
 

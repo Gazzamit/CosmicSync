@@ -56,6 +56,8 @@ public class SpaceshipControls : MonoBehaviour
     public static bool _LaserFiringStartShake = false, _laserFiringAddBlur = false;
     public ParticleSystem[] _laserParticleSystems;
 
+    public static bool _doWelcomeSpaceShipControls = false;
+
     //stop input triggers after every half beat
     private float _turnOffInOneHalfBeat;
 
@@ -68,8 +70,8 @@ public class SpaceshipControls : MonoBehaviour
     void Awake()
 
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         _rbSpaceShip = GetComponent<Rigidbody>();
         //_rbSpaceShip.AddRelativeForce(Vector3.forward  * 1000);   
@@ -94,6 +96,12 @@ public class SpaceshipControls : MonoBehaviour
 
         _speedRight.value = _magnitude / 200f; //200 set as max speed
         _speedLeft.value = _magnitude / 200f; //200 set as max speed
+
+        if (_doWelcomeSpaceShipControls == true)
+        {
+            StartCoroutine(_DoWelcomeSpaceshipActions());
+            _doWelcomeSpaceShipControls = false;
+        }
     }
 
     /*
@@ -110,7 +118,7 @@ public class SpaceshipControls : MonoBehaviour
                         //clonedRocket = Instantiate(_rocketRB, transform.position, transform.rotation);
                         clonedRocket = Instantiate(_rocketRB, transform.position, transform.rotation * Quaternion.Euler(90, 0, 0));
                         clonedRocket.velocity = transform.TransformDirection((Vector3.forward) * 150f) + _rbSpaceShip.velocity;
-                        
+
                         _readyToFire1 = 0;
                     }
             }
@@ -144,6 +152,35 @@ public class SpaceshipControls : MonoBehaviour
         }
     }
 
+    IEnumerator _DoWelcomeSpaceshipActions()
+    {
+        //move toward target for doWelcome
+        _thrust1D = 0.5f;
+        _pitchYaw.y = 0.01f;
+        _pitchYaw.x = 0.01f;
+        _allowMovement = true;
+        yield return new WaitForSeconds(5.7f);
+        _pitchYaw.y = -0.001f;
+        _pitchYaw.x = -0.001f;
+        _laserFiringLeftReduceValue = true; //for Tap scripts (reduce Laser value)
+        _laserFiringRightReduceValue = true; //for Tap scripts (reduce Laser value)
+        _LaserFiringStartShake = true; //for camera shake
+        _laserFiringAddBlur = true; //for camera blur
+        _laserLeft.SetActive(true);
+        _laserRight.SetActive(true);
+        StartCoroutine(FireLaserParticleSystems());
+        _readyToFireLaser = false;
+        StartCoroutine(TurnOffLasers());
+        yield return new WaitForSeconds(7f);
+        //Add back amounts
+        _roll1D = 0.05f;
+        _thrust1D = 3f;
+        _pitchYaw.y = -0.01f;
+        _pitchYaw.x = -0.01f;
+        yield return new WaitForSeconds(10f);
+        //disable thrust
+        _allowMovement = false;
+    }
 
     IEnumerator FireLaserParticleSystems()
     {

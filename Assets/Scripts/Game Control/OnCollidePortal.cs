@@ -42,6 +42,7 @@ public class OnCollidePortal : MonoBehaviour
                 {
                     // Debug.Log("Adding portal Turbulance");
                     _addPortalTurbulanceNow = true;
+                    ScoreManager._instance.AddPoints("portal");
 
                     // First, Check if all targets have been hit
                     if (ScoreManager._finalTargetDestroyed == true)

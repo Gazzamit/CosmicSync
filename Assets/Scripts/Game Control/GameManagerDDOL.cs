@@ -25,6 +25,9 @@ public class GameManagerDDOL : MonoBehaviour
     public static bool _doWelcome = false; //run welcome dialogues
     public static bool _doWelcomeFlickerFX = true; //runonce menu fx in HUDanimations
 
+    //Track current level
+    public static int _currentLevel;
+
     //enum for game mode
     public enum GameMode
     {
@@ -62,8 +65,8 @@ public class GameManagerDDOL : MonoBehaviour
 
         //_gameModePublic = _currentMode; 
 
-        //GAZ REMOVE
-        _doWelcome = false;
+        //run welcome?
+        _doWelcome = true;
     }
 
     void Update()

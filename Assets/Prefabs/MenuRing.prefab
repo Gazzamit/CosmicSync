@@ -10323,6 +10323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeInTime: 2
+  _alpha: 0
 --- !u!225 &6346420751317238845
 CanvasGroup:
   m_ObjectHideFlags: 0

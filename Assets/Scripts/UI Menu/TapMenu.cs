@@ -174,7 +174,9 @@ public class TapMenu : MonoBehaviour
             HUDAnimations._switchingHUD = true; //for HUD animations
             //int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             Debug.Log("TM - Load Scene: " + i);
-            //Debug.Log("TM - Current Game Mode: " + GameManagerDDOL._currentMode );
+            //set current level in DDOL
+            GameManagerDDOL._currentLevel = i;
+            //load scene
             SceneManager.LoadScene(i, LoadSceneMode.Single);
         }
     }

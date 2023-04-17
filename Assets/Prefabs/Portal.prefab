@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 1556935447107952537}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &7389802167400563023
 ParticleSystem:
@@ -604,7 +604,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    gravitySource: 0
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 1
@@ -3998,7 +3997,6 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.09
     textureMode: 0
-    textureScale: {x: 4.56, y: 0.95}
     ribbonCount: 11
     shadowBias: 0.5
     worldSpace: 0
@@ -4856,7 +4854,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
     m_TransformParent: {fileID: 6860733991364932315}
     m_Modifications:
     - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
@@ -4882,6 +4879,10 @@ PrefabInstance:
     - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
       propertyPath: InitialModule.startSize.minScalar
       value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
+      propertyPath: TrailModule.widthOverTrail.scalar
+      value: 3.34
       objectReference: {fileID: 0}
     - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
@@ -4914,6 +4915,22 @@ PrefabInstance:
     - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
       propertyPath: InitialModule.startSizeZ.minMaxState
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
+      propertyPath: TrailModule.colorOverTrail.maxColor.g
+      value: 0.65639186
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
+      propertyPath: TrailModule.colorOverTrail.maxColor.r
+      value: 0.6273585
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxColor.g
+      value: 0.2698729
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586974675011609263, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxColor.r
+      value: 0.1462264
       objectReference: {fileID: 0}
     - target: {fileID: 6626809326098153040, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
       propertyPath: m_Materials.Array.size
@@ -4978,7 +4995,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6642199199589531581, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
     - {fileID: 3627856772980114984, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
-    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: c7021dc0343c4491382beb5b532b456b, type: 3}
 --- !u!4 &1556935447107952537 stripped
 Transform:

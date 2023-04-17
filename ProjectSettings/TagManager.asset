@@ -32,8 +32,17 @@ TagManager:
   - STimingIndicator
   - SRToFlash
   - UI
-  - Multiplier
   - MultiplierX
+  - SpeedBonusText
+  - SpeedBonusPoints
+  - CountdownText
+  - CountdownPoints
+  - MultiplierL
+  - MultiplierR
+  - Welcome5
+  - Welcome6
+  - Velocity
+  - Welcome7
   layers:
   - Default
   - TransparentFX

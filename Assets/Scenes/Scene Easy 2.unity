@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.24116093, g: 0.040610228, b: 0.0040389365, a: 1}
+  m_IndirectSpecularColor: {r: 0.06103787, g: 0.010278297, b: 0.0010223304, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11276,7 +11276,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2f1612150b9234bafa353212882fe803, type: 2}
   m_sharedMaterial: {fileID: 2831453143563345481, guid: 2f1612150b9234bafa353212882fe803, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2831453143563345481, guid: 2f1612150b9234bafa353212882fe803, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -17013,6 +17014,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e132961a0e7a438088dfef212aac99f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skyboxWelcomeColor: {r: 0, g: 0, b: 0, a: 0}
+  _skyboxStartColour: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &595131432
 GameObject:
   m_ObjectHideFlags: 0
@@ -43684,7 +43687,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2f1612150b9234bafa353212882fe803, type: 2}
   m_sharedMaterial: {fileID: 2831453143563345481, guid: 2f1612150b9234bafa353212882fe803, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2831453143563345481, guid: 2f1612150b9234bafa353212882fe803, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -49336,9 +49340,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c64d99de7ff33402986872f4cab2301b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flashColours:
-  - {r: 0.0047169924, g: 0.6156863, b: 1, a: 1}
-  - {r: 0.007843138, g: 1, b: 0, a: 1}
+  _Colours: []
+  _streakCountForMultiply: 8
+  _countDown: 0
+  _countDownMultiplier: 0
+  _scorePointsLocation: {fileID: 0}
+  _velocityLocation: {fileID: 0}
+  _frequencyOfVelUpdate: 0.2
 --- !u!1 &1233242932
 GameObject:
   m_ObjectHideFlags: 0

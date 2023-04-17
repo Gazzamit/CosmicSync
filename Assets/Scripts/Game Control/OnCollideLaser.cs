@@ -67,13 +67,14 @@ public class OnCollideLaser : MonoBehaviour
                 //Log destroyed in bool and increment next target index
                 NextTargetIndex._targetsDestoryedStaticVar[NextTargetIndex._nextTargetIndex] = true;
                 NextTargetIndex._nextTargetIndex++;
+                ScoreManager._instance.AddPoints("laserRightOrder");
             }
             else
             {
                 //Log destroyed in bool and do not increment next target index
                 NextTargetIndex._targetsDestoryedStaticVar[transform.GetSiblingIndex()] = true;
                 Debug.Log("OCL - Laser Bool Set, but Target Destroyed Wrong Order: " + transform.GetSiblingIndex());
-                //could add a 'searching' message for next target, maybe a coroutine?
+                ScoreManager._instance.AddPoints("laserWrongOrder");
             }
             StartCoroutine(HandleBreakingApart());
 
@@ -93,7 +94,7 @@ public class OnCollideLaser : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(AddExplosion2Effect());
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         BigExplosionForce();
 
         //this will also disable instantiated particle effects
@@ -173,7 +174,7 @@ public class OnCollideLaser : MonoBehaviour
 
             // Apply a constant torque to the objects
             Vector3 torqueDirection = Random.insideUnitSphere.normalized;
-            _child.GetComponent<Rigidbody>().AddTorque(torqueDirection * _constantTorque * 2f, ForceMode.Impulse);
+            _child.GetComponent<Rigidbody>().AddTorque(torqueDirection * _constantTorque * 3f, ForceMode.Impulse);
 
             // Apply a constant force to push the objects apart
             Vector3 forceDirection = _direction.normalized;

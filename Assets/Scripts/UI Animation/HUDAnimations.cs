@@ -18,7 +18,7 @@ public class HUDAnimations : MonoBehaviour
     //transfrom start location
     private Vector3 _leftRingStartPos, _rightRingStartPos, _targetSquareStartPos, _menuRingStartPos, _settingsRingStartPos, _dialoguePanelStartPos;
 
-    public static bool _switchingHUD = false, _flickerTween = false, _showDialogue = false, _hideDialogue = false, _fadeToBlack = false, _fadeFromBlack = false;
+    public static bool _switchingHUD = false, _flickerTween = false, _showDialogue = false, _hideDialogue = false, _fadeToBlack = false, _fadeFromBlack = false, _flickerHUD = false;
 
     [SerializeField] private int _newXMenuShift = 2000, _newYMenuShift = 1500;
     private void Awake()
@@ -65,24 +65,29 @@ public class HUDAnimations : MonoBehaviour
         // Normal run Game Start - activate Mainmenu
         if (GameManagerDDOL._normalStart == true && GameManagerDDOL._doWelcome == false)
         {
-            Debug.Log("Normal Game Start");
+            Debug.Log("HUDA - Normal Game Start");
             StartCoroutine(ActivateMenuObjects());
             MoveHUDGameLauncher();
             GameManagerDDOL._normalStart = false;
             _switchingHUD = false;
         }
-        //Flicker menu on welcome dialogue
+        //welcome dialogue - in game before ship lasered
         if (GameManagerDDOL._doWelcome == true)
         {
-            Debug.Log("doWelcome Game start");
-            StartCoroutine(ActivateMenuObjects());
-            MoveHUDGameLauncher();
-            StartCoroutine(FlickerMenu());
+            Debug.Log("HUDA - doWelcome Game start");
+            StartCoroutine(ActivateGameObjects()); //activate targets for start
+            MoveHUDMenuToGame(); //show in game HUD
         }
     }
 
     void FixedUpdate()
     {
+        if (_flickerHUD == true)
+        {
+            _flickerHUD = false;
+            StartCoroutine(FlickerHUD());
+        }
+
         if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu && _switchingHUD == true)
         {
             //If main Menu called from Game
@@ -109,6 +114,7 @@ public class HUDAnimations : MonoBehaviour
             StartCoroutine(ActivateGameObjects());
             MoveHUDMenuToGame();
             FlickerTween();
+            ScoreManager._instance.TriggerCountdownCoroutine();
         }
         //If settings called (will always be from Main menu)
         else if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu && _switchingHUD == true)
@@ -144,13 +150,16 @@ public class HUDAnimations : MonoBehaviour
         }
     }
 
-    IEnumerator FlickerMenu()
+    IEnumerator FlickerHUD()
     {
-        for (int i = 0; i < 30; i++)
+        float _timer = 7.8f;
+        Debug.Log("HUDA - FlickerHUD for: " + _timer);
+        float _startTime = Time.time;
+        while (Time.time - _startTime < _timer)
         {
-            _mainMenu.SetActive(true);
+            _mainInGameUI.SetActive(true);
             yield return new WaitForSeconds(Random.Range(0.01f, 0.1f));
-            _mainMenu.SetActive(false);
+            _mainInGameUI.SetActive(false);
             yield return new WaitForSeconds(Random.Range(0.05f, 0.15f));
         }
     }
@@ -197,9 +206,9 @@ public class HUDAnimations : MonoBehaviour
     {
         if (_dialoguePanel == null)
         {
-            Debug.Log ("_dialoguePanel not found");
+            Debug.Log("_dialoguePanel not found");
         }
-        _dialoguePanel.DOLocalMove(_dialoguePanelStartPos + new Vector3( 0, 1560, 0), 0.3f).SetEase(_easeType);   
+        _dialoguePanel.DOLocalMove(_dialoguePanelStartPos + new Vector3(0, 1560, 0), 0.3f).SetEase(_easeType);
     }
 
     public void MoveDialigueDown()

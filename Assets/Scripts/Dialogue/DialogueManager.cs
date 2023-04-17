@@ -15,7 +15,7 @@ public class DialogueManager : MonoBehaviour
     public TextMeshProUGUI _dialogueText;
 
     //Handle Starting Dialogue
-    public bool _isDialogue = false;
+    public bool _isDialogue = false, _pauseAdvance = false;
 
     //Queue from sentances
     private Queue<string> _sentences;
@@ -68,23 +68,47 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        //if no sentences, end dialogue
-        if (_sentences.Count == 0)
+        if (_pauseAdvance == false)
         {
-            EndDialogue();
-            return;
+            //if no sentences, end dialogue
+            if (_sentences.Count == 0)
+            {
+                EndDialogue();
+                return;
+            }
+
+            //Have sentances, so Dequeue
+            string _sentence = _sentences.Dequeue();
+
+            // Stop the running coroutine, if there is one
+
+            if (_typewritterCoroutine != null)
+            {
+                StopCoroutine(_typewritterCoroutine);
+            }
+            _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
         }
+    }
 
-        //Have sentances, so Dequeue
-        string _sentence = _sentences.Dequeue();
+        public void DisplayNextSentenceNow()
+    {
+            //if no sentences, end dialogue
+            if (_sentences.Count == 0)
+            {
+                EndDialogue();
+                return;
+            }
 
-        // Stop the running coroutine, if there is one
+            //Have sentances, so Dequeue
+            string _sentence = _sentences.Dequeue();
 
-        if (_typewritterCoroutine != null)
-        {
-            StopCoroutine(_typewritterCoroutine);
-        }
-        _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
+            // Stop the running coroutine, if there is one
+
+            if (_typewritterCoroutine != null)
+            {
+                StopCoroutine(_typewritterCoroutine);
+            }
+            _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
     }
 
     IEnumerator Typewritter(string _sentence)
