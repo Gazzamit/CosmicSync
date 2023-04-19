@@ -8,7 +8,7 @@ public class StartDialogue : MonoBehaviour
     private Dialogue _welcome1, _welcome2, _welcome3, _welcome4, _welcome5, _welcome6, _welcome7;
 
     private GameObject _mainMenu, _dialoguePanel, _blackCanvasPanel, _UIObject, _velocityObj, _mainInGameUI;
-    [SerializeField] private Color _skyboxWelcomeColor, _skyboxStartColour;
+
 
     private Material _skyboxMat;
 
@@ -40,6 +40,12 @@ public class StartDialogue : MonoBehaviour
         {
             StartCoroutine(StartWelcomeDialogues());
         }
+
+        //set skybox for normal gameplay
+        if (GameManagerDDOL._doWelcome == false)
+        {
+            _skyboxMat.SetColor("_Tint", DialogueManager._instance._skyboxGameColour);
+        }
     }
 
     void Update()
@@ -54,7 +60,7 @@ public class StartDialogue : MonoBehaviour
         // welcome 1
         HUDAnimations._hideDialogue = true;
         //set to black at start
-        _skyboxMat.SetColor("_Tint", _skyboxWelcomeColor);
+        _skyboxMat.SetColor("_Tint", DialogueManager._instance._skyboxInWelcomeColor);
         HUDAnimations._fadeToBlack = true;
         //wait till black
         yield return new WaitForSeconds(1f);
@@ -71,11 +77,11 @@ public class StartDialogue : MonoBehaviour
         for (int i = 0; i < 40; i++)
         {
             OnCollidePortal._addPortalTurbulanceNow = true;
-            if (i == 15) HUDAnimations._flickerHUD = true;
+            if (i == 12) HUDAnimations._flickerHUD = true;
             yield return new WaitForSeconds(0.25f);
         }
 
-        _skyboxMat.SetColor("_Tint", _skyboxStartColour);
+        _skyboxMat.SetColor("_Tint", DialogueManager._instance._skyboxGameColour);
         //add fx to spaceship
         _smoke.GetComponent<ParticleSystem>().Play();
 
@@ -108,7 +114,7 @@ public class StartDialogue : MonoBehaviour
         //activate main menu (set it to game first so it will trigger change)
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
-        HUDAnimations._switchingHUD = true; //adds flicker as well
+        HUDAnimations._switchingHUD = true; //switch to menu HUDD
         yield return new WaitForSeconds(0.5f); //wait for menu to be in place
         _mainInGameUI.SetActive(true); // was inactive affter HUDFlicker
 
@@ -117,17 +123,16 @@ public class StartDialogue : MonoBehaviour
         yield return StartCoroutine(ProcessDialogue(_welcome5));
         DialogueManager._instance._pauseAdvance = true; //stop I working
         yield return new WaitUntil(() => Keyboard.current.escapeKey.wasPressedThisFrame); //press escape
-        //DialogueManager._instance.DisplayNextSentenceNow(); //call next sentance on escape 
         DialogueManager._instance._pauseAdvance = false; //start I working
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
-        HUDAnimations._switchingHUD = true; //adds flicker as well
+        HUDAnimations._switchingHUD = true; //switch to setting HUDD
 
         // A/V sync
         yield return StartCoroutine(ProcessDialogue(_welcome6));
         _UIObject.GetComponent<HUDAnimations>().MoveDialogueUp();//move up dialogue
         //Pitch/Yaw tweak
         yield return StartCoroutine(ProcessDialogue(_welcome7));
-        
+
 
         _velocityObj.SetActive(true);
         yield return null;
@@ -137,6 +142,7 @@ public class StartDialogue : MonoBehaviour
     {
         DialogueManager._instance.StartDialogue(_dialogue);
 
+        //wait here until no dialogue
         yield return new WaitUntil(() => !DialogueManager._instance._isDialogue);
 
     }
@@ -151,9 +157,14 @@ public class StartDialogue : MonoBehaviour
         System.IO.StreamWriter file = new System.IO.StreamWriter(@"/Users/gazzamit/Documents/welcome_dialogue.txt");
 
         // Write the welcome dialogues to the text file
-        file.WriteLine("Welcome Dialogue 1: " + string.Join(", ", _welcome1._sentences));
-        file.WriteLine("Welcome Dialogue 2: " + string.Join(", ", _welcome2._sentences));
-        file.WriteLine("Welcome Dialogue 3: " + string.Join(", ", _welcome3._sentences));
+        file.WriteLine("Welcome Dialogue 1: " + _welcome1._name + ", " + string.Join(", ", _welcome1._sentences));
+        file.WriteLine("Welcome Dialogue 2: " + _welcome1._name + ", " + string.Join(", ", _welcome2._sentences));
+        file.WriteLine("Welcome Dialogue 3: " + _welcome1._name + ", " + string.Join(", ", _welcome3._sentences));
+        file.WriteLine("Welcome Dialogue 4: " + _welcome1._name + ", " + string.Join(", ", _welcome4._sentences));
+        file.WriteLine("Welcome Dialogue 5: " + _welcome1._name + ", " + string.Join(", ", _welcome5._sentences));
+        file.WriteLine("Welcome Dialogue 6: " + _welcome1._name + ", " + string.Join(", ", _welcome6._sentences));
+        file.WriteLine("Welcome Dialogue 7: " + _welcome1._name + ", " + string.Join(", ", _welcome7._sentences));
+        //file.WriteLine("Welcome Dialogue 1: " + _welcome1._name + ", " + string.Join(", ", _welcome1._sentences));
 
         // Close the StreamWriter
         file.Close();

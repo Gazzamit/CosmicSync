@@ -10,13 +10,14 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager _instance;
 
     //targets, score text and value
-    private TextMeshProUGUI _targetsRemainingText, _scoreText, _multiplierTextL, _multiplierTextR, _velocityBonusText, _velocity, _countdownPoints, _countdownText;
+    private TextMeshProUGUI _targetsRemainingText, _scoreText, _multiplierTextL, _multiplierTextR, _velocityBonusText, _velocityText, _countdownText, _countdownTitleText, _bonusPointMultiplierText, _levelCompleted;
 
     [SerializeField] private Color[] _Colours;
 
     [SerializeField] private int _streakCountForMultiply = 8;
 
-    [SerializeField] private int _countDown, _countDownMultiplier;
+    [SerializeField] private float _countDown;
+    [SerializeField] private int _countDownMultiplier;
 
     [SerializeField] Transform _scorePointsLocation, _velocityLocation;
 
@@ -39,7 +40,7 @@ public class ScoreManager : MonoBehaviour
     private Dictionary<string, int> _pointsByType = new Dictionary<string, int>();
 
     //after final target is destroyed, stop adding points
-    private bool _stopAddingPoints = false, _freezeVelocityOnBonus = false, _addTimeBonusToScore = false;
+    private bool _stopAddingPoints = false, _freezeVelocityOnEOL = false, _addTimeBonusToScore = false;
 
     //slow update of velocity
     [SerializeField] private float _frequencyOfVelUpdate = 0.2f;
@@ -65,20 +66,35 @@ public class ScoreManager : MonoBehaviour
         _multiplierTextL = GameObject.FindGameObjectWithTag("MultiplierL").GetComponent<TextMeshProUGUI>();
         _targetsRemainingText = GameObject.FindGameObjectWithTag("TargetsRemaining").GetComponent<TextMeshProUGUI>();
         _velocityBonusText = GameObject.FindGameObjectWithTag("SpeedBonusText").GetComponent<TextMeshProUGUI>();
-        _velocity = GameObject.FindGameObjectWithTag("Velocity").GetComponent<TextMeshProUGUI>();
-        _countdownText = GameObject.FindGameObjectWithTag("CountdownText").GetComponent<TextMeshProUGUI>();
-        _countdownPoints = GameObject.FindGameObjectWithTag("CountdownPoints").GetComponent<TextMeshProUGUI>();
+        _velocityText = GameObject.FindGameObjectWithTag("Velocity").GetComponent<TextMeshProUGUI>();
+        _countdownTitleText = GameObject.FindGameObjectWithTag("CountdownText").GetComponent<TextMeshProUGUI>();
+        _countdownText = GameObject.FindGameObjectWithTag("CountdownPoints").GetComponent<TextMeshProUGUI>();
+        _bonusPointMultiplierText = GameObject.FindGameObjectWithTag("CountDownMultiplierText").GetComponent<TextMeshProUGUI>();
+        _levelCompleted = GameObject.FindGameObjectWithTag("LevelCompleted").GetComponent<TextMeshProUGUI>();
 
-        //set alpha of speed bonus text to zero
+        //set countdown multiplier text fade out as not using
+        _bonusPointMultiplierText.DOFade(0, 0);
+
+        //set alpha text to zero
         _velocityBonusText.alpha = 0;
+        _countdownTitleText.alpha = 0;
         _countdownText.alpha = 0;
-        _countdownPoints.alpha = 0;
-        _velocity.text = "0";
+        _levelCompleted.alpha = 0;
+        _velocityText.text = "0";
 
         //Calc number of targets
         _targetParent = GameObject.FindGameObjectWithTag("TargetHolder");
         _targetsRemaining = _targetParent.transform.childCount;
         _finalTargetDestroyed = false;
+
+        if (GameManagerDDOL._doWelcome == true)
+        {
+            Debug.Log("SM - doWelcome set score / target numbers");
+            _score = 3258;
+            _targetsRemaining = 1;
+            _scoreText.text = _score.ToString();
+            _targetsRemainingText.text = _targetsRemaining.ToString();
+        }
     }
 
     void Start()
@@ -92,14 +108,14 @@ public class ScoreManager : MonoBehaviour
         //_xRect = _multiplierXText.GetComponent<RectTransform>();
 
         //show multiplier
-        _multiplierTextL.text = "<size=30><sup>X</sup></size>" + _multiplier.ToString();
-        _multiplierTextR.text = "<size=30><sup>X</sup></size>" + _multiplier.ToString();
+        _multiplierTextL.text = "<size=40><sup>x</sup></size>" + _multiplier.ToString();
+        _multiplierTextR.text = "<size=40><sup>x</sup></size>" + _multiplier.ToString();
 
         //set 'x' to left of multiplier text
         //_xRect.anchoredPosition = new Vector2(_multiplierRect.anchoredPosition.x - _multiplierText.preferredWidth / 2 - _multiplierXText.preferredWidth / 2, _xRect.anchoredPosition.y);
 
         //set countdown text
-        _countdownPoints.text = (_countDown * _countDownMultiplier).ToString();
+        _countdownText.text = _countDown.ToString();
 
         //get initial serialized value for resetting timer
         _frequencyOfVelUpdateStart = _frequencyOfVelUpdate;
@@ -119,11 +135,11 @@ public class ScoreManager : MonoBehaviour
         }
 
         //Set true at end of AddPoints, if finalTargetDestroyed = true
-        if (_stopAddingPoints == true && _addTimeBonusToScore == false)
+        if (_finalTargetDestroyed == true && _addTimeBonusToScore == false)
         {
+            Debug.Log("SM - Add Countdown Bonus to Score");
             _addTimeBonusToScore = true;
             StartCoroutine(AddTimeBonusToScore()); //add bonus time to score at end of game
-            return;
         }
 
 
@@ -132,13 +148,13 @@ public class ScoreManager : MonoBehaviour
     //allow slower update of speed
     private void ShowSpeed()
     {
-        if (_freezeVelocityOnBonus == true)
+        if (_freezeVelocityOnEOL == true)
         {
             return;
         }
         else
         {
-            _velocity.text = SpaceshipControls._magnitude.ToString() + "<size=8><sup>m/s</sup></size>";
+            _velocityText.text = SpaceshipControls._magnitude.ToString() + "<size=8><sup>m/s</sup></size>";
         }
     }
 
@@ -206,7 +222,7 @@ public class ScoreManager : MonoBehaviour
 
 
         //add points by taptype * multiplier (only for taps)
-        if ( _stringTypeForPoints == "poor" || _stringTypeForPoints == "good" || _stringTypeForPoints == "perfect")
+        if (_stringTypeForPoints == "poor" || _stringTypeForPoints == "good" || _stringTypeForPoints == "perfect")
         {
             int _points = _pointsByType[_stringTypeForPoints];
             _score += _points * _multiplier;
@@ -220,7 +236,7 @@ public class ScoreManager : MonoBehaviour
             _pointsBoost = (int)(SpaceshipControls._magnitude + _pointsByType[_stringTypeForPoints]);
             Debug.Log("Show Bonus Points: " + _pointsBoost);
             StartCoroutine(ShowVelocityBonus());
-            _freezeVelocityOnBonus = true;
+            _freezeVelocityOnEOL = true;
             _score += _pointsBoost;
         }
 
@@ -229,6 +245,7 @@ public class ScoreManager : MonoBehaviour
 
         if (_finalTargetDestroyed == true)
         {
+            Debug.Log("SM - Stop Adding Points");
             _stopAddingPoints = true;
         }
     }
@@ -241,7 +258,11 @@ public class ScoreManager : MonoBehaviour
 
         //All targets destroyed - END OF LEVEL
         //This trigger InputMapSwitch to wait 10s then call switch back to menu via HUDAnimations
-        if (_targetsRemaining == 0) _finalTargetDestroyed = true;
+        if (_targetsRemaining == 0)
+        {
+            _finalTargetDestroyed = true;
+            Debug.Log("SM - Final Target Destroyed");
+        }
     }
 
     private IEnumerator ScaleMultiplierText()
@@ -275,22 +296,22 @@ public class ScoreManager : MonoBehaviour
     private IEnumerator ShowVelocityBonus()
     {
         //velocity temporarily show velocity as points boost on laser/portal hit         
-        _velocity.text = "+" + _pointsBoost.ToString();  //reset automatically to velocity via update()
+        _velocityText.text = "+" + _pointsBoost.ToString();  //reset automatically to velocity via update()
         yield return new WaitForSeconds(0.5f);
         //fade + scale at same time
         _velocityBonusText.DOFade(1f, .2f);
         _velocityBonusText.transform.localScale = Vector3.zero;
-        _velocity.transform.localScale = Vector3.zero;
+        _velocityText.transform.localScale = Vector3.zero;
         _velocityBonusText.transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack);
-        _velocity.transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack);
+        _velocityText.transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack);
         //wait
         yield return new WaitForSeconds(1f);
         //fade + scale back down
         _velocityBonusText.transform.DOScale(1f, 0.2f);
-        _velocity.transform.DOScale(1f, 0.2f);
+        _velocityText.transform.DOScale(1f, 0.2f);
         _velocityBonusText.DOFade(0f, .2f);
 
-        _freezeVelocityOnBonus = false;
+        _freezeVelocityOnEOL = false;
     }
 
     //trigger by other script
@@ -301,77 +322,126 @@ public class ScoreManager : MonoBehaviour
 
     private IEnumerator CountdownCoroutine()
     {
-        Debug.Log("Started Countdown: " + _countDown);
-        yield return new WaitForSeconds(2);
-        _countdownPoints.DOFade(1f, 1f);
+        yield return new WaitForSeconds(1.5f);
+
+        Debug.Log("SM - Started Countdown: " + _countDown);
+        //highlight countdown value to user
+        //_countdownText.color = _Colours[1];//grn
         _countdownText.DOFade(1f, 1f);
-        //wait for fade-up
-        yield return new WaitForSeconds(1);
+        //_countdownTitleText.DOFade(1f, 1f);
+        //_countdownText.transform.DOScale(2.5f, .4f);
+        //_countdownText.transform.DOScale(1f, .2f).SetDelay(.4f);
+        //_countdownText.DOColor(_Colours[0], 4f); // gradually change colour to blue
+
+        //decrement countdown
         while (_countDown > 0 && _finalTargetDestroyed == false)
         {
-            _countDown--;
-            if (_countDown < 10)
-            {
-                _countdownPoints.text = (_countDown * _countDownMultiplier).ToString();
-                _countdownPoints.transform.DOScale(1.4f, 0.1f);
-                yield return new WaitForSeconds(0.5f);
-                _countdownPoints.transform.DOScale(1f, 0.1f);
-                yield return new WaitForSeconds(0.5f);
-            }
-            else
-            {
-                yield return new WaitForSeconds(1f);
-                _countdownPoints.text = (_countDown * _countDownMultiplier).ToString();
-            }
+            _countDown -= Time.deltaTime;
+            _countdownText.text = ((int)_countDown + "s").ToString();
+            yield return null;
         }
+
+        //run out of time
         if (_countDown == 0)
         {
-            _countdownPoints.color = _Colours[2]; //red
             _countdownText.color = _Colours[2]; //red
+            //_countdownTitleText.color = _Colours[2]; //red
         }
+
+        //_countdownText.text = ((int)_countDown).ToString(); //set to just number with no 's'
     }
 
-    private IEnumerator AddTimeBonusToScore()
+    IEnumerator AddTimeBonusToScore()
     {
-        //scaling tends towards 1 + 1/_scale factor (1 adds 1, 2 adds 0.5 etc)
-        float _scaleFactor = 1f;
-        int _limit = _countDown;
-        //increase time bonus text size
-        _countdownPoints.transform.DOScale(1f + 1f / _scaleFactor, 2f).SetEase(Ease.OutBounce);
-        yield return new WaitForSeconds(2f);
-        //move and fade final bonus time score toward actual score text
-        _countdownPoints.GetComponent<RectTransform>().DOMove(_scorePointsLocation.position, 6f);
-        _countdownPoints.DOFade(0, 4f);
-        for (int i = 0; i < _limit; i++)
+        if (GameManagerDDOL._doWelcome == false)
         {
-            _score += _countDownMultiplier;
-            _countDown--;
-            //increase score text while decreasing time bonus text
-            _scoreText.transform.DOScale(1 + (float)(i / _limit) / _scaleFactor, 0.01f);
-            _countdownPoints.transform.DOScale((1f + 1f / _scaleFactor) - (float)(i / _limit) / _scaleFactor, 0.01f);
-            _scoreText.text = _score.ToString();
-            _countdownPoints.text = (_countDown * _countDownMultiplier).ToString();
-            yield return new WaitForSeconds(0.01f);
-            //Debug.Log("CountDown Value: " + _countDown);
-            //Debug.Log("i Value: " + i);
+            //pulse tiime, then show level completed
+            StartCoroutine(PulseFinalTime());
+            yield return new WaitForSeconds(2f);
+            StartCoroutine(LevelCompleted());
+
+            //show bonus points
+            _countdownTitleText.transform.DOScale(0.1f, 0.1f).WaitForCompletion();
+            _countdownTitleText.text = "BONUS POINTS" + "\n" + (((int)_countDown) * _countDownMultiplier).ToString();
+            _countdownTitleText.DOFade(1.5f, 0.2f);
+            //move text down a little over same 0.2
+            _countdownTitleText.GetComponent<RectTransform>().DOMove(_countdownTitleText.transform.position + new Vector3(0, -1.4f, 0), 0.2f).SetEase(Ease.InOutSine);
+            _countdownTitleText.transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack);
+
+            //see the time and multiplier values
+            yield return new WaitForSeconds(3f);
+
+            //move title text to score
+            _countdownTitleText.GetComponent<RectTransform>().DOMove(_scorePointsLocation.position, 3f).SetEase(Ease.InOutSine);
+            _countdownTitleText.DOFade(0, 2.5f);
+            _countdownTitleText.transform.DOScale(0.8f, 3f);
+
+            //increase score text while reseting to 1 the timer countdown text
+            _scoreText.transform.DOScale(1.5f, 3f);
+            _countdownText.transform.DOScale(1f, 3f);
+
+            //_limit is what is left of countdown timer
+            int _limit = ((int)_countDown);
+
+            for (int i = 0; i < _limit; i++)
+            {
+                _score += _countDownMultiplier; //add count down multiplier until i < limit
+                _scoreText.text = _score.ToString();
+                _countdownTitleText.text = "BONUS POINTS" + "\n" + (((int)_countDown - i) * _countDownMultiplier).ToString();
+                yield return new WaitForSeconds(0.01f);
+            }
+            _countdownText.transform.DOScale(1f, 0.5f);
+            _countdownText.color = _Colours[0]; //blue
+            _countdownTitleText.color = _Colours[0]; //blue
+
+            //pulse text till screen removed automatically by end of game control
+            StartCoroutine(PulseFinalScore());
         }
-        _countdownPoints.transform.DOScale(1f, 0.5f);
-        _scoreText.transform.DOScale(1f, 0.5f);
-        _countdownPoints.color = _Colours[0]; //blue
-        _countdownText.color = _Colours[0]; //blue
-        //pulse the score till screen removed automatically by end of game control
-        StartCoroutine(PulseFinalScore());
     }
 
     private IEnumerator PulseFinalScore()
     {
+        //reset size
+        _scoreText.transform.DOScale(1f, 1f);
+        yield return new WaitForSeconds(1f);
         while (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
-            // Scale the image up to pulseScale over a duration of pulseDuration
+            // Scale the image up 
             yield return _scoreText.transform.DOScale(1.1f, 0.3f).WaitForCompletion();
 
-            // Scale the image back down to 1.0 over a duration of pulseDuration
+            // Scale the image back down
             yield return _scoreText.transform.DOScale(1f, 0.3f).WaitForCompletion();
         }
+    }
+
+    private IEnumerator PulseFinalTime()
+    {
+        //reset size
+        _countdownText.transform.DOScale(1f, 1f);
+        yield return new WaitForSeconds(1f);
+        while (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
+        {
+            // Scale the image up 
+            yield return _countdownText.transform.DOScale(1.05f, 0.3f).WaitForCompletion();
+
+            // Scale the image back down
+            yield return _countdownText.transform.DOScale(1f, 0.3f).WaitForCompletion();
+        }
+    }
+
+    private IEnumerator LevelCompleted()
+    {
+        _levelCompleted.DOFade(1, 4f);
+
+        yield return new WaitForSeconds(1f);
+        while (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
+        {
+            // Scale the image up
+            yield return _levelCompleted.transform.DOScale(1.02f, 0.3f).WaitForCompletion();
+
+            // Scale the image back down 
+            yield return _levelCompleted.transform.DOScale(0.99f, 0.3f).WaitForCompletion();
+        }
+
     }
 }

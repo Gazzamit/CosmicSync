@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManagerDDOL : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class GameManagerDDOL : MonoBehaviour
     //Track wheter to show welcome text
     public static bool _doWelcome = false; //run welcome dialogues
     public static bool _doWelcomeFlickerFX = true; //runonce menu fx in HUDanimations
+
+    public bool DEV_DO_WELCOME = false;
+    private bool _doWelcomeDEVseton = false;
 
     //Track current level
     public static int _currentLevel;
@@ -63,16 +67,25 @@ public class GameManagerDDOL : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        //_gameModePublic = _currentMode; 
-
-        //run welcome?
-        _doWelcome = true;
+        if (DEV_DO_WELCOME == true && _doWelcomeDEVseton == false)
+        {
+            _doWelcome = true;
+            Debug.Log("DDOL - Loading WelcomeScene");
+            _doWelcomeDEVseton = true;
+            //load welcome scene if not on welcome scene
+            if (SceneManager.GetActiveScene().name != "WelcomeScene") SceneManager.LoadScene("WelcomeScene", LoadSceneMode.Single);
+        }
+        else
+        {
+            _doWelcome = false;
+        }
     }
 
     void Update()
     {
         StartCoroutine(SetGameModes());
     }
+
 
     IEnumerator SetGameModes()
     {

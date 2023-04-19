@@ -9,6 +9,8 @@ using DG.Tweening;
 
 public class TapLeft : MonoBehaviour
 {
+    //[SerializeField] private GameObject _audioManagerObj;
+    [SerializeField] private AudioManager _audioManager;
     public List<float> _leftBeats; //beats entered in inspector
     //public float _startOffsetUnit; //0 to 1
 
@@ -61,6 +63,8 @@ public class TapLeft : MonoBehaviour
 
         //length in seconds of one bar of 'x' beats
         _barInSeconds = BeatController.instance._beatsInLoop * BeatController.instance._secondsPerBeat;
+        
+        //_audioManager = _audioManagerObj.GetComponent<AudioManager>(); //get reference to the script
     }
 
     void FixedUpdate()
@@ -175,6 +179,7 @@ public class TapLeft : MonoBehaviour
                         _leftSliderValue += _perfectLaserBoost;
                         ScoreManager._instance.AddPoints("perfect");
                         _hitCounts = true; //so not a miss hit
+                        _audioManager.PlayThruster();
                     }
                     else
                     if (_timeDiff <= _goodThreshold)
@@ -186,6 +191,7 @@ public class TapLeft : MonoBehaviour
                         _leftSliderValue += _goodLaserBoost;
                         ScoreManager._instance.AddPoints("good");
                         _hitCounts = true; //so not a miss hit
+                        _audioManager.PlayThruster();
                     }
                     else
                     if (_timeDiff <= _poorThreshold)
@@ -197,6 +203,7 @@ public class TapLeft : MonoBehaviour
                         _leftSliderValue += _poorLaserBoost;
                         ScoreManager._instance.AddPoints("poor");
                         _hitCounts = true; //so not a miss hit
+                        _audioManager.PlayThruster();
                     }
                     else
                     {

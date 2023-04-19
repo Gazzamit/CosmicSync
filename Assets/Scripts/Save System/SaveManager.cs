@@ -6,7 +6,7 @@ public class SaveManager : MonoBehaviour
 {
     public bool RESET_SAVE = false;
 
-    public static SaveManager Instance { set; get; } //access from anywhere in the
+    public static SaveManager _instance; //access from anywhere in the
     public SaveState state; //this will be converted to/from a string
 
     private void Awake()
@@ -25,8 +25,15 @@ public class SaveManager : MonoBehaviour
         {
             Debug.Log ("Save not reset");
         }
-        DontDestroyOnLoad(gameObject);
-        Instance = this;
+         if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         Load();
 
         //test state

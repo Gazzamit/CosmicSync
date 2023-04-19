@@ -44,15 +44,18 @@ public class TapOrbitScriptFlashSync : MonoBehaviour
     //on ESC Cancel, retrun to Menu
     public void onReturnToMenu(InputAction.CallbackContext _context)
     {
-        //if in Settings
-        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)
+        if (GameManagerDDOL._doWelcome == false) //disabled on doWelcome
         {
-            //as settings/menu active, transform used to check which input esc to use
-            if (_context.performed && gameObject.transform.position.y == 0)
+            //if in Settings
+            if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)
             {
-                Debug.Log("TOSFS - ESC Pressed from Settings Menu");
-                HUDAnimations._switchingHUD = true; //for HUD animations
-                GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
+                //as settings/menu active, transform used to check which input esc to use
+                if (_context.performed && gameObject.transform.position.y == 0)
+                {
+                    Debug.Log("TOSFS - ESC Pressed from Settings Menu");
+                    HUDAnimations._switchingHUD = true; //for HUD animations
+                    GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
+                }
             }
         }
     }

@@ -51,8 +51,13 @@ public class InputMapSwitch : MonoBehaviour
                 Debug.Log("IMS - Switching to UI Menu...");
                 ActivateUIMenuControls();
             }
-            else //this should not be called
-            if (_playerInput.currentActionMap.name == "UIControls")
+            else if (_playerInput.currentActionMap.name == "PressI")
+            {
+                Debug.Log("IMS - Switching to UI Menu...");
+                ActivateUIMenuControls();
+            }
+            //this should not be called as a load scene occura for each level
+            else if (_playerInput.currentActionMap.name == "UIControls")
             {
                 Debug.Log("IMS - Switching to Spaceship Contols...");
                 ActivateSpaceshipControls();
@@ -63,11 +68,14 @@ public class InputMapSwitch : MonoBehaviour
         //end of level, activate menu controls
         if (ScoreManager._finalTargetDestroyed == true)
         {
-            if (_endOfLevel == false)
+            if (GameManagerDDOL._doWelcome == false)
             {
-                _endOfLevel = true;
-                //Debug.Log("Start End Of Level Coroutine");
-                StartCoroutine(EndOfLevel());
+                if (_endOfLevel == false)
+                {
+                    _endOfLevel = true;
+                    //Debug.Log("Start End Of Level Coroutine");
+                    StartCoroutine(EndOfLevel()); //activate menu controls
+                }
             }
         }
     }

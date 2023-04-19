@@ -10,6 +10,7 @@ public class DialogueManager : MonoBehaviour
 {
     //singleton
     public static DialogueManager _instance;
+    public Color _skyboxInWelcomeColor, _skyboxGameColour;
 
     public TextMeshProUGUI _nameText;
     public TextMeshProUGUI _dialogueText;
@@ -46,10 +47,10 @@ public class DialogueManager : MonoBehaviour
         //Clear previous sentances
         _sentences.Clear();
 
-        //get sentances from Character (Rai)
-        foreach (string _sentance in _dialogue._sentences)
+        //get sentances from Character (Rai, jenzi etc)
+        foreach (string _sentence in _dialogue._sentences)
         {
-            _sentences.Enqueue(_sentance);
+            _sentences.Enqueue(_sentence);
         }
 
         //display the next sentence in the list
@@ -80,6 +81,8 @@ public class DialogueManager : MonoBehaviour
             //Have sentances, so Dequeue
             string _sentence = _sentences.Dequeue();
 
+            Debug.Log(" DM - DisplayNextSentence: " + _sentence);
+
             // Stop the running coroutine, if there is one
 
             if (_typewritterCoroutine != null)
@@ -87,28 +90,44 @@ public class DialogueManager : MonoBehaviour
                 StopCoroutine(_typewritterCoroutine);
             }
             _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
-        }
-    }
 
-        public void DisplayNextSentenceNow()
-    {
-            //if no sentences, end dialogue
+            //if no sentences, set isDiaglogue to false (trigger next line of code in StartDialogue)
             if (_sentences.Count == 0)
             {
                 EndDialogue();
                 return;
             }
+        }
+    }
 
-            //Have sentances, so Dequeue
-            string _sentence = _sentences.Dequeue();
+    public void DisplayNextSentenceNow()
+    {
+        //if no sentences, end dialogue
+        if (_sentences.Count == 0)
+        {
+            EndDialogue();
+            return;
+        }
 
-            // Stop the running coroutine, if there is one
+        //Have sentances, so Dequeue
+        string _sentence = _sentences.Dequeue();
 
-            if (_typewritterCoroutine != null)
-            {
-                StopCoroutine(_typewritterCoroutine);
-            }
-            _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
+        Debug.Log(" DM - DisplayNextSentenceNow: " + _sentence);
+
+        // Stop the running coroutine, if there is one
+
+        if (_typewritterCoroutine != null)
+        {
+            StopCoroutine(_typewritterCoroutine);
+        }
+        _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
+        
+        //if no sentences, set isDiaglogue to false (trigger next line of code in StartDialogue)
+        if (_sentences.Count == 0)
+        {
+            EndDialogue();
+            return;
+        }
     }
 
     IEnumerator Typewritter(string _sentence)

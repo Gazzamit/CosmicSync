@@ -67,6 +67,7 @@ public class TapMenu : MonoBehaviour
 
     public void WKeyPressed(InputAction.CallbackContext _context)
     {
+        //choosing which level to play
         //Debug.Log("Callback Triggered W: " + context.phase);
 
         _navInput = _context.ReadValue<Vector2>();
@@ -131,15 +132,18 @@ public class TapMenu : MonoBehaviour
     //setting Menu Call
     public void ESCpressed(InputAction.CallbackContext _context)
     {
-        //if in Menu
-        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu)
+        if (GameManagerDDOL._doWelcome == false) //disabled if running doWelcome
         {
-            //as settings/menu active, transform used to check which input esc to use
-            if (_context.performed && gameObject.transform.position.y == 0)
+            //if in Menu
+            if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu)
             {
-                Debug.Log("TM - ESC pressed from Menu");
-                GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
-                HUDAnimations._switchingHUD = true; //for HUD animations
+                //as settings/menu active, transform used to check which input esc to use
+                if (_context.performed && gameObject.transform.position.y == 0)
+                {
+                    Debug.Log("TM - ESC pressed from Menu");
+                    GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
+                    HUDAnimations._switchingHUD = true; //for HUD animations
+                }
             }
         }
     }

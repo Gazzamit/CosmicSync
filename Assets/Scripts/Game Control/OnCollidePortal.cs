@@ -10,11 +10,17 @@ public class OnCollidePortal : MonoBehaviour
     // public static int _nextTargetIndex;
     public static bool _addPortalTurbulanceNow = false;
 
+    [SerializeField]
+    AudioClip _portal;
+
+    private AudioSource _portalAS;
+
     //Script is on Spaceship
     // Populate the targetPositions list with the positions of the child objects of the targetParent
     void Start()
     {
         _targetParent = GameObject.FindGameObjectWithTag("TargetHolder");
+        _portalAS = gameObject.AddComponent<AudioSource>();
     }
 
     // Script is on Spaceship
@@ -43,6 +49,9 @@ public class OnCollidePortal : MonoBehaviour
                     // Debug.Log("Adding portal Turbulance");
                     _addPortalTurbulanceNow = true;
                     ScoreManager._instance.AddPoints("portal");
+
+                    _portalAS.pitch = 1f;
+                    _portalAS.PlayOneShot(_portal, 0.2f);
 
                     // First, Check if all targets have been hit
                     if (ScoreManager._finalTargetDestroyed == true)

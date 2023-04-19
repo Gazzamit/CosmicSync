@@ -10,6 +10,7 @@ public class OnCollideLaser : MonoBehaviour
     [SerializeField] private float _constantForce = 5f, _constantTorque = 5f;
     [SerializeField] private GameObject _explosionParticlePrefab; // the particle effect prefab
     [SerializeField] private GameObject _explosion2ParticlePrefab; // shorting out effect
+    [SerializeField] private AudioManager _audioManager;
 
     // A list of all the child objects that will be broken apart
     private List<Transform> _spaceshipChildObjects;
@@ -83,6 +84,9 @@ public class OnCollideLaser : MonoBehaviour
 
     IEnumerator HandleBreakingApart()
     {
+        yield return new WaitForSeconds(0.2f);
+        _audioManager.PlayExplosion();
+        
         //Add particle effects first
         StartCoroutine(AddExplosionEffect());
         // Add a Rigidbody component to allow addforce. No Gravity required.

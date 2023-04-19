@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class SpaceshipControls : MonoBehaviour
 {
     public bool _DEV_AllowLaserFire = false;
+
     //add header to inspector
     [Header("REQUIRED SETTINGS")]
 
@@ -24,6 +25,7 @@ public class SpaceshipControls : MonoBehaviour
 
     public float _perfectTapMultiplier = 8f, _goodTapMultiplier = 4f, _poorTapMultiplier = 2f;
     private float _tapMultiplier = 1;
+    [SerializeField] private AudioManager _audioManager;
 
     public Slider _speedRight, _speedLeft;
     public float _laserPulseLength = 0.4f;
@@ -85,6 +87,9 @@ public class SpaceshipControls : MonoBehaviour
         //prevent control activation after 0.5 beats
         _turnOffInOneHalfBeat = BeatController.instance._secondsPerBeat / 2f;
         //Debug.Log("Start() turnOffInOneHalfBeat: " + _turnOffInOneHalfBeat);
+        
+        //start engine audio on 0
+        _audioManager.PlayEngineRumble(0f);
     }
 
     // FixedUpdate so that its framerate independant
@@ -96,6 +101,10 @@ public class SpaceshipControls : MonoBehaviour
 
         _speedRight.value = _magnitude / 200f; //200 set as max speed
         _speedLeft.value = _magnitude / 200f; //200 set as max speed
+
+
+        float _volume = _magnitude / 200f;
+        _audioManager.AdjustEngineRumbleVolume(_volume);        
 
         if (_doWelcomeSpaceShipControls == true)
         {
@@ -139,6 +148,9 @@ public class SpaceshipControls : MonoBehaviour
                 _laserFiringRightReduceValue = true; //for Tap scripts (reduce Laser value)
                 _LaserFiringStartShake = true; //for camera shake
                 _laserFiringAddBlur = true; //for camera blur
+
+                _audioManager.PlayLaser();
+
                 _laserLeft.SetActive(true);
                 _laserRight.SetActive(true);
                 StartCoroutine(FireLaserParticleSystems());
