@@ -347,6 +347,7 @@ public class ScoreManager : MonoBehaviour
         {
             _countdownText.color = _Colours[2]; //red
             //_countdownTitleText.color = _Colours[2]; //red
+            _finalTargetDestroyed = true;
         }
 
         //_countdownText.text = ((int)_countDown).ToString(); //set to just number with no 's'
