@@ -23,6 +23,8 @@ public class DialogueManager : MonoBehaviour
 
     private Coroutine _typewritterCoroutine;
 
+    private int _counter = 0;
+
     void Awake()
     {
         _instance = this;
@@ -62,7 +64,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (_context.performed)
         {
-            //Debug.Log("DM - context: " + _context.phase);
+            Debug.Log("DM - PressI context: " + _context.phase);
             DisplayNextSentence();
         }
     }

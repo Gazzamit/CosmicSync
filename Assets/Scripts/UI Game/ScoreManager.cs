@@ -52,7 +52,6 @@ public class ScoreManager : MonoBehaviour
 
         // Initialize the point values for each tap type
         _pointsByType.Add("miss", -10);
-        _pointsByType.Add("miss", -10);
         _pointsByType.Add("poor", 1);
         _pointsByType.Add("good", 5);
         _pointsByType.Add("perfect", 10);

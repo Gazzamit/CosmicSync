@@ -224,12 +224,12 @@ public class WelcomeDialogue : MonoBehaviour
         DialogueManager._instance.StartDialogue(_dialogue);
 
         //wait here until _isDialogue == false
-        //yield return new WaitUntil(() => !DialogueManager._instance._isDialogue);
-        while (DialogueManager._instance._isDialogue)
-        {
-            yield return null;
-        }
-        yield break;
+        yield return new WaitUntil(() => !DialogueManager._instance._isDialogue);
+        // while (DialogueManager._instance._isDialogue)
+        // {
+        //     yield return null;
+        // }
+        // yield break;
     }
     public void TriggerWelcomeDialogues()
     {

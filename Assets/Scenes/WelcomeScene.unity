@@ -11424,25 +11424,9 @@ MonoBehaviour:
     m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
     m_ActionName: PressI/PressI[/Keyboard/i]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1709522656}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: TriggerNextSentence
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI1[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
@@ -17682,6 +17666,7 @@ MonoBehaviour:
   _laserAS: {fileID: 1648604441}
   _explosionAS: {fileID: 1435753062}
   _welcomeAS: {fileID: 487412047}
+  _audioClip: []
 --- !u!4 &574128378
 Transform:
   m_ObjectHideFlags: 0
@@ -18442,6 +18427,14 @@ MonoBehaviour:
     m_ActionId: 4d97f5c4-52dc-47c5-b4e4-c2017904b6cb
     m_ActionName: SpaceshipControls/Cancel[/Keyboard/escape]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
+    m_ActionName: UIControls/PressI1[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
+    m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1709522656}
         m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
@@ -18455,20 +18448,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
-    m_ActionName: PressI/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
-    m_ActionName: UIControls/PressI1[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
-    m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
+    m_ActionId: 9ce2e4d5-0c00-4197-8300-859668f2486e
+    m_ActionName: PressI/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PressI
@@ -57190,10 +57171,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PressI
@@ -73995,6 +73972,7 @@ MonoBehaviour:
   _rightBeats:
   - 1
   - 2.5
+  _audioManager: {fileID: 0}
   _colours:
   - {r: 0, g: 0.76470596, b: 0.95294124, a: 0.39215687}
   - {r: 0.007843138, g: 1, b: 0, a: 1}
@@ -74106,10 +74084,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
@@ -79585,37 +79559,9 @@ MonoBehaviour:
     m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
     m_ActionName: PressI/PressI[/Keyboard/i]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1709522656}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: TriggerNextSentence
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI1[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1709522656}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: TriggerNextSentence
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
@@ -90989,10 +90935,6 @@ MonoBehaviour:
     m_ActionName: UIControls/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
   m_NeverAutoSwitchControlSchemes: 0
@@ -92689,10 +92631,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2858286526950967488}
@@ -131953,10 +131891,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f

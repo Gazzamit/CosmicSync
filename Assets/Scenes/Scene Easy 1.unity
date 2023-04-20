@@ -79837,7 +79837,7 @@ MonoBehaviour:
   _thrust: 1000
   _upThrust: 1000
   _strafeThrust: 1000
-  _maxSpaceshipMagnitude: 180
+  _maxSpaceshipMagnitude: 160
   _thrustGlideReduction: 0.189
   _upDownGllideReduction: 0.5
   _leftRightGlideReduction: 0.5

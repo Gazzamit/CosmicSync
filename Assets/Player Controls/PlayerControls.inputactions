@@ -554,15 +554,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "PressI",
-                    "type": "PassThrough",
-                    "id": "098d15c4-f7a9-43cf-afe4-5ecea18910e0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -961,17 +952,6 @@
                     "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "67a2e90a-4fe5-444e-b5a1-13051643089c",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PressI",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
@@ -982,7 +962,7 @@
                 {
                     "name": "PressI",
                     "type": "PassThrough",
-                    "id": "32d8b44e-ce9c-4fa4-8155-4ec25754a0d1",
+                    "id": "9ce2e4d5-0c00-4197-8300-859668f2486e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press",
@@ -992,7 +972,7 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "316b01f8-6e61-44dd-b6a4-f9675008e123",
+                    "id": "bb93e71d-fe3b-4d1d-b2d5-15b7a36c4080",
                     "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
@@ -1003,7 +983,7 @@
                 },
                 {
                     "name": "",
-                    "id": "de252caf-fef6-4f45-8729-73391eb8ae0a",
+                    "id": "b0371ed2-3904-4772-8a11-38407ae4468b",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -1014,11 +994,11 @@
                 },
                 {
                     "name": "",
-                    "id": "58c5df86-16f3-4ec2-aecb-22f4c5444073",
+                    "id": "a7909bb5-3406-4165-8cce-200068011f3a",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PressI",
                     "isComposite": false,
                     "isPartOfComposite": false
