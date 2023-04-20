@@ -17,7 +17,7 @@ public class PitchYawSlider : MonoBehaviour
     public void onNav(InputAction.CallbackContext _context)
     {
         _UI_Pressed = _context.ReadValue<float>();
-        //Debug.Log("PYS - U, I Pressed");
+        Debug.Log("PYS - K, L Pressed");
 
         //if in Settings get slider value
         if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)

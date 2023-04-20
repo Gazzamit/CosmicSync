@@ -9,7 +9,9 @@ public class HUDAnimations : MonoBehaviour
     public List<GameObject> _SVGFlickerTweenObjects;
 
     //set active/inactive
-    private GameObject _mainMenu, _spaceshipHolder, _targetHolder, _mainInGameUI, _targetingSVG, _settings, _dialoguePanelObject;
+    private GameObject _mainMenu, _spaceshipHolder, _targetHolder, _targetingSVG, _settings, _dialoguePanelObject;
+
+    public GameObject[] _enableDisableMenuObj;
 
     //transform location set in inspector
     public Transform _leftRing, _rightRing, _targetSquare, _menuRingBlue, _settingsRingBlue, _dialoguePanel, _blackCanvas;
@@ -27,7 +29,6 @@ public class HUDAnimations : MonoBehaviour
         _mainMenu = GameObject.Find("MainMenu");
         _spaceshipHolder = GameObject.Find("SpaceShipHolder");
         _targetHolder = GameObject.FindGameObjectWithTag("TargetHolder");
-        _mainInGameUI = GameObject.Find("MainInGameUI");
         _targetingSVG = GameObject.Find("TargetingSVG");
         _settings = GameObject.Find("Settings");
         _dialoguePanelObject = GameObject.FindGameObjectWithTag("Dialogue");
@@ -61,16 +62,6 @@ public class HUDAnimations : MonoBehaviour
         //move dialogue panel off the bottom of the screen
         _dialoguePanel.localPosition = new Vector3(0, -_newYMenuShift, 0);
 
-
-        // Normal run Game Start - activate Mainmenu
-        if (GameManagerDDOL._normalStart == true && GameManagerDDOL._doWelcome == false)
-        {
-            Debug.Log("HUDA - Normal Game Start");
-            StartCoroutine(ActivateMenuObjects());
-            MoveHUDGameLauncher();
-            GameManagerDDOL._normalStart = false;
-            _switchingHUD = false;
-        }
         //welcome dialogue - in game before ship lasered
         if (GameManagerDDOL._doWelcome == true)
         {
@@ -157,9 +148,15 @@ public class HUDAnimations : MonoBehaviour
         float _startTime = Time.time;
         while (Time.time - _startTime < _timer)
         {
-            _mainInGameUI.SetActive(true);
+            foreach (var _obj in _enableDisableMenuObj)
+            {
+                _obj.SetActive(true);
+            }
             yield return new WaitForSeconds(Random.Range(0.01f, 0.1f));
-            _mainInGameUI.SetActive(false);
+            foreach (var _obj in _enableDisableMenuObj)
+            {
+                _obj.SetActive(false);
+            }
             yield return new WaitForSeconds(Random.Range(0.05f, 0.15f));
         }
     }
@@ -211,7 +208,7 @@ public class HUDAnimations : MonoBehaviour
         _dialoguePanel.DOLocalMove(_dialoguePanelStartPos + new Vector3(0, 1560, 0), 0.3f).SetEase(_easeType);
     }
 
-    public void MoveDialigueDown()
+    public void MoveDialogueDown()
     {
         _dialoguePanel.DOLocalMove(_dialoguePanelStartPos, 0.3f).SetEase(_easeType);
     }
@@ -252,7 +249,7 @@ public class HUDAnimations : MonoBehaviour
     }
     public void MoveHUDGameLauncher()
     {
-        Debug.Log("HA - MoveHUDGameLauncher");
+        Debug.Log("HA - MoveHUDToMenu");
         _menuRingBlue.DOLocalMove(_menuRingStartPos, 0.3f).SetEase(_easeType);
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
     }
@@ -294,7 +291,10 @@ public class HUDAnimations : MonoBehaviour
     {
         //activate Game HUD Objects then move them
         _targetHolder.SetActive(true);
-        _mainInGameUI.SetActive(true);
+        foreach (var _obj in _enableDisableMenuObj)
+        {
+            _obj.SetActive(true);
+        }
         _targetingSVG.SetActive(true);
 
         //move objects, then disable them
@@ -311,7 +311,7 @@ public class HUDAnimations : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         //_settings.SetActive(false);
         _targetHolder.SetActive(false);
-        //_mainInGameUI.SetActive(false);
+        Debug.Log("HUDA - Activated Menu Objects");
     }
 
     IEnumerator ActivateSettingsObjects()

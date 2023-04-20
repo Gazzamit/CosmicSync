@@ -87,7 +87,7 @@ public class SpaceshipControls : MonoBehaviour
         //prevent control activation after 0.5 beats
         _turnOffInOneHalfBeat = BeatController.instance._secondsPerBeat / 2f;
         //Debug.Log("Start() turnOffInOneHalfBeat: " + _turnOffInOneHalfBeat);
-        
+
         //start engine audio on 0
         _audioManager.PlayEngineRumble(0f);
     }
@@ -104,7 +104,7 @@ public class SpaceshipControls : MonoBehaviour
 
 
         float _volume = _magnitude / 200f;
-        _audioManager.AdjustEngineRumbleVolume(_volume);        
+        _audioManager.AdjustEngineRumbleVolume(_volume);
 
         if (_doWelcomeSpaceShipControls == true)
         {
@@ -183,7 +183,9 @@ public class SpaceshipControls : MonoBehaviour
         StartCoroutine(FireLaserParticleSystems());
         _readyToFireLaser = false;
         StartCoroutine(TurnOffLasers());
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(3f);
+        _audioManager.PlayWelcome();
+        yield return new WaitForSeconds(4f);
         //Add back amounts
         _roll1D = 0.05f;
         _thrust1D = 3f;

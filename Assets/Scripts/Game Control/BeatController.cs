@@ -108,4 +108,5 @@ public class BeatController : MonoBehaviour
             _dspTimeAtStart = (float)AudioSettings.dspTime;
         }
     }
+
 }

@@ -18,7 +18,7 @@ public class AVSynchronisation : MonoBehaviour
     public void onOP_Key(InputAction.CallbackContext _context)
     {
         _OP_Input = _context.ReadValue<float>();
-        //Debug.Log("AVS - OP Pressed");
+        Debug.Log("AVS - OP Pressed");
 
         //if in Settings get slider value
         if( GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)

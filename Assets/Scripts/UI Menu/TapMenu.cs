@@ -110,7 +110,7 @@ public class TapMenu : MonoBehaviour
                             _isPerfectHit = true;
 
                             //load new scence with index tied to beat number
-                            StartCoroutine(LoadNewScene(i));
+                            StartCoroutine(LoadNewScene(i + 1));
                         }
                         else
                         if (_timeDiff <= _poorThreshold)
@@ -132,20 +132,21 @@ public class TapMenu : MonoBehaviour
     //setting Menu Call
     public void ESCpressed(InputAction.CallbackContext _context)
     {
-        if (GameManagerDDOL._doWelcome == false) //disabled if running doWelcome
+        //if in Menu
+        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu)
         {
-            //if in Menu
-            if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu)
+            //as settings/menu active, transform used to check which input esc to use
+            if (_context.performed && gameObject.transform.position.y == 0)
             {
-                //as settings/menu active, transform used to check which input esc to use
-                if (_context.performed && gameObject.transform.position.y == 0)
-                {
-                    Debug.Log("TM - ESC pressed from Menu");
-                    GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
-                    HUDAnimations._switchingHUD = true; //for HUD animations
-                }
+                Debug.Log("TM - ESC pressed from Menu");
+                GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
+                HUDAnimations._switchingHUD = true; //for HUD animations
+
+                //reset which dialogue shown to user in welcome
+                WelcomeDialogue._triggerRestartMenuLoop = true;
             }
         }
+
     }
     private void SetColorAndReset(int _colourIndex)
     {
@@ -168,19 +169,24 @@ public class TapMenu : MonoBehaviour
 
     IEnumerator LoadNewScene(int i)
     {
-        //load scene based on beat
+        //load scene based on beat (already + 1 on call) as welcome is build scene no. 0
+
 
         yield return new WaitForSeconds(0.3f);
         if (_isPerfectHit == true)
         {
             _isPerfectHit = false; //load just one new scene
-            GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
+            //entry force correct game mode
+            GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
             HUDAnimations._switchingHUD = true; //for HUD animations
+            GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
+
             //int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             Debug.Log("TM - Load Scene: " + i);
             //set current level in DDOL
             GameManagerDDOL._currentLevel = i;
             //load scene
+            GameManagerDDOL._doWelcome = false;
             SceneManager.LoadScene(i, LoadSceneMode.Single);
         }
     }

@@ -52,6 +52,7 @@ public class ScoreManager : MonoBehaviour
 
         // Initialize the point values for each tap type
         _pointsByType.Add("miss", -10);
+        _pointsByType.Add("miss", -10);
         _pointsByType.Add("poor", 1);
         _pointsByType.Add("good", 5);
         _pointsByType.Add("perfect", 10);
@@ -216,7 +217,7 @@ public class ScoreManager : MonoBehaviour
         //minus point for miss (anti-constant tap)
         if (_stringTypeForPoints == "miss" && _score >= 10)
         {
-            _score += _pointsByType[_stringTypeForPoints]; // -10
+            //_score += _pointsByType[_stringTypeForPoints]; // -10
         }
 
 

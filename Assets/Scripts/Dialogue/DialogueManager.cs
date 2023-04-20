@@ -90,44 +90,12 @@ public class DialogueManager : MonoBehaviour
                 StopCoroutine(_typewritterCoroutine);
             }
             _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
-
-            //if no sentences, set isDiaglogue to false (trigger next line of code in StartDialogue)
-            if (_sentences.Count == 0)
-            {
-                EndDialogue();
-                return;
-            }
         }
     }
 
-    public void DisplayNextSentenceNow()
+    public void NextDialogueNow()
     {
-        //if no sentences, end dialogue
-        if (_sentences.Count == 0)
-        {
-            EndDialogue();
-            return;
-        }
-
-        //Have sentances, so Dequeue
-        string _sentence = _sentences.Dequeue();
-
-        Debug.Log(" DM - DisplayNextSentenceNow: " + _sentence);
-
-        // Stop the running coroutine, if there is one
-
-        if (_typewritterCoroutine != null)
-        {
-            StopCoroutine(_typewritterCoroutine);
-        }
-        _typewritterCoroutine = StartCoroutine(Typewritter(_sentence));
-        
-        //if no sentences, set isDiaglogue to false (trigger next line of code in StartDialogue)
-        if (_sentences.Count == 0)
-        {
-            EndDialogue();
-            return;
-        }
+        EndDialogue();
     }
 
     IEnumerator Typewritter(string _sentence)

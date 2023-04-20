@@ -10,7 +10,8 @@ using DG.Tweening;
 public class TapRight : MonoBehaviour
 {
     public List<float> _rightBeats; //beats entered in inspector
-    //public float _startOffsetUnit; //0 to 1
+                                    //public float _startOffsetUnit; //0 to 1
+    [SerializeField] private AudioManager _audioManager;
 
     private SVGImage _svgImageRing;
 
@@ -172,6 +173,7 @@ public class TapRight : MonoBehaviour
                         _rightSliderValue += _perfectLaserBoost;
                         ScoreManager._instance.AddPoints("perfect");
                         _hitCounts = true; //so not a miss hit
+                        _audioManager.PlayThruster();
                     }
                     else
                     if (_timeDiff <= _goodThreshold)
@@ -183,6 +185,7 @@ public class TapRight : MonoBehaviour
                         _rightSliderValue += _goodLaserBoost;
                         ScoreManager._instance.AddPoints("good");
                         _hitCounts = true; //so not a miss hit
+                        _audioManager.PlayThruster();
                     }
                     else
                     if (_timeDiff <= _poorThreshold)
@@ -194,6 +197,7 @@ public class TapRight : MonoBehaviour
                         _rightSliderValue += _poorLaserBoost;
                         ScoreManager._instance.AddPoints("poor");
                         _hitCounts = true; //so not a miss hit
+                        _audioManager.PlayThruster();
                     }
                     else
                     {

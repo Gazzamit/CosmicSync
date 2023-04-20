@@ -90,15 +90,15 @@ public class InputMapSwitch : MonoBehaviour
         // check if active
         if (_playerInput.currentActionMap == _pressIActionMap)
         {
-            Debug.Log("IMS - PressI action map active");
+            Debug.Log("WD - Action Map Check for pressI: " + _playerInput.currentActionMap.name);
         }
         if (_playerInput.currentActionMap == _UIControlsActionMap)
         {
-            Debug.Log("IMS - UIControls action map active");
+            Debug.Log("WD - Action Map Check for UI: " + _playerInput.currentActionMap.name);
         }
         if (_playerInput.currentActionMap == _spaceshipControlsActionMap)
         {
-            Debug.Log("IMS - SpaceShip action map active");
+            Debug.Log("WD - Action Map Check for Spaceship Conotrols: " + _playerInput.currentActionMap.name);
         }
     }
 
@@ -112,13 +112,13 @@ public class InputMapSwitch : MonoBehaviour
     void ActivateUIMenuControls()
     {
         // Switch to the UI action map 
-        _playerInput.SwitchCurrentActionMap("UIControls");
+        SwitchActionMap("UIControls");
         Debug.Log("IMS - To UI Action Map: " + _playerInput.currentActionMap.name);
         CheckWhichMapsAreActive();
 
         //set bools for HUD
         HUDAnimations._switchingHUD = true; //for HUD animations
-        Debug.Log("IMS - Activating Menu Controls");
+        Debug.Log("IMS - Game Mode is MainMenu");
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
         //Debug.Log("MainMenu Mode: " + GameManagerDDOL._currentMode);
     }
@@ -126,22 +126,33 @@ public class InputMapSwitch : MonoBehaviour
     void ActivateSpaceshipControls()
     {
         // Switch back to the player action map 
-        _playerInput.SwitchCurrentActionMap("SpaceshipControls");
+        SwitchActionMap("SpaceshipControls");
         Debug.Log("IMS - To Spaceship Action Map: " + _playerInput.currentActionMap.name);
         CheckWhichMapsAreActive();
 
         //set bools for HUD
         HUDAnimations._switchingHUD = true; //for HUD animations
-        Debug.Log("IMS - Activating Game Controls");
+        Debug.Log("IMS - Game Mode is Game");
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
 
     }
 
     void ActivateWelcomeControls()
     {
-        _playerInput.SwitchCurrentActionMap("PressI");
+        SwitchActionMap("PressI");
         Debug.Log("IMS - To PressI Action Map: " + _playerInput.currentActionMap.name);
         CheckWhichMapsAreActive();
+    }
+
+
+    public void SwitchActionMap(string actionMapName)
+    {
+        PlayerInput[] playerInputs = PlayerInput.all.ToArray();
+
+        foreach (PlayerInput playerInput in playerInputs)
+        {
+            playerInput.SwitchCurrentActionMap(actionMapName);
+        }
     }
 }
 

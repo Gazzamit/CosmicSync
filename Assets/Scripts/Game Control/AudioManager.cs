@@ -5,16 +5,23 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     [SerializeField]
-    public AudioSource _thrusterHAS, _thrusterMAS, _thrusterLAS, _engineRumbleAS, _laserAS, _explosionAS;
+    public AudioSource _thrusterHAS, _thrusterMAS, _thrusterLAS, _engineRumbleAS, _laserAS, _explosionAS, _welcomeAS;
+
+    public AudioClip[] _audioClip;
+
+    //[SerializeField] private AudioManager _audioManager; //Links to script - can run functions
+    //[serializeField] private AudioSource _audioSource; // can do _audioSource.pitch etc after 
+    //    public AudioSource _audioSource; public GameObject _audioSourceObj;
+    //    _audioSource = _audioSourceObj.GetComponent<AudioSource>();
 
     public void PlayThruster()
     {
 
         int _index = Random.Range(0, 3);
-        Debug.Log("Playong Thruster: " + _index);
-        if (_index == 0 && _thrusterHAS.isPlaying == false) _thrusterHAS.Play();
-        else if (_index == 1 && _thrusterMAS.isPlaying == false) _thrusterMAS.Play();
-        else if (_index == 2 && _thrusterLAS.isPlaying == false) _thrusterLAS.Play();
+        Debug.Log("Playing Thruster: " + _index);
+        if (_index == 0) _thrusterHAS.PlayOneShot(_audioClip[_index]);
+        else if (_index == 1) _thrusterMAS.PlayOneShot(_audioClip[_index]);
+        else if (_index == 2) _thrusterLAS.PlayOneShot(_audioClip[_index]);
 
     }
 
@@ -37,5 +44,10 @@ public class AudioManager : MonoBehaviour
     public void PlayExplosion()
     {
         _explosionAS.Play();
+    }
+
+    public void PlayWelcome()
+    {
+        _welcomeAS.Play();
     }
 }

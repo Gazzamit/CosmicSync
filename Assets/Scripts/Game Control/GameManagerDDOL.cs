@@ -7,13 +7,13 @@ public class GameManagerDDOL : MonoBehaviour
     //Not Singleton - just one instance check
     private static bool _instance = false;
 
+    public bool DEV_THIS_LEVEL = false;
+
     //DDOL calibration timing value
     public static float _timingSliderValue = 0f;
 
     //DDOL PitchYaw slider value
     public static float _pitchYawSliderValue = 1f;
-
-    public static bool _normalStart = true;
 
     //DDOL GameMode private statics (set to Main Menu at the start)
     private static GameMode _currentGameMode = GameMode.MainMenu;
@@ -23,11 +23,11 @@ public class GameManagerDDOL : MonoBehaviour
     public GameMode _gameModePublic, _previousGameModePublic;
 
     //Track wheter to show welcome text
-    public static bool _doWelcome = false; //run welcome dialogues
-    public static bool _doWelcomeFlickerFX = true; //runonce menu fx in HUDanimations
+    public static bool _doWelcome; //run welcome dialogues
+    public static bool _doWelcomeRunOnce = false;
 
-    public bool DEV_DO_WELCOME = false;
-    private bool _doWelcomeDEVseton = false;
+    public bool _doWelcomePublicStatic, _doWelcomeRunOncePubSt;
+    public static bool _doWelcomeFlickerFX = true; //runonce menu fx in HUDanimations
 
     //Track current level
     public static int _currentLevel;
@@ -67,20 +67,26 @@ public class GameManagerDDOL : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        if (DEV_DO_WELCOME == true && _doWelcomeDEVseton == false)
+        if (DEV_THIS_LEVEL == true)
         {
-            _doWelcome = true;
-            Debug.Log("DDOL - Loading WelcomeScene");
-            _doWelcomeDEVseton = true;
-            //load welcome scene if not on welcome scene
-            if (SceneManager.GetActiveScene().name != "WelcomeScene") SceneManager.LoadScene("WelcomeScene", LoadSceneMode.Single);
+            Debug.Log("THIS LEVEL IS IN DEV MODE");
+            //see start()
         }
-        else
+        else if (_doWelcomeRunOnce == false)
         {
-            _doWelcome = false;
+            Debug.Log("RUNNING WELCOME");
+            _doWelcomeRunOnce = true;
+            _doWelcome = true;
         }
     }
 
+    void Start()
+    {
+        if (DEV_THIS_LEVEL == true)
+        {
+            StartCoroutine(SETDEVMODE());
+        }
+    }
     void Update()
     {
         StartCoroutine(SetGameModes());
@@ -91,6 +97,17 @@ public class GameManagerDDOL : MonoBehaviour
     {
         _gameModePublic = _currentGameMode;
         _previousGameModePublic = _previousGameMode;
+        _doWelcomePublicStatic = _doWelcome;
+        _doWelcomeRunOncePubSt = _doWelcomeRunOnce;
         yield return null;
+    }
+
+    IEnumerator SETDEVMODE()
+    {
+        yield return new WaitForSeconds(1);
+        //activate main menu (set it to game first so it will trigger change)
+        HUDAnimations._switchingHUD = true;
+        GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
+        GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
     }
 }

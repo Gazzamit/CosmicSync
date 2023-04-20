@@ -7,7 +7,7 @@ public class StartDialogue : MonoBehaviour
 {
     private Dialogue _welcome1, _welcome2, _welcome3, _welcome4, _welcome5, _welcome6, _welcome7;
 
-    private GameObject _mainMenu, _dialoguePanel, _blackCanvasPanel, _UIObject, _velocityObj, _mainInGameUI;
+    private GameObject _mainMenu, _dialoguePanel, _blackCanvasPanel, _UIObject, _velocityObj;
 
 
     private Material _skyboxMat;
@@ -22,7 +22,6 @@ public class StartDialogue : MonoBehaviour
     {
         _mainMenu = GameObject.FindGameObjectWithTag("MainMenu");
         _velocityObj = GameObject.FindGameObjectWithTag("Velocity");
-        _mainInGameUI = GameObject.Find("MainInGameUI");
         _welcome1 = GameObject.FindGameObjectWithTag("Welcome1").GetComponent<DialogueTrigger>()._dialogue;
         _welcome2 = GameObject.FindGameObjectWithTag("Welcome2").GetComponent<DialogueTrigger>()._dialogue;
         _welcome3 = GameObject.FindGameObjectWithTag("Welcome3").GetComponent<DialogueTrigger>()._dialogue;
@@ -55,87 +54,11 @@ public class StartDialogue : MonoBehaviour
 
     IEnumerator StartWelcomeDialogues()
     {
-        Debug.Log("SD - Do Welcome");
-
-        // welcome 1
-        HUDAnimations._hideDialogue = true;
-        //set to black at start
-        _skyboxMat.SetColor("_Tint", DialogueManager._instance._skyboxInWelcomeColor);
-        HUDAnimations._fadeToBlack = true;
-        //wait till black
-        yield return new WaitForSeconds(1f);
-        //fadeup from black
-        //add forwad thrust and fire lasers
-        SpaceshipControls._doWelcomeSpaceShipControls = true;
-        yield return new WaitForSeconds(0.3f);
-        HUDAnimations._fadeFromBlack = true;
-        yield return new WaitForSeconds(8.8f);
-        //hide velocity in warp tunnel
-        _velocityObj.SetActive(false);
-
-        //add temporary rotation to spaceship at start
-        for (int i = 0; i < 40; i++)
-        {
-            OnCollidePortal._addPortalTurbulanceNow = true;
-            if (i == 12) HUDAnimations._flickerHUD = true;
-            yield return new WaitForSeconds(0.25f);
-        }
-
-        _skyboxMat.SetColor("_Tint", DialogueManager._instance._skyboxGameColour);
-        //add fx to spaceship
-        _smoke.GetComponent<ParticleSystem>().Play();
-
-
-        //Welcome 1: RAI - hi Jamie....
+  
         yield return new WaitForSeconds(2.0f);
         HUDAnimations._showDialogue = true;//show dialogue box
         yield return StartCoroutine(ProcessDialogue(_welcome1));
-        HUDAnimations._hideDialogue = true;//hide dialogue box
-        yield return new WaitForSeconds(1.0f);//wait for a second
-
-        //welcome 2: r-a-i rebooted...
-        HUDAnimations._showDialogue = true;
-        _smoke.GetComponent<ParticleSystem>().Stop();//stop smoke fx
-        yield return StartCoroutine(ProcessDialogue(_welcome2));
-        HUDAnimations._hideDialogue = true; // hide dialogue box
-        yield return new WaitForSeconds(1.0f);
-
-        //welcome 3: JENZI...
-        HUDAnimations._showDialogue = true;
-        yield return StartCoroutine(ProcessDialogue(_welcome3));
-        HUDAnimations._hideDialogue = true; // hide dialogue box
-        yield return new WaitForSeconds(1.0f);
-
-        //welcome 4: RAI - creates log file... launching hud...
-        HUDAnimations._showDialogue = true;
-        yield return StartCoroutine(ProcessDialogue(_welcome4));
-        HUDAnimations._hideDialogue = true; // hide dialogue box
-        yield return new WaitForSeconds(1.0f);
-        //activate main menu (set it to game first so it will trigger change)
-        GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
-        GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
-        HUDAnimations._switchingHUD = true; //switch to menu HUDD
-        yield return new WaitForSeconds(0.5f); //wait for menu to be in place
-        _mainInGameUI.SetActive(true); // was inactive affter HUDFlicker
-
-        //welcome5 : RAI - press escape
-        HUDAnimations._showDialogue = true;
-        yield return StartCoroutine(ProcessDialogue(_welcome5));
-        DialogueManager._instance._pauseAdvance = true; //stop I working
-        yield return new WaitUntil(() => Keyboard.current.escapeKey.wasPressedThisFrame); //press escape
-        DialogueManager._instance._pauseAdvance = false; //start I working
-        GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.SettingsMenu;
-        HUDAnimations._switchingHUD = true; //switch to setting HUDD
-
-        // A/V sync
-        yield return StartCoroutine(ProcessDialogue(_welcome6));
-        _UIObject.GetComponent<HUDAnimations>().MoveDialogueUp();//move up dialogue
-        //Pitch/Yaw tweak
-        yield return StartCoroutine(ProcessDialogue(_welcome7));
-
-
-        _velocityObj.SetActive(true);
-        yield return null;
+  
 
     }
     IEnumerator ProcessDialogue(Dialogue _dialogue)
