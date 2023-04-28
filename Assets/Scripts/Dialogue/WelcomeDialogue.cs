@@ -68,7 +68,7 @@ public class WelcomeDialogue : MonoBehaviour
     {
         Debug.Log("WD - Welcome 1");
 
-        if (true)
+        if (DialogueManager._instance.DEV_BYPASS_INTRO == false)
         {
 
             // welcome 1
@@ -192,20 +192,22 @@ public class WelcomeDialogue : MonoBehaviour
         {
             if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)
             {
+                _UIObject.GetComponent<HUDAnimations>().MoveDialogueDown();
                 Debug.Log("WD - InMenuSettingsLoop: Settings");
                 _skipText.text = "More (Space / Click)";
-                yield return StartCoroutine(ProcessDialogue(_welcome6));
+                yield return StartCoroutine(ProcessDialogue(_welcome6)); //AV Sync O/P
                 Debug.Log("WD - Welcome 6 Completed");
-                _UIObject.GetComponent<HUDAnimations>().MoveDialogueUp(); //move up dialogue
+
 
                 //if still in settings
                 if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)
                 {
+                    _UIObject.GetComponent<HUDAnimations>().MoveDialogueUp(); //move up dialogue
                     //Pitch/Yaw tweak
                     _skipText.text = "More (Space / Click)";
-                    yield return StartCoroutine(ProcessDialogue(_welcome7));
+                    yield return StartCoroutine(ProcessDialogue(_welcome7)); //Pitch Yaw K/L
                     Debug.Log("WD - Welcome 7 Completed");
-                    _UIObject.GetComponent<HUDAnimations>().MoveDialogueDown();
+
                 }
             }
             if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu)

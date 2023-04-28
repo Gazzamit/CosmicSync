@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
+    public bool DEV_BYPASS_INTRO;
     //singleton
     public static DialogueManager _instance;
     public Color _skyboxInWelcomeColor, _skyboxGameColour;
@@ -73,6 +74,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (_pauseAdvance == false)
         {
+            Debug.Log("Sentences Count: " + _sentences.Count);
             //if no sentences, end dialogue
             if (_sentences.Count == 0)
             {

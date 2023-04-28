@@ -11400,10 +11400,6 @@ MonoBehaviour:
     m_ActionName: UIControls/Look Sensitivity[/Keyboard/u,/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
-    m_ActionName: PressI/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   - m_PersistentCalls:
@@ -11412,8 +11408,8 @@ MonoBehaviour:
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
+    m_ActionId: 9ce2e4d5-0c00-4197-8300-859668f2486e
+    m_ActionName: PressI/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: SpaceshipControls
@@ -29470,7 +29466,10 @@ MonoBehaviour:
   _laserAS: {fileID: 2055111536}
   _explosionAS: {fileID: 2062450132}
   _welcomeAS: {fileID: 0}
-  _audioClip: []
+  _audioClip:
+  - {fileID: 8300000, guid: 8adfed115fd634e3d9b7c899e2bea6a8, type: 3}
+  - {fileID: 8300000, guid: cc31707354a6a4b47ba135d9adaebe1f, type: 3}
+  - {fileID: 8300000, guid: 861b6eabfa6ac44a8bb5040373870940, type: 3}
 --- !u!4 &860163962
 Transform:
   m_ObjectHideFlags: 0
@@ -72685,6 +72684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3e2707655e0443fa708fd22071adf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEV_BYPASS_INTRO: 0
   _skyboxInWelcomeColor: {r: 0, g: 0.65114903, b: 0.9433962, a: 0}
   _skyboxGameColour: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0}
   _nameText: {fileID: 1217110715}
@@ -73892,7 +73892,7 @@ MonoBehaviour:
   _rightBeats:
   - 1
   - 2.5
-  _audioManager: {fileID: 0}
+  _audioManager: {fileID: 860163961}
   _colours:
   - {r: 0, g: 0.76470596, b: 0.95294124, a: 0.39215687}
   - {r: 0.007843138, g: 1, b: 0, a: 1}
@@ -74006,11 +74006,7 @@ MonoBehaviour:
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 098d15c4-f7a9-43cf-afe4-5ecea18910e0
-    m_ActionName: SpaceshipControls/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
+    m_ActionId: 9ce2e4d5-0c00-4197-8300-859668f2486e
     m_ActionName: PressI/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 

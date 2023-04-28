@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.035425305, g: 0.004897118, b: 0.0003933339, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0.008056693, b: 0.0014856623, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11282,7 +11282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52dd64263457d4e8fa99dad415fd9a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioManager: {fileID: 0}
+  _audioManager: {fileID: 574128377}
   _leftBeats:
   - 1
   - 2.5
@@ -11421,16 +11421,16 @@ MonoBehaviour:
     m_ActionName: UIControls/Look Sensitivity[/Keyboard/u,/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
-    m_ActionName: PressI/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI1[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9ce2e4d5-0c00-4197-8300-859668f2486e
+    m_ActionName: PressI/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PressI
@@ -18427,7 +18427,19 @@ MonoBehaviour:
     m_ActionId: 4d97f5c4-52dc-47c5-b4e4-c2017904b6cb
     m_ActionName: SpaceshipControls/Cancel[/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1709522656}
+        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
+        m_MethodName: TriggerNextSentence
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI1[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   - m_PersistentCalls:
@@ -72883,6 +72895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3e2707655e0443fa708fd22071adf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEV_BYPASS_INTRO: 1
   _skyboxInWelcomeColor: {r: 0, g: 0.65114903, b: 0.9433962, a: 0}
   _skyboxGameColour: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0}
   _nameText: {fileID: 1217110715}
@@ -73972,7 +73985,7 @@ MonoBehaviour:
   _rightBeats:
   - 1
   - 2.5
-  _audioManager: {fileID: 0}
+  _audioManager: {fileID: 574128377}
   _colours:
   - {r: 0, g: 0.76470596, b: 0.95294124, a: 0.39215687}
   - {r: 0.007843138, g: 1, b: 0, a: 1}
@@ -74078,16 +74091,16 @@ MonoBehaviour:
     m_ActionName: UIControls/Look Sensitivity[/Keyboard/u,/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
-    m_ActionName: PressI/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9ce2e4d5-0c00-4197-8300-859668f2486e
+    m_ActionName: PressI/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PressI
@@ -79543,22 +79556,6 @@ MonoBehaviour:
     m_ActionId: fc71ed58-f93f-418d-8277-7558cd5e9b8e
     m_ActionName: UIControls/Look Sensitivity[/Keyboard/u,/Keyboard/i]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1709522656}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: TriggerNextSentence
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
-    m_ActionName: PressI/PressI[/Keyboard/i]
-  - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI1[/Keyboard/i]
@@ -79566,6 +79563,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9ce2e4d5-0c00-4197-8300-859668f2486e
+    m_ActionName: PressI/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PressI

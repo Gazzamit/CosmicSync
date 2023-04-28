@@ -9,7 +9,7 @@ public class MessWithAudio : MonoBehaviour
 
     void Start()
     {
-        if (GameManagerDDOL._doWelcome == true)
+        if (GameManagerDDOL._doWelcome == true && DialogueManager._instance.DEV_BYPASS_INTRO == false)
         {
             //_audioSource = _audioSourceObj.GetComponent<AudioSource>();
             StartCoroutine(PitchChangeAudio());

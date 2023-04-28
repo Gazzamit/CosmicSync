@@ -73200,6 +73200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3e2707655e0443fa708fd22071adf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEV_BYPASS_INTRO: 0
   _skyboxInWelcomeColor: {r: 0, g: 0.65114903, b: 0.9433962, a: 0}
   _skyboxGameColour: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0}
   _nameText: {fileID: 1217110715}
