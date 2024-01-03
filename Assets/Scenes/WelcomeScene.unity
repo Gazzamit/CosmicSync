@@ -57173,16 +57173,16 @@ MonoBehaviour:
     m_ActionName: UIControls/Look Sensitivity[/Keyboard/u,/Keyboard/i]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 32d8b44e-ce9c-4fa4-8155-4ec25754a0d1
-    m_ActionName: PressI/PressI[/Keyboard/i]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 735b0f2d-c39f-4341-bbf3-55f954002856
     m_ActionName: UIControls/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 76b3f596-1cc5-4895-ac52-ef8c28805f8f
     m_ActionName: UIControls/OP_Keys[/Keyboard/o,/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9ce2e4d5-0c00-4197-8300-859668f2486e
+    m_ActionName: PressI/PressI[/Keyboard/i,/Keyboard/space,/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PressI
@@ -57220,7 +57220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: fd6d57af880614459b92cd84821cc3aa, type: 3}
   m_PreserveAspect: 0
 --- !u!222 &1449847054
 CanvasRenderer:
@@ -80709,7 +80709,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: a4924a9f30db14ae3affa6665673ca03, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: fd6d57af880614459b92cd84821cc3aa, type: 3}
   m_PreserveAspect: 0
 --- !u!222 &872157884345791899
 CanvasRenderer:
