@@ -4,20 +4,34 @@ using System.Collections;
 
 public class OnCollideLaser : MonoBehaviour
 {
-    // Public variables 
-    [SerializeField] private float _disableAfterTime = 15f;
-    [SerializeField] private float _explosionForce = 10f;
-    [SerializeField] private float _constantForce = 5f, _constantTorque = 5f;
-    [SerializeField] private GameObject _explosionParticlePrefab; // the particle effect prefab
-    [SerializeField] private GameObject _explosion2ParticlePrefab; // shorting out effect
-    [SerializeField] private AudioManager _audioManager;
+    // Public variables
+    [SerializeField]
+    private float _disableAfterTime = 15f;
+
+    [SerializeField]
+    private float _explosionForce = 10f;
+
+    [SerializeField]
+    private float _constantForce = 5f,
+        _constantTorque = 5f;
+
+    [SerializeField]
+    private GameObject _explosionParticlePrefab; // the particle effect prefab
+
+    [SerializeField]
+    private GameObject _explosion2ParticlePrefab; // shorting out effect
+
+    [SerializeField]
+    private AudioManager _audioManager;
 
     // A list of all the child objects that will be broken apart
     private List<Transform> _spaceshipChildObjects;
 
     // The time at which the object starts breaking apart
     private float _startTime;
-    [SerializeField] private bool _isBreakingApart = false;
+
+    [SerializeField]
+    private bool _isBreakingApart = false;
 
     void Awake()
     {
@@ -33,7 +47,6 @@ public class OnCollideLaser : MonoBehaviour
         foreach (Transform _child in transform)
         {
             if (_child.gameObject != null && _child.gameObject.activeSelf)
-
             {
                 _spaceshipChildObjects.Add(_child);
                 //child.gameObject.SetActive(false); //for testing
@@ -42,7 +55,6 @@ public class OnCollideLaser : MonoBehaviour
             foreach (Transform _grandchild in _child)
             {
                 if (_grandchild.gameObject != null && _grandchild.gameObject.activeSelf)
-
                 {
                     _spaceshipChildObjects.Add(_grandchild);
                     //grandchild.gameObject.SetActive(false); //for testing
@@ -50,6 +62,7 @@ public class OnCollideLaser : MonoBehaviour
             }
         }
     }
+
     void OnTriggerEnter(Collider other)
     {
         // Check if the collision was with a laser fired by the player's spaceship
@@ -74,11 +87,13 @@ public class OnCollideLaser : MonoBehaviour
             {
                 //Log destroyed in bool and do not increment next target index
                 NextTargetIndex._targetsDestoryedStaticVar[transform.GetSiblingIndex()] = true;
-                Debug.Log("OCL - Laser Bool Set, but Target Destroyed Wrong Order: " + transform.GetSiblingIndex());
+                Debug.Log(
+                    "OCL - Laser Bool Set, but Target Destroyed Wrong Order: "
+                        + transform.GetSiblingIndex()
+                );
                 ScoreManager._instance.AddPoints("laserWrongOrder");
             }
             StartCoroutine(HandleBreakingApart());
-
         }
     }
 
@@ -86,7 +101,7 @@ public class OnCollideLaser : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         _audioManager.PlayExplosion();
-        
+
         //Add particle effects first
         StartCoroutine(AddExplosionEffect());
         // Add a Rigidbody component to allow addforce. No Gravity required.
@@ -121,7 +136,6 @@ public class OnCollideLaser : MonoBehaviour
         }
     }
 
-
     void PushObjectsApart()
     {
         // Move each child object away from the spaceship's center
@@ -136,11 +150,15 @@ public class OnCollideLaser : MonoBehaviour
 
             // Apply a constant torque to the objects
             Vector3 torqueDirection = Random.insideUnitSphere.normalized;
-            _child.GetComponent<Rigidbody>().AddTorque(torqueDirection * _constantTorque, ForceMode.Impulse);
+            _child
+                .GetComponent<Rigidbody>()
+                .AddTorque(torqueDirection * _constantTorque, ForceMode.Impulse);
 
             // Apply a constant force to push the objects apart
             Vector3 forceDirection = _direction.normalized;
-            _child.GetComponent<Rigidbody>().AddForce(forceDirection * _constantForce, ForceMode.Impulse);
+            _child
+                .GetComponent<Rigidbody>()
+                .AddForce(forceDirection * _constantForce, ForceMode.Impulse);
         }
     }
 
@@ -167,7 +185,7 @@ public class OnCollideLaser : MonoBehaviour
 
     void BigExplosionForce()
     {
-        // Add an explosive force to child objects 
+        // Add an explosive force to child objects
         foreach (Transform _child in _spaceshipChildObjects)
         {
             Vector3 _direction = _child.position - transform.position;
@@ -178,16 +196,21 @@ public class OnCollideLaser : MonoBehaviour
 
             // Apply a constant torque to the objects
             Vector3 torqueDirection = Random.insideUnitSphere.normalized;
-            _child.GetComponent<Rigidbody>().AddTorque(torqueDirection * _constantTorque * 3f, ForceMode.Impulse);
+            _child
+                .GetComponent<Rigidbody>()
+                .AddTorque(torqueDirection * _constantTorque * 3f, ForceMode.Impulse);
 
             // Apply a constant force to push the objects apart
             Vector3 forceDirection = _direction.normalized;
-            _child.GetComponent<Rigidbody>().AddForce(forceDirection * _explosionForce, ForceMode.Impulse);
+            _child
+                .GetComponent<Rigidbody>()
+                .AddForce(forceDirection * _explosionForce, ForceMode.Impulse);
         }
     }
+
     IEnumerator AddExplosion2Effect()
     {
-        // Instantiate the particle effect prefab 
+        // Instantiate the particle effect prefab
         GameObject _particleObject2 = Instantiate(_explosion2ParticlePrefab, transform);
         _particleObject2.transform.localPosition = Vector3.zero;
 
@@ -200,6 +223,7 @@ public class OnCollideLaser : MonoBehaviour
         yield return new WaitForSeconds(2f);
         _particleSystem2.Stop();
     }
+
     IEnumerator DisableObjects()
     {
         // Debug.Log("BA - Disable Objects");
@@ -209,7 +233,8 @@ public class OnCollideLaser : MonoBehaviour
             _obj.gameObject.SetActive(false);
 
             //disable particle effects
-            ParticleSystem _particleSystem = _obj.gameObject.GetComponentInChildren<ParticleSystem>();
+            ParticleSystem _particleSystem =
+                _obj.gameObject.GetComponentInChildren<ParticleSystem>();
             if (_particleSystem != null)
             {
                 _particleSystem.Stop();
@@ -218,7 +243,5 @@ public class OnCollideLaser : MonoBehaviour
         }
         //disable parent spaceship after child objects disabled
         gameObject.SetActive(false);
-
     }
 }
-

@@ -4,22 +4,37 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager _instance;
 
     //targets, score text and value
-    private TextMeshProUGUI _targetsRemainingText, _scoreText, _multiplierTextL, _multiplierTextR, _velocityBonusText, _velocityText, _countdownText, _countdownTitleText, _bonusPointMultiplierText, _levelCompleted;
+    private TextMeshProUGUI _targetsRemainingText,
+        _scoreText,
+        _multiplierTextL,
+        _multiplierTextR,
+        _velocityBonusText,
+        _velocityText,
+        _countdownText,
+        _countdownTitleText,
+        _bonusPointMultiplierText,
+        _levelCompleted;
 
-    [SerializeField] private Color[] _Colours;
+    [SerializeField]
+    private Color[] _Colours;
 
-    [SerializeField] private int _streakCountForMultiply = 8;
+    [SerializeField]
+    private int _streakCountForMultiply = 8;
 
-    [SerializeField] private float _countDown;
-    [SerializeField] private int _countDownMultiplier;
+    [SerializeField]
+    private float _countDown;
 
-    [SerializeField] Transform _scorePointsLocation, _velocityLocation;
+    [SerializeField]
+    private int _countDownMultiplier;
+
+    [SerializeField]
+    Transform _scorePointsLocation,
+        _velocityLocation;
 
     //score value
     private int _score = 0;
@@ -32,7 +47,10 @@ public class ScoreManager : MonoBehaviour
     public static bool _finalTargetDestroyed;
 
     //multiplier ints
-    private int _perfectCounter = 0, _perfectStreak = 0, _multiplier = 1;
+    private int _perfectCounter = 0,
+        _perfectStreak = 0,
+        _multiplier = 1;
+
     //multiplier rect transforms to offest x to left of multiplier
     //private RectTransform _multiplierRect, _xRect;
 
@@ -40,12 +58,16 @@ public class ScoreManager : MonoBehaviour
     private Dictionary<string, int> _pointsByType = new Dictionary<string, int>();
 
     //after final target is destroyed, stop adding points
-    private bool _stopAddingPoints = false, _freezeVelocityOnEOL = false, _addTimeBonusToScore = false;
+    private bool _stopAddingPoints = false,
+        _freezeVelocityOnEOL = false,
+        _addTimeBonusToScore = false;
 
     //slow update of velocity
-    [SerializeField] private float _frequencyOfVelUpdate = 0.2f;
+    [SerializeField]
+    private float _frequencyOfVelUpdate = 0.2f;
     private float _frequencyOfVelUpdateStart;
     private int _pointsBoost = 0;
+
     void Awake()
     {
         _instance = this;
@@ -59,18 +81,35 @@ public class ScoreManager : MonoBehaviour
         _pointsByType.Add("laserRightOrder", 0);
         _pointsByType.Add("laserWrongOrder", 0);
 
-
         //find objects by tag
         _scoreText = GameObject.FindGameObjectWithTag("Score").GetComponent<TextMeshProUGUI>();
-        _multiplierTextR = GameObject.FindGameObjectWithTag("MultiplierR").GetComponent<TextMeshProUGUI>();
-        _multiplierTextL = GameObject.FindGameObjectWithTag("MultiplierL").GetComponent<TextMeshProUGUI>();
-        _targetsRemainingText = GameObject.FindGameObjectWithTag("TargetsRemaining").GetComponent<TextMeshProUGUI>();
-        _velocityBonusText = GameObject.FindGameObjectWithTag("SpeedBonusText").GetComponent<TextMeshProUGUI>();
-        _velocityText = GameObject.FindGameObjectWithTag("Velocity").GetComponent<TextMeshProUGUI>();
-        _countdownTitleText = GameObject.FindGameObjectWithTag("CountdownText").GetComponent<TextMeshProUGUI>();
-        _countdownText = GameObject.FindGameObjectWithTag("CountdownPoints").GetComponent<TextMeshProUGUI>();
-        _bonusPointMultiplierText = GameObject.FindGameObjectWithTag("CountDownMultiplierText").GetComponent<TextMeshProUGUI>();
-        _levelCompleted = GameObject.FindGameObjectWithTag("LevelCompleted").GetComponent<TextMeshProUGUI>();
+        _multiplierTextR = GameObject
+            .FindGameObjectWithTag("MultiplierR")
+            .GetComponent<TextMeshProUGUI>();
+        _multiplierTextL = GameObject
+            .FindGameObjectWithTag("MultiplierL")
+            .GetComponent<TextMeshProUGUI>();
+        _targetsRemainingText = GameObject
+            .FindGameObjectWithTag("TargetsRemaining")
+            .GetComponent<TextMeshProUGUI>();
+        _velocityBonusText = GameObject
+            .FindGameObjectWithTag("SpeedBonusText")
+            .GetComponent<TextMeshProUGUI>();
+        _velocityText = GameObject
+            .FindGameObjectWithTag("Velocity")
+            .GetComponent<TextMeshProUGUI>();
+        _countdownTitleText = GameObject
+            .FindGameObjectWithTag("CountdownText")
+            .GetComponent<TextMeshProUGUI>();
+        _countdownText = GameObject
+            .FindGameObjectWithTag("CountdownPoints")
+            .GetComponent<TextMeshProUGUI>();
+        _bonusPointMultiplierText = GameObject
+            .FindGameObjectWithTag("CountDownMultiplierText")
+            .GetComponent<TextMeshProUGUI>();
+        _levelCompleted = GameObject
+            .FindGameObjectWithTag("LevelCompleted")
+            .GetComponent<TextMeshProUGUI>();
 
         //set countdown multiplier text fade out as not using
         _bonusPointMultiplierText.DOFade(0, 0);
@@ -141,8 +180,6 @@ public class ScoreManager : MonoBehaviour
             _addTimeBonusToScore = true;
             StartCoroutine(AddTimeBonusToScore()); //add bonus time to score at end of game
         }
-
-
     }
 
     //allow slower update of speed
@@ -154,7 +191,8 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
-            _velocityText.text = SpaceshipControls._magnitude.ToString() + "<size=8><sup>m/s</sup></size>";
+            _velocityText.text =
+                SpaceshipControls._magnitude.ToString() + "<size=8><sup>m/s</sup></size>";
         }
     }
 
@@ -182,7 +220,8 @@ public class ScoreManager : MonoBehaviour
             _perfectCounter = 0;
             _perfectStreak = 0;
             //reduce multiplier by one if bad hit
-            if (_multiplier > 1) _multiplier--;
+            if (_multiplier > 1)
+                _multiplier--;
         }
         //set multiplier
         if (_perfectStreak == _streakCountForMultiply)
@@ -203,7 +242,6 @@ public class ScoreManager : MonoBehaviour
         {
             _multiplierTextL.color = _Colours[0];
             _multiplierTextR.color = _Colours[0];
-
         }
 
         //show multiplier
@@ -219,10 +257,12 @@ public class ScoreManager : MonoBehaviour
             //_score += _pointsByType[_stringTypeForPoints]; // -10
         }
 
-
-
         //add points by taptype * multiplier (only for taps)
-        if (_stringTypeForPoints == "poor" || _stringTypeForPoints == "good" || _stringTypeForPoints == "perfect")
+        if (
+            _stringTypeForPoints == "poor"
+            || _stringTypeForPoints == "good"
+            || _stringTypeForPoints == "perfect"
+        )
         {
             int _points = _pointsByType[_stringTypeForPoints];
             _score += _points * _multiplier;
@@ -231,9 +271,15 @@ public class ScoreManager : MonoBehaviour
         //default extra points set to zero for all these
         //could be added as a 'bonus' set of points seperate to the 'velocity' bonus'.
         //However, velocity bonus is the most important.
-        if (_stringTypeForPoints == "laserRightOrder" || _stringTypeForPoints == "laserWrongOrder" || _stringTypeForPoints == "portal")
+        if (
+            _stringTypeForPoints == "laserRightOrder"
+            || _stringTypeForPoints == "laserWrongOrder"
+            || _stringTypeForPoints == "portal"
+        )
         {
-            _pointsBoost = (int)(SpaceshipControls._magnitude + _pointsByType[_stringTypeForPoints]);
+            _pointsBoost = (int)(
+                SpaceshipControls._magnitude + _pointsByType[_stringTypeForPoints]
+            );
             Debug.Log("Show Bonus Points: " + _pointsBoost);
             StartCoroutine(ShowVelocityBonus());
             _freezeVelocityOnEOL = true;
@@ -290,13 +336,12 @@ public class ScoreManager : MonoBehaviour
         _multiplierTextR.transform.localScale = Vector3.one;
         //set 'x' to left of original multiplier text
         //_xRect.anchoredPosition = new Vector2(_multiplierRect.anchoredPosition.x - _multiplierText.preferredWidth / 2 - _multiplierXText.preferredWidth / 2, _xRect.anchoredPosition.y);
-
     }
 
     private IEnumerator ShowVelocityBonus()
     {
-        //velocity temporarily show velocity as points boost on laser/portal hit         
-        _velocityText.text = "+" + _pointsBoost.ToString();  //reset automatically to velocity via update()
+        //velocity temporarily show velocity as points boost on laser/portal hit
+        _velocityText.text = "+" + _pointsBoost.ToString(); //reset automatically to velocity via update()
         yield return new WaitForSeconds(0.5f);
         //fade + scale at same time
         _velocityBonusText.DOFade(1f, .2f);
@@ -363,17 +408,24 @@ public class ScoreManager : MonoBehaviour
 
             //show bonus points
             _countdownTitleText.transform.DOScale(0.1f, 0.1f).WaitForCompletion();
-            _countdownTitleText.text = "BONUS POINTS" + "\n" + (((int)_countDown) * _countDownMultiplier).ToString();
+            _countdownTitleText.text =
+                "BONUS POINTS" + "\n" + (((int)_countDown) * _countDownMultiplier).ToString();
             _countdownTitleText.DOFade(1.5f, 0.2f);
             //move text down a little over same 0.2
-            _countdownTitleText.GetComponent<RectTransform>().DOMove(_countdownTitleText.transform.position + new Vector3(0, -1.4f, 0), 0.2f).SetEase(Ease.InOutSine);
+            _countdownTitleText
+                .GetComponent<RectTransform>()
+                .DOMove(_countdownTitleText.transform.position + new Vector3(0, -1.4f, 0), 0.2f)
+                .SetEase(Ease.InOutSine);
             _countdownTitleText.transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack);
 
             //see the time and multiplier values
             yield return new WaitForSeconds(3f);
 
             //move title text to score
-            _countdownTitleText.GetComponent<RectTransform>().DOMove(_scorePointsLocation.position, 3f).SetEase(Ease.InOutSine);
+            _countdownTitleText
+                .GetComponent<RectTransform>()
+                .DOMove(_scorePointsLocation.position, 3f)
+                .SetEase(Ease.InOutSine);
             _countdownTitleText.DOFade(0, 2.5f);
             _countdownTitleText.transform.DOScale(0.8f, 3f);
 
@@ -388,7 +440,10 @@ public class ScoreManager : MonoBehaviour
             {
                 _score += _countDownMultiplier; //add count down multiplier until i < limit
                 _scoreText.text = _score.ToString();
-                _countdownTitleText.text = "BONUS POINTS" + "\n" + (((int)_countDown - i) * _countDownMultiplier).ToString();
+                _countdownTitleText.text =
+                    "BONUS POINTS"
+                    + "\n"
+                    + (((int)_countDown - i) * _countDownMultiplier).ToString();
                 yield return new WaitForSeconds(0.01f);
             }
             _countdownText.transform.DOScale(1f, 0.5f);
@@ -407,7 +462,7 @@ public class ScoreManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         while (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
-            // Scale the image up 
+            // Scale the image up
             yield return _scoreText.transform.DOScale(1.1f, 0.3f).WaitForCompletion();
 
             // Scale the image back down
@@ -422,7 +477,7 @@ public class ScoreManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         while (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game)
         {
-            // Scale the image up 
+            // Scale the image up
             yield return _countdownText.transform.DOScale(1.05f, 0.3f).WaitForCompletion();
 
             // Scale the image back down
@@ -440,9 +495,8 @@ public class ScoreManager : MonoBehaviour
             // Scale the image up
             yield return _levelCompleted.transform.DOScale(1.02f, 0.3f).WaitForCompletion();
 
-            // Scale the image back down 
+            // Scale the image back down
             yield return _levelCompleted.transform.DOScale(0.99f, 0.3f).WaitForCompletion();
         }
-
     }
 }

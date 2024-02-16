@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 public class GameManagerDDOL : MonoBehaviour
 {
     //Not Singleton - just one instance check
+    //this effectively ignores the DDOL that are in other scenes
+    //DDOL in other scenees - they are there so that DEV load level works in that isolated scene when loaded for editing
+    //otherwise they are not loaded, as just one instance
     private static bool _instance = false;
 
     public bool DEV_THIS_LEVEL = false;
@@ -20,13 +23,15 @@ public class GameManagerDDOL : MonoBehaviour
     private static GameMode _previousGameMode = GameMode.MainMenu;
 
     //Track mode in editor
-    public GameMode _gameModePublic, _previousGameModePublic;
+    public GameMode _gameModePublic,
+        _previousGameModePublic;
 
-    //Track wheter to show welcome text
+    //Track whether to show welcome text
     public static bool _doWelcome; //run welcome dialogues
     public static bool _doWelcomeRunOnce = false;
 
-    public bool _doWelcomePublicStatic, _doWelcomeRunOncePubSt;
+    public bool _doWelcomePublicStatic,
+        _doWelcomeRunOncePubSt;
     public static bool _doWelcomeFlickerFX = true; //runonce menu fx in HUDanimations
 
     //Track current level
@@ -74,7 +79,7 @@ public class GameManagerDDOL : MonoBehaviour
         }
         else if (_doWelcomeRunOnce == false)
         {
-            Debug.Log("RUNNING WELCOME");
+            Debug.Log("GM DDOL RUNNING WELCOME");
             _doWelcomeRunOnce = true;
             _doWelcome = true;
         }
@@ -87,14 +92,15 @@ public class GameManagerDDOL : MonoBehaviour
             StartCoroutine(SETDEVMODE());
         }
     }
+
     void Update()
     {
         StartCoroutine(SetGameModes());
     }
 
-
     IEnumerator SetGameModes()
     {
+        //just for inspector view of game modes
         _gameModePublic = _currentGameMode;
         _previousGameModePublic = _previousGameMode;
         _doWelcomePublicStatic = _doWelcome;

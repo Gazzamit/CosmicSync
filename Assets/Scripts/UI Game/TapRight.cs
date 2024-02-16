@@ -6,20 +6,30 @@ using Unity.VectorGraphics;
 using System;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.IO;
 
 public class TapRight : MonoBehaviour
 {
     public List<float> _rightBeats; //beats entered in inspector
-                                    //public float _startOffsetUnit; //0 to 1
-    [SerializeField] private AudioManager _audioManager;
+
+    //public float _startOffsetUnit; //0 to 1
+    [SerializeField]
+    private AudioManager _audioManager;
 
     private SVGImage _svgImageRing;
 
-    private float _perfectThreshold, _goodThreshold, _poorThreshold;
-    [Header("REQUIRED")]
-    [SerializeField] private Color[] _colours; //normal, good, poor, miss
+    private float _perfectThreshold,
+        _goodThreshold,
+        _poorThreshold;
 
-    [SerializeField] private float _perfectLaserBoost = 0.06f, _goodLaserBoost = 0.04f, _poorLaserBoost = 0.02f;
+    [Header("REQUIRED")]
+    [SerializeField]
+    private Color[] _colours; //normal, good, poor, miss
+
+    [SerializeField]
+    private float _perfectLaserBoost = 0.06f,
+        _goodLaserBoost = 0.04f,
+        _poorLaserBoost = 0.02f;
 
     public static List<float> _rightBeatsStaticVar;
     private bool[] _beatsProcessed; //track beats processed to avoid double tap on beat
@@ -38,8 +48,26 @@ public class TapRight : MonoBehaviour
     public static bool _isMissHit = false;
     private bool _hitCounts;
     public ParticleSystem _anyHitRight;
-    [SerializeField] private SVGImage _svgImageCharge;
-    [SerializeField] private Image _laserSlider;
+
+    [SerializeField]
+    private SVGImage _svgImageCharge;
+
+    [SerializeField]
+    private Image _laserSlider;
+
+    // Struct to hold beat and tap times for the left side
+    public struct RightHitAccuracyData
+    {
+        public float DataTimeOfBeat;
+        public float DataTapTime;
+    }
+
+    // Lists to store hit accuracy data
+    private List<RightHitAccuracyData> _listRightPerfectHits = new List<RightHitAccuracyData>();
+    private List<RightHitAccuracyData> _listRightGoodHits = new List<RightHitAccuracyData>();
+    private List<RightHitAccuracyData> _listRightPoorHits = new List<RightHitAccuracyData>();
+
+    private bool _metricsSavedRight = false; // bool flag to check saved once only from update
 
     void Awake()
     {
@@ -60,7 +88,8 @@ public class TapRight : MonoBehaviour
         _beatsProcessed = new bool[_rightBeats.Count];
 
         //length in seconds of one bar of 'x' beats
-        _barInSeconds = BeatController.instance._beatsInLoop * BeatController.instance._secondsPerBeat;
+        _barInSeconds =
+            BeatController.instance._beatsInLoop * BeatController.instance._secondsPerBeat;
     }
 
     void FixedUpdate()
@@ -70,11 +99,13 @@ public class TapRight : MonoBehaviour
         {
             _rightSlider.value = _rightSliderValue; //update slider (from pefect, good, poor hits)
 
-
             //stop on beat one AV sync check
             if (BeatController.instance._stopOnBeatSyncCheck == true)
             {
-                if (BeatController.instance._loopPlayheadInSeconds > BeatController.instance._secondsPerBeat * 2)
+                if (
+                    BeatController.instance._loopPlayheadInSeconds
+                    > BeatController.instance._secondsPerBeat * 2
+                )
                 {
                     //Debug.Log("Sec Per beat: " + BeatController.instance.secondsPerBeat + " Playhead: " + BeatController.instance.loopPlayheadInSeconds);
                     Time.timeScale = 0.0f; // Stop time
@@ -90,7 +121,12 @@ public class TapRight : MonoBehaviour
                 Array.Clear(_beatsProcessed, 0, _beatsProcessed.Length);
                 _resetLoop = false;
             }
-            if (!_resetLoop && _loopPlayheadInSeconds > _poorThreshold && _loopPlayheadInSeconds < _poorThreshold + 0.05f) _resetLoop = true;
+            if (
+                !_resetLoop
+                && _loopPlayheadInSeconds > _poorThreshold
+                && _loopPlayheadInSeconds < _poorThreshold + 0.05f
+            )
+                _resetLoop = true;
 
             if (SpaceshipControls._laserFiringRightReduceValue == true)
             {
@@ -98,6 +134,12 @@ public class TapRight : MonoBehaviour
                 StartCoroutine(LaserFiring());
                 StartCoroutine(LerpLaserSliders());
             }
+        }
+
+        if (ScoreManager._finalTargetDestroyed && !_metricsSavedRight)
+        {
+            SaveMetricsToFiles();
+            _metricsSavedRight = true; // don't call SaveMetricsToFiles again
         }
     }
 
@@ -153,7 +195,9 @@ public class TapRight : MonoBehaviour
             {
                 //beat being processed
                 float _beatNumber = _rightBeats[i];
-                float _timeOfBeat = Mathf.Abs((_beatNumber - 1) * BeatController.instance._secondsPerBeat);
+                float _timeOfBeat = Mathf.Abs(
+                    (_beatNumber - 1) * BeatController.instance._secondsPerBeat
+                );
                 float _tapTime = BeatController.instance._loopPlayheadInSeconds;
                 float _timeDiff = Mathf.Abs(_timeOfBeat - _tapTime);
                 //if approaching complete loop set timeDiff to fraction of sec before beat 1.
@@ -174,9 +218,15 @@ public class TapRight : MonoBehaviour
                         ScoreManager._instance.AddPoints("perfect");
                         _hitCounts = true; //so not a miss hit
                         _audioManager.PlayThruster();
+                        _listRightPerfectHits.Add(
+                            new RightHitAccuracyData
+                            {
+                                DataTimeOfBeat = _timeOfBeat,
+                                DataTapTime = _tapTime
+                            }
+                        );
                     }
-                    else
-                    if (_timeDiff <= _goodThreshold)
+                    else if (_timeDiff <= _goodThreshold)
                     {
                         //Debug.Log("Good L: timeDiff: " + timeDiff);
                         SetColorAndReset(2);
@@ -186,9 +236,15 @@ public class TapRight : MonoBehaviour
                         ScoreManager._instance.AddPoints("good");
                         _hitCounts = true; //so not a miss hit
                         _audioManager.PlayThruster();
+                        _listRightGoodHits.Add(
+                            new RightHitAccuracyData
+                            {
+                                DataTimeOfBeat = _timeOfBeat,
+                                DataTapTime = _tapTime
+                            }
+                        );
                     }
-                    else
-                    if (_timeDiff <= _poorThreshold)
+                    else if (_timeDiff <= _poorThreshold)
                     {
                         //Debug.Log("Poor L: timeDiff: " + timeDiff);
                         SetColorAndReset(3);
@@ -198,6 +254,13 @@ public class TapRight : MonoBehaviour
                         ScoreManager._instance.AddPoints("poor");
                         _hitCounts = true; //so not a miss hit
                         _audioManager.PlayThruster();
+                        _listRightPoorHits.Add(
+                            new RightHitAccuracyData
+                            {
+                                DataTimeOfBeat = _timeOfBeat,
+                                DataTapTime = _tapTime
+                            }
+                        );
                     }
                     else
                     {
@@ -208,9 +271,10 @@ public class TapRight : MonoBehaviour
             //if the hit was not inside even the poor threshold for any beat
             if (_hitCounts == false)
             {
-                ScoreManager._instance.AddPoints("miss");  //minus value    
+                ScoreManager._instance.AddPoints("miss"); //minus value
             }
-            if (_hitCounts == true) _hitCounts = false; //reset for next key press
+            if (_hitCounts == true)
+                _hitCounts = false; //reset for next key press
         }
     }
 
@@ -227,11 +291,9 @@ public class TapRight : MonoBehaviour
 
     IEnumerator ResetColour()
     {
-
         yield return new WaitForSeconds(0.2f);
         _svgImageRing.color = _colours[0];
         _svgImageCharge.color = _colours[0];
-
     }
 
     IEnumerator AnyHitEffectRight(int _colourIndex)
@@ -242,9 +304,70 @@ public class TapRight : MonoBehaviour
         color = new ParticleSystem.MinMaxGradient(_colours[_colourIndex]);
         colorModule.color = color;
         //Debug.Log("Colour L : " + _colourIndex);
-        _anyHitRight.Stop();//Sto in case it is still playing
+        _anyHitRight.Stop(); //Sto in case it is still playing
         _anyHitRight.Play();
         yield return null;
     }
 
+    // Save the metrics to files. and save vars
+    public void SaveMetricsToFiles()
+    {
+        SaveListToCSV(_listRightPerfectHits, "CSPerfectHits_Right.csv");
+        SaveListToCSV(_listRightGoodHits, "CSGoodHits_Right.csv");
+        SaveListToCSV(_listRightPoorHits, "CSPoorHits_Right.csv");
+        SaveVarsToCSV();
+    }
+
+    private void SaveListToCSV(List<RightHitAccuracyData> list, string fileName)
+    {
+        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string baseFileName = Path.GetFileNameWithoutExtension(fileName);
+        string extension = Path.GetExtension(fileName);
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+        string directoryPath = Path.Combine(
+            documentsPath,
+            $"Documents/CSGameData/Data_Right_{timestamp}"
+        );
+
+        Debug.Log("Save Folder Right: " + directoryPath);
+
+        // Check if the directory exists, if not, create it
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+
+        string fileNameWithTimestamp = $"{baseFileName}_{timestamp}{extension}";
+        string filePath = Path.Combine(directoryPath, fileNameWithTimestamp);
+
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine("TimeOfBeat,TapTime"); // CSV Header
+            foreach (var hit in list)
+            {
+                writer.WriteLine($"{hit.DataTimeOfBeat},{hit.DataTapTime}");
+            }
+        }
+    }
+
+    private void SaveVarsToCSV()
+    {
+        // Save secondsPerBeat and beatsInLoop to a text file
+        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string baseFileName = "CSDataVars";
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+        string varsFileName = $"{baseFileName}_{timestamp}.csv";
+        string directoryPath = Path.Combine(
+            documentsPath,
+            $"Documents/CSGameData/Data_Right_{timestamp}"
+        );
+        string varsFilePath = Path.Combine(directoryPath, varsFileName);
+        using (StreamWriter writer = new StreamWriter(varsFilePath))
+        {
+            writer.WriteLine($"SecondsPerBeat, {BeatController.instance._secondsPerBeat}");
+            writer.WriteLine($"BeatsInLoop, {BeatController.instance._beatsInLoop}");
+            writer.WriteLine($"TimeStamp, {timestamp}");
+            writer.WriteLine($"LeftOrRight, Right");
+        }
+    }
 }

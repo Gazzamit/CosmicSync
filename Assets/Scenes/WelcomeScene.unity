@@ -24127,8 +24127,8 @@ MonoBehaviour:
     _name: Jenzi AI Mainframe
     _sentences:
     - The current mission is "Destruction of Hazardous Space-Junk in Sector 42".
-    - "The Final Log Entry states:\nWarning: Spatial Anomally Detected \nPrimary
-      FlightControls: Offline\n"
+    - "The Final Log Entry states:\nWarning: Spatial Anomaly Detected \nPrimary FlightControls:
+      Offline\n"
     - The Spatial Anomaly caused a system wide failure. Primary Flight Controls are
       offline and cannot be enabled.
     - 'Primary Navigation can only be controlled through secondary system: RAI v2.001'
@@ -57247,6 +57247,7 @@ MonoBehaviour:
   - 1.5
   - 2
   - 2.5
+  - 3
   _perfectThreshold: 0.1
   _poorThreshold: 0.15
   _colours:

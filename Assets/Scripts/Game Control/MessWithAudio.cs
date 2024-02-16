@@ -9,7 +9,10 @@ public class MessWithAudio : MonoBehaviour
 
     void Start()
     {
-        if (GameManagerDDOL._doWelcome == true && DialogueManager._instance.DEV_BYPASS_INTRO == false)
+        if (
+            GameManagerDDOL._doWelcome == true
+            && DialogueManager._instance.DEV_BYPASS_INTRO == false
+        )
         {
             //_audioSource = _audioSourceObj.GetComponent<AudioSource>();
             StartCoroutine(PitchChangeAudio());
@@ -18,13 +21,13 @@ public class MessWithAudio : MonoBehaviour
 
     IEnumerator PitchChangeAudio()
     {
-        Debug.Log("BC - Messing with audio");
+        Debug.Log("MWA - Messing with audio");
         yield return new WaitForSeconds(11);
         float _currentPitch = 1f;
         while (WelcomeDialogue._resetAudioWhenRaiReboots == false)
         {
             float _newPitch = Random.Range(0.5f, 0.8f);
-            Debug.Log("BC - New Pitch: " + _newPitch);
+            Debug.Log("MWA - New Pitch: " + _newPitch);
             float _durationOfChange = Random.Range(2f, 3f);
             float _ratio = 0.0f;
 
@@ -39,7 +42,7 @@ public class MessWithAudio : MonoBehaviour
         }
 
         //quickly reset audio pitch
-        Debug.Log("BC - Reset Audio");
+        Debug.Log("MWA - Reset Audio");
         float _elapsedTime = 0.0f;
         float _resetDuration = 0.3f;
 

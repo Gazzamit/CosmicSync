@@ -6,8 +6,8 @@ using DG.Tweening;
 
 public class SVGFlickerTween : MonoBehaviour
 {
-
     private SVGImage _svgImage;
+
     //[SerializeField] SVGImage _svgImage;
     void Start()
     {
@@ -21,7 +21,8 @@ public class SVGFlickerTween : MonoBehaviour
     {
         //Debug.Log("Flicker Tween: " + gameObject.name);
         // Create the fade sequence
-        Sequence fadeSequence = DOTween.Sequence()
+        Sequence fadeSequence = DOTween
+            .Sequence()
             .Append(_svgImage.DOFade(1, 0.04f)) //to White
             .AppendInterval(Random.Range(0.01f, 0.04f))
             .Append(_svgImage.DOFade(0, 0.04f)) //to black
@@ -37,10 +38,9 @@ public class SVGFlickerTween : MonoBehaviour
             .AppendInterval(Random.Range(0.01f, 0.04f))
             .Append(_svgImage.DOFade(1, 0.04f)); //to white
 
-
         // Start the sequence
         fadeSequence.Play();
-        
+
         // HUDAnimations._flickerTween = false;
     }
 }

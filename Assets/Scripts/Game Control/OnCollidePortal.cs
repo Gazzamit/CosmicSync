@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class OnCollidePortal : MonoBehaviour
 {
     private GameObject _targetParent; //holds the targets
+
     // private List<Vector3> _targetPositions;
     // public static List<Vector3> _targetPositionsStaticVar;
     // public static int _nextTargetIndex;
@@ -39,8 +40,10 @@ public class OnCollidePortal : MonoBehaviour
             // Check if the collided target is a child of the targetParent
             if (_collidedTarget.parent == _targetParent.transform)
             {
-                //Object set inactive if hit. 
-                Transform _expectedTarget = _targetParent.transform.GetChild(NextTargetIndex._nextTargetIndex);
+                //Object set inactive if hit.
+                Transform _expectedTarget = _targetParent.transform.GetChild(
+                    NextTargetIndex._nextTargetIndex
+                );
                 //Debug.Log("TCC - Target Transversed: " + _nextTargetIndex);
 
                 // Check if the collided target is the expected target
@@ -50,7 +53,7 @@ public class OnCollidePortal : MonoBehaviour
                     _addPortalTurbulanceNow = true;
                     ScoreManager._instance.AddPoints("portal");
 
-                    _portalAS.pitch = 1f;
+                    _portalAS.pitch = .8f;
                     _portalAS.PlayOneShot(_portal, 0.2f);
 
                     // First, Check if all targets have been hit
@@ -60,9 +63,13 @@ public class OnCollidePortal : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("OCP - Portal Bool Set Destroyed: " + NextTargetIndex._nextTargetIndex);
+                        Debug.Log(
+                            "OCP - Portal Bool Set Destroyed: " + NextTargetIndex._nextTargetIndex
+                        );
                         //Log destroyed in bool and increment target index
-                        NextTargetIndex._targetsDestoryedStaticVar[NextTargetIndex._nextTargetIndex] = true;
+                        NextTargetIndex._targetsDestoryedStaticVar[
+                            NextTargetIndex._nextTargetIndex
+                        ] = true;
                         NextTargetIndex._nextTargetIndex++;
                         // Debug.Log("_nextTargetIndex: " + _nextTargetIndex);
                         ScoreManager._instance.TargetDestroyed();
@@ -70,7 +77,6 @@ public class OnCollidePortal : MonoBehaviour
 
                     //make hit object inactive
                     _collidedTarget.gameObject.SetActive(false);
-
                 }
             }
         }

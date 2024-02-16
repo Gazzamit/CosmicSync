@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+
 public class PitchYawSlider : MonoBehaviour
 {
     private Slider _slider;
@@ -24,7 +25,8 @@ public class PitchYawSlider : MonoBehaviour
         {
             if (_context.performed)
             {
-                float _newValue = GameManagerDDOL._pitchYawSliderValue; ;
+                float _newValue = GameManagerDDOL._pitchYawSliderValue;
+                ;
                 // Get the new value
                 if (_UI_Pressed == 1 && _newValue <= _slider.maxValue)
                 {
@@ -54,10 +56,7 @@ public class PitchYawSlider : MonoBehaviour
                 _slider.value = _newValue;
                 GameManagerDDOL._pitchYawSliderValue = _newValue;
                 //Debug.Log("PtichYaw Value: " + _newValue);
-
             }
         }
     }
 }
-
-

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WelcomeScene.unity
     guid: 46278ff3d9476416eb69219f092d4c8f
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: d630e7ce41ec5445388dcf2255e1366a
+  - enabled: 1
     path: Assets/Scenes/Scene Easy 1.unity
     guid: f8b3ec3fdb20c4d9992245291683a9f8
   - enabled: 1
@@ -19,6 +22,9 @@ EditorBuildSettings:
     guid: e3505d82c21aa455b9de0802d26310be
   - enabled: 1
     path: Assets/Scenes/Scene Easy 1 as 5.4.unity
+    guid: a88a015b800c64dc497038d04f3c7877
+  - enabled: 1
+    path: Assets/Scenes/Scene Easy 1 as 7.4.unity
     guid: c0d5ac3dcccfe437fb177a857961fd04
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: e01a006e5c15146cd90bfbe4316fe20b, type: 2}

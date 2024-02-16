@@ -10,19 +10,27 @@ public class TapOrbitScriptFlashSync : MonoBehaviour
     [Header("REQUIRED")]
     public float _radius = 215.5f;
     public GameObject _tapIndicatorPrefab;
-    [SerializeField] private Color[] _colours; //normal, flash
 
-    [SerializeField] private SVGImage _blueCircle;
+    [SerializeField]
+    private Color[] _colours; //normal, flash
 
-    [SerializeField] private int _currentBeatPosition, _lastBeatPosition;
+    [SerializeField]
+    private SVGImage _blueCircle;
 
-    [SerializeField] private float _flashOffset = -0.02f;
+    [SerializeField]
+    private int _currentBeatPosition,
+        _lastBeatPosition;
+
+    [SerializeField]
+    private float _flashOffset = -0.02f;
 
     void FixedUpdate()
     {
         // Calculate the beat and loop position from the BeatController
         //offset by -0.01 for slightly earlier 0.1s flash
-        _currentBeatPosition = Mathf.FloorToInt(BeatController.instance._playheadInBeats + _flashOffset);
+        _currentBeatPosition = Mathf.FloorToInt(
+            BeatController.instance._playheadInBeats + _flashOffset
+        );
 
         // On increment flash the circle
         if (_currentBeatPosition != _lastBeatPosition)
@@ -58,10 +66,7 @@ public class TapOrbitScriptFlashSync : MonoBehaviour
                 WelcomeDialogue._triggerRestartMenuLoop = true;
             }
         }
-
     }
-
-
 
     //on Q pressed, Quit Game
     public void onQ(InputAction.CallbackContext _context)
@@ -75,10 +80,9 @@ public class TapOrbitScriptFlashSync : MonoBehaviour
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
 #else
-                    Application.Quit();
+                Application.Quit();
 #endif
             }
         }
-
     }
 }

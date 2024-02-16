@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+
 public class AVSynchronisation : MonoBehaviour
 {
     private Slider _slider;
-
 
     private float _OP_Input;
 
@@ -21,7 +21,7 @@ public class AVSynchronisation : MonoBehaviour
         Debug.Log("AVS - OP Pressed");
 
         //if in Settings get slider value
-        if( GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)
+        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu)
         {
             if (_context.performed)
             {
@@ -44,5 +44,3 @@ public class AVSynchronisation : MonoBehaviour
         }
     }
 }
-
-

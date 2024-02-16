@@ -91,7 +91,7 @@ public class TapMenu : MonoBehaviour
                     // Debug.Log("TM - TimmDiff from beaat(" + i + "): " + _timeDiff);
 
                     //if approaching complete loop set timeDiff to fraction of sec before beat 1.
-                    if ((_barInSeconds - _timeDiff) < _poorThreshold)
+                    if ((_barInSeconds - _timeDiff) < _poorThreshold) 
                     {
                         _timeDiff = _barInSeconds - _timeDiff;
                         // Debug.Log("TM - Bar in Seconds: " + _barInSeconds);
@@ -110,7 +110,7 @@ public class TapMenu : MonoBehaviour
                             _isPerfectHit = true;
 
                             //load new scence with index tied to beat number
-                            StartCoroutine(LoadNewScene(i + 1));
+                            StartCoroutine(LoadNewScene(i + 2));
                         }
                         else
                         if (_timeDiff <= _poorThreshold)
@@ -169,7 +169,7 @@ public class TapMenu : MonoBehaviour
 
     IEnumerator LoadNewScene(int i)
     {
-        //load scene based on beat (already + 1 on call) as welcome is build scene no. 0
+        //load scene based on beat (already + 2 on call) as welcome is build scene no. 0, menu is 1
 
 
         yield return new WaitForSeconds(0.3f);

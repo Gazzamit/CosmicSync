@@ -9,7 +9,8 @@ public class TargetRadar : MonoBehaviour
     public Vector3 _targetPosition; // The target to track
     public float _radius = 300.0f; // The radius of the radar
     private float _flashInterval = 0.5f;
-    public Color _flashColourSlow, _flashColourFast; // When target is off screen
+    public Color _flashColourSlow,
+        _flashColourFast; // When target is off screen
     private Color _flashColourSelect;
 
     // Private variables
@@ -24,7 +25,8 @@ public class TargetRadar : MonoBehaviour
 
     private Color _originalColour; // Store original color of the indicator
 
-    private int _debugIndexCurrent, _debugIndexPrevious = -1;
+    private int _debugIndexCurrent,
+        _debugIndexPrevious = -1;
 
     private void Awake()
     {
@@ -37,27 +39,36 @@ public class TargetRadar : MonoBehaviour
         _originalColour = _rectTransformUIIndicator.GetComponent<SVGImage>().color;
     }
 
-
     private void FixedUpdate()
     {
         if (ScoreManager._finalTargetDestroyed == false)
         {
             //Get the next target from collision coltroller script list
-            _targetPosition = NextTargetIndex._targetPositionsStaticVar[NextTargetIndex._nextTargetIndex];
+            _targetPosition = NextTargetIndex._targetPositionsStaticVar[
+                NextTargetIndex._nextTargetIndex
+            ];
 
             _debugIndexCurrent = NextTargetIndex._nextTargetIndex;
             if (_debugIndexCurrent != _debugIndexPrevious)
             {
-                Debug.Log("TR - Target index: " + _debugIndexCurrent + " . Position: " + _targetPosition);
+                Debug.Log(
+                    "TR - Target index: " + _debugIndexCurrent + " . Position: " + _targetPosition
+                );
                 _debugIndexPrevious = _debugIndexCurrent;
             }
-            
+
             // Convert target position as viewport space
             Vector3 _targetPos = _cam.WorldToViewportPoint(_targetPosition);
             Vector2 _indicatorPos = Vector2.zero;
 
             // Check if the target is inside target square, snap to zero
-            if (_targetPos.z > 0.3f && _targetPos.x > 0.4f && _targetPos.x < 0.6f && _targetPos.y > 0.35f && _targetPos.y < 0.65f)
+            if (
+                _targetPos.z > 0.3f
+                && _targetPos.x > 0.4f
+                && _targetPos.x < 0.6f
+                && _targetPos.y > 0.35f
+                && _targetPos.y < 0.65f
+            )
             {
                 // Target is inside target square, zero UI indicator and stop flashing
                 _rectTransformUIIndicator.anchoredPosition = new Vector2(0, 0); // Move the UI indicator to center
@@ -83,9 +94,12 @@ public class TargetRadar : MonoBehaviour
 
                 // Clamp UI to target square via parent rectTransform
                 float _aspectRatio = Screen.width / (float)Screen.height;
-                float _maxY = _parentRectTransform.rect.height * 0.5f - _rectTransformUIIndicator.rect.height * 0.5f;
-                float _maxX = _parentRectTransform.rect.width * 0.5f - _rectTransformUIIndicator.rect.width * 0.5f;
-
+                float _maxY =
+                    _parentRectTransform.rect.height * 0.5f
+                    - _rectTransformUIIndicator.rect.height * 0.5f;
+                float _maxX =
+                    _parentRectTransform.rect.width * 0.5f
+                    - _rectTransformUIIndicator.rect.width * 0.5f;
 
                 //Debug.Log("Max(x,y): ()" + _maxX.ToString("F1") + "," + _maxY.ToString("F1") + ")");
 
@@ -100,7 +114,9 @@ public class TargetRadar : MonoBehaviour
                 }
 
                 //check if target is BEHIND the ship. Direction is ship to target
-                Vector3 _directionShipToTarget = (_targetPosition - _shipTransform.position).normalized;
+                Vector3 _directionShipToTarget = (
+                    _targetPosition - _shipTransform.position
+                ).normalized;
                 //dot produc of directio to target and ship forward
                 float _dot = Vector3.Dot(_directionShipToTarget, _shipTransform.forward);
                 //negative dot product means target is behind the ship
@@ -130,7 +146,6 @@ public class TargetRadar : MonoBehaviour
                 }
 
                 _indicatorPos = new Vector2(x, y);
-
             }
 
             // Set the position of the UI indicator
@@ -143,7 +158,6 @@ public class TargetRadar : MonoBehaviour
             //Set inactive
             _rectTransformUIIndicator.gameObject.SetActive(false);
         }
-
     }
 
     // Flash UI Indicator - target outside square target
@@ -159,7 +173,6 @@ public class TargetRadar : MonoBehaviour
         }
     }
 
-
     // Stop flashing UI indicaor
     private void StopFlashing()
     {
@@ -171,5 +184,4 @@ public class TargetRadar : MonoBehaviour
             _rectTransformUIIndicator.GetComponent<SVGImage>().color = _originalColour;
         }
     }
-
 }

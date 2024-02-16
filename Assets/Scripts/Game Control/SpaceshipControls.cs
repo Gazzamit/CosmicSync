@@ -11,25 +11,42 @@ public class SpaceshipControls : MonoBehaviour
 
     //add header to inspector
     [Header("REQUIRED SETTINGS")]
-
     //public Rigidbody _rocketRB;
 
     //show private floats in inspector to allow game play adjustments like how fast to Yaw / Pitch etc
     [SerializeField]
-    private float _yawTorque = 250f, _pitchTorque = 1000f, _rollTorque = 250f, _thrust = 1000f, _upThrust = 250f, _strafeThrust = 250f, _maxSpaceshipMagnitude = 180f;
+    private float _yawTorque = 250f,
+        _pitchTorque = 1000f,
+        _rollTorque = 250f,
+        _thrust = 1000f,
+        _upThrust = 250f,
+        _strafeThrust = 250f,
+        _maxSpaceshipMagnitude = 180f;
 
     //Show in ispector, limit range, glide controls
     [SerializeField, Range(.01f, .99f)]
-    private float _thrustGlideReduction = .5f, _upDownGllideReduction = .5f, _leftRightGlideReduction = .5f;
-    private float _glide, _verticalGlide, _horizontalGlide = 0f;
+    private float _thrustGlideReduction = .5f,
+        _upDownGllideReduction = .5f,
+        _leftRightGlideReduction = .5f;
+    private float _glide,
+        _verticalGlide,
+        _horizontalGlide = 0f;
 
-    public float _perfectTapMultiplier = 8f, _goodTapMultiplier = 4f, _poorTapMultiplier = 2f;
+    public float _perfectTapMultiplier = 8f,
+        _goodTapMultiplier = 4f,
+        _poorTapMultiplier = 2f;
     private float _tapMultiplier = 1;
-    [SerializeField] private AudioManager _audioManager;
 
-    public Slider _speedRight, _speedLeft;
+    [SerializeField]
+    private AudioManager _audioManager;
+
+    public Slider _speedRight,
+        _speedLeft;
     public float _laserPulseLength = 0.4f;
-    [SerializeField] private GameObject _laserLeft, _laserRight;
+
+    [SerializeField]
+    private GameObject _laserLeft,
+        _laserRight;
 
     //applied above scene index > 0
     public float _randomPortalTurbulance = 10f;
@@ -42,7 +59,10 @@ public class SpaceshipControls : MonoBehaviour
     public static float _magnitude = 0f;
 
     //Input Values for controller / keyboard
-    private float _thrust1D, _upDown1D, _strafe1D, _roll1D;
+    private float _thrust1D,
+        _upDown1D,
+        _strafe1D,
+        _roll1D;
     public static Vector2 _pitchYaw;
 
     private float _pitchYawMultiplier;
@@ -53,9 +73,11 @@ public class SpaceshipControls : MonoBehaviour
 
     //Laser
     private bool _readyToFireLaser = true;
-    public static bool _laserFiringLeftReduceValue = false, _laserFiringRightReduceValue = false;
+    public static bool _laserFiringLeftReduceValue = false,
+        _laserFiringRightReduceValue = false;
 
-    public static bool _LaserFiringStartShake = false, _laserFiringAddBlur = false;
+    public static bool _LaserFiringStartShake = false,
+        _laserFiringAddBlur = false;
     public ParticleSystem[] _laserParticleSystems;
 
     public static bool _doWelcomeSpaceShipControls = false;
@@ -63,20 +85,19 @@ public class SpaceshipControls : MonoBehaviour
     //stop input triggers after every half beat
     private float _turnOffInOneHalfBeat;
 
-    //limit spaceship movement to tapped beats    
+    //limit spaceship movement to tapped beats
     public static bool _allowMovement = false;
 
     //add portal turbulance
     private float _addPortalTurbulanceMultiplier;
 
     void Awake()
-
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         _rbSpaceShip = GetComponent<Rigidbody>();
-        //_rbSpaceShip.AddRelativeForce(Vector3.forward  * 1000);   
+        //_rbSpaceShip.AddRelativeForce(Vector3.forward  * 1000);
 
         //No multiplier turbulance on awake
         _addPortalTurbulanceMultiplier = 1;
@@ -102,8 +123,7 @@ public class SpaceshipControls : MonoBehaviour
         _speedRight.value = _magnitude / 200f; //200 set as max speed
         _speedLeft.value = _magnitude / 200f; //200 set as max speed
 
-
-        float _volume = _magnitude / 200f;
+        float _volume = _magnitude / 100f;
         _audioManager.AdjustEngineRumbleVolume(_volume);
 
         if (_doWelcomeSpaceShipControls == true)
@@ -116,7 +136,7 @@ public class SpaceshipControls : MonoBehaviour
     /*
     void Fire1()
     {
-        //reset fire when key / button released 
+        //reset fire when key / button released
         if (_fire1 < 0.1f && _readyToFire1 == 0)
             _readyToFire1 = 1;
         //fire
@@ -142,7 +162,11 @@ public class SpaceshipControls : MonoBehaviour
         //fire
         if (_fire1 > 0.1f && _readyToFireLaser == true)
         {
-            if (_DEV_AllowLaserFire || TapLeft._leftSliderValue >= 0.25f || TapRight._rightSliderValue >= 0.25f) //fire when either quater full
+            if (
+                _DEV_AllowLaserFire
+                || TapLeft._leftSliderValue >= 0.25f
+                || TapRight._rightSliderValue >= 0.25f
+            ) //fire when either quater full
             {
                 _laserFiringLeftReduceValue = true; //for Tap scripts (reduce Laser value)
                 _laserFiringRightReduceValue = true; //for Tap scripts (reduce Laser value)
@@ -200,12 +224,11 @@ public class SpaceshipControls : MonoBehaviour
     {
         foreach (ParticleSystem _ps in _laserParticleSystems)
         {
-            _ps.Stop();//Stop in case it is still playing
+            _ps.Stop(); //Stop in case it is still playing
             _ps.Play();
         }
         yield return null;
     }
-
 
     void Movement()
     {
@@ -214,7 +237,7 @@ public class SpaceshipControls : MonoBehaviour
         //Debug.Log(_Vector3Spaceship);
 
         _localVelocity = transform.InverseTransformDirection(_rbSpaceShip.velocity);
-        //Debug.Log("Local Velocity: " + _localVelocity.ToString());     
+        //Debug.Log("Local Velocity: " + _localVelocity.ToString());
 
         if (_allowMovement && (_roll1D > 0.05f || _roll1D < -0.05f))
         {
@@ -225,9 +248,13 @@ public class SpaceshipControls : MonoBehaviour
 
         //Pitch Yaw allowed to move all the time
         //pitch (UP/Down Mouse delta) (clamp to prevent exceed 1)
-        _rbSpaceShip.AddRelativeTorque(Vector3.right * Mathf.Clamp(-_pitchYaw.y, -1f, 1f) * _pitchTorque * Time.deltaTime);
+        _rbSpaceShip.AddRelativeTorque(
+            Vector3.right * Mathf.Clamp(-_pitchYaw.y, -1f, 1f) * _pitchTorque * Time.deltaTime
+        );
         // Yaw (LR) (clamp to prevent exceed 1)
-        _rbSpaceShip.AddRelativeTorque(Vector3.up * Mathf.Clamp(_pitchYaw.x, -1f, 1f) * _yawTorque * Time.deltaTime);
+        _rbSpaceShip.AddRelativeTorque(
+            Vector3.up * Mathf.Clamp(_pitchYaw.x, -1f, 1f) * _yawTorque * Time.deltaTime
+        );
 
         // THRUST - if pressing a thrust key or move controller slightly above minimum amount
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100, Color.red);
@@ -235,11 +262,16 @@ public class SpaceshipControls : MonoBehaviour
         {
             float _currentThrust = _thrust;
             // Debug.Log("Allow Thrust");
-            _rbSpaceShip.AddRelativeForce(Vector3.forward * _thrust1D * _currentThrust * Time.deltaTime);
+            _rbSpaceShip.AddRelativeForce(
+                Vector3.forward * _thrust1D * _currentThrust * Time.deltaTime
+            );
 
             //Clamp Velocity Magnitude
             if (_rbSpaceShip.velocity.magnitude > _maxSpaceshipMagnitude)
-                _rbSpaceShip.velocity = Vector3.ClampMagnitude(_rbSpaceShip.velocity, _maxSpaceshipMagnitude);
+                _rbSpaceShip.velocity = Vector3.ClampMagnitude(
+                    _rbSpaceShip.velocity,
+                    _maxSpaceshipMagnitude
+                );
 
             //_glide = _thrust;
         }
@@ -247,11 +279,15 @@ public class SpaceshipControls : MonoBehaviour
         {
             //add negative velocity relative force to all three vertex over glide time
             //Debug.Log("Slow Down");
-            _rbSpaceShip.AddRelativeForce(Vector3.forward * -_localVelocity.z * _thrustGlideReduction);
-            _rbSpaceShip.AddRelativeForce(Vector3.right * -_localVelocity.x * _thrustGlideReduction);
+            _rbSpaceShip.AddRelativeForce(
+                Vector3.forward * -_localVelocity.z * _thrustGlideReduction
+            );
+            _rbSpaceShip.AddRelativeForce(
+                Vector3.right * -_localVelocity.x * _thrustGlideReduction
+            );
             _rbSpaceShip.AddRelativeForce(Vector3.up * -_localVelocity.y * _thrustGlideReduction);
             //reduce glide to reduce force per frame
-            //_glide *= _thrustGlideReduction;   
+            //_glide *= _thrustGlideReduction;
 
             //untested alternative way to lerp velocity to zero
             //rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, Time.fixedTimeDelta);
@@ -274,12 +310,13 @@ public class SpaceshipControls : MonoBehaviour
             _verticalGlide *= _upDownGllideReduction;
         }
 
-
         // STRAFE - (QE) if pressing a strafe key or move controller slightly above minimum amount
         if (_allowMovement && (_strafe1D > 0.1f || _strafe1D < -0.1f))
         {
             // Debug.Log("Allow Strafe");
-            _rbSpaceShip.AddRelativeForce(Vector3.right * _strafe1D * _strafeThrust * Time.fixedDeltaTime);
+            _rbSpaceShip.AddRelativeForce(
+                Vector3.right * _strafe1D * _strafeThrust * Time.fixedDeltaTime
+            );
             _horizontalGlide = _strafe1D * _strafeThrust;
         }
         else //nothing pressed
@@ -289,7 +326,7 @@ public class SpaceshipControls : MonoBehaviour
             _horizontalGlide *= _leftRightGlideReduction;
         }
 
-        //for scenes > 0   
+        //for scenes > 0
         if (OnCollidePortal._addPortalTurbulanceNow == true)
         //if( _thrust1D != 0) //swap out for testing
         {
@@ -297,15 +334,14 @@ public class SpaceshipControls : MonoBehaviour
             AddPortalTurbulance();
             StartCoroutine(WhiteflashEffect());
         }
-
-
-
     }
 
     void AddPortalTurbulance()
     {
         //add random roll turbulance to tranversing portal (plus/minus 0.3f to 0.3f plus random)
-        _addPortalTurbulanceMultiplier = Mathf.Sign(Random.Range(-1, 1)) * Random.Range(_randomPortalTurbulance, 0.2f + _randomPortalTurbulance);
+        _addPortalTurbulanceMultiplier =
+            Mathf.Sign(Random.Range(-1, 1))
+            * Random.Range(_randomPortalTurbulance, 0.2f + _randomPortalTurbulance);
         // Debug.Log("Random Turbulance: " + _addPortalTurbulanceMultiplier);
         _allowMovement = true;
         if (GameManagerDDOL._doWelcome == true)
@@ -316,6 +352,7 @@ public class SpaceshipControls : MonoBehaviour
         _roll1D = _addPortalTurbulanceMultiplier;
         TurnOffMovement();
     }
+
     IEnumerator WhiteflashEffect()
     {
         // Debug.Log("White Flash Effect Called");
@@ -389,8 +426,8 @@ public class SpaceshipControls : MonoBehaviour
         _thrust1D = _context.ReadValue<float>() * _tapMultiplier;
         StartCoroutine(TurnOffMovement());
         //Debug.Log("thrust");
-
     }
+
     public void onStrafe(InputAction.CallbackContext _context)
     {
         setTapMultiuplier(); //perfect/good/poor
@@ -398,14 +435,15 @@ public class SpaceshipControls : MonoBehaviour
         StartCoroutine(TurnOffMovement());
         //Debug.Log("strafe");
     }
+
     public void onUpDown(InputAction.CallbackContext _context)
     {
-
         setTapMultiuplier(); //perfect/good/poor
         _upDown1D = _context.ReadValue<float>() * _tapMultiplier;
         StartCoroutine(TurnOffMovement());
         //Debug.Log("upDown");
     }
+
     public void onRoll(InputAction.CallbackContext _context)
     {
         setTapMultiuplier(); //perfect/good/poor
@@ -414,12 +452,14 @@ public class SpaceshipControls : MonoBehaviour
 
         //Debug.Log("roll");
     }
+
     public void onPitchYaw(InputAction.CallbackContext _context)
     {
         //PitchYaw added to player controls in UI menu
         _pitchYaw = _context.ReadValue<Vector2>() * GameManagerDDOL._pitchYawSliderValue;
         //Debug.Log("pitchYaw: " + _pitchYaw);
     }
+
     public void onFire1(InputAction.CallbackContext _context)
     {
         _fire1 = _context.ReadValue<float>();

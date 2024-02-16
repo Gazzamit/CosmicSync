@@ -3,26 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Unity.VectorGraphics;
+using UnityEngine.SceneManagement;
 
 public class HUDAnimations : MonoBehaviour
 {
     public List<GameObject> _SVGFlickerTweenObjects;
 
     //set active/inactive
-    private GameObject _mainMenu, _spaceshipHolder, _targetHolder, _targetingSVG, _settings, _dialoguePanelObject;
+    private GameObject _mainMenu,
+        _spaceshipHolder,
+        _targetHolder,
+        _targetingSVG,
+        _settings,
+        _dialoguePanelObject;
 
     public GameObject[] _enableDisableMenuObj;
 
     //transform location set in inspector
-    public Transform _leftRing, _rightRing, _targetSquare, _menuRingBlue, _settingsRingBlue, _dialoguePanel, _blackCanvas;
+    public Transform _leftRing,
+        _rightRing,
+        _targetSquare,
+        _menuRingBlue,
+        _settingsRingBlue,
+        _dialoguePanel,
+        _blackCanvas;
 
     public Ease _easeType;
+
     //transfrom start location
-    private Vector3 _leftRingStartPos, _rightRingStartPos, _targetSquareStartPos, _menuRingStartPos, _settingsRingStartPos, _dialoguePanelStartPos;
+    private Vector3 _leftRingStartPos,
+        _rightRingStartPos,
+        _targetSquareStartPos,
+        _menuRingStartPos,
+        _settingsRingStartPos,
+        _dialoguePanelStartPos;
 
-    public static bool _switchingHUD = false, _flickerTween = false, _showDialogue = false, _hideDialogue = false, _fadeToBlack = false, _fadeFromBlack = false, _flickerHUD = false;
+    public static bool _switchingHUD = false,
+        _flickerTween = false,
+        _showDialogue = false,
+        _hideDialogue = false,
+        _fadeToBlack = false,
+        _fadeFromBlack = false,
+        _flickerHUD = false;
 
-    [SerializeField] private int _newXMenuShift = 2000, _newYMenuShift = 1500;
+    [SerializeField]
+    private int _newXMenuShift = 2000,
+        _newYMenuShift = 1500;
+
     private void Awake()
     {
         //for set active / inactive
@@ -35,8 +62,8 @@ public class HUDAnimations : MonoBehaviour
 
         //for Transforms
         _blackCanvas = GameObject.Find("BlackoutPanel").transform;
-
     }
+
     private void Start()
     {
         //Get original Vector3 Locations;
@@ -46,7 +73,6 @@ public class HUDAnimations : MonoBehaviour
         _menuRingStartPos = _menuRingBlue.localPosition;
         _settingsRingStartPos = _settingsRingBlue.localPosition;
         _dialoguePanelStartPos = _dialoguePanel.localPosition;
-
 
         //Start state
         //move left ring off screen to left
@@ -79,7 +105,10 @@ public class HUDAnimations : MonoBehaviour
             StartCoroutine(FlickerHUD());
         }
 
-        if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu && _switchingHUD == true)
+        if (
+            GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.MainMenu
+            && _switchingHUD == true
+        )
         {
             //If main Menu called from Game
             if (GameManagerDDOL._previousMode == GameManagerDDOL.GameMode.Game)
@@ -99,7 +128,9 @@ public class HUDAnimations : MonoBehaviour
             }
         }
         //If Game called (and not first run)
-        else if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game && _switchingHUD == true)
+        else if (
+            GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.Game && _switchingHUD == true
+        )
         {
             _switchingHUD = false;
             StartCoroutine(ActivateGameObjects());
@@ -108,7 +139,10 @@ public class HUDAnimations : MonoBehaviour
             ScoreManager._instance.TriggerCountdownCoroutine();
         }
         //If settings called (will always be from Main menu)
-        else if (GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu && _switchingHUD == true)
+        else if (
+            GameManagerDDOL._currentMode == GameManagerDDOL.GameMode.SettingsMenu
+            && _switchingHUD == true
+        )
         {
             _switchingHUD = false;
             StartCoroutine(ActivateSettingsObjects());
@@ -169,6 +203,7 @@ public class HUDAnimations : MonoBehaviour
             obj.GetComponent<SVGFlickerTween>().StartFlashSequence();
         }
     }
+
     public void ShowDialogue()
     {
         _dialoguePanel.DOLocalMove(_dialoguePanelStartPos, 0.3f).SetEase(_easeType);
@@ -176,7 +211,8 @@ public class HUDAnimations : MonoBehaviour
         _canvasGroup.alpha = 0;
 
         // Create the fade sequence
-        Sequence _sequence = DOTween.Sequence()
+        Sequence _sequence = DOTween
+            .Sequence()
             .Append(_canvasGroup.DOFade(1f, 1f))
             .SetLoops(1, LoopType.Incremental);
 
@@ -186,12 +222,15 @@ public class HUDAnimations : MonoBehaviour
 
     public void HideDialogue()
     {
-        _dialoguePanel.DOLocalMove(_dialoguePanelStartPos + new Vector3(0, -2000, 0), 0.3f).SetEase(_easeType);
+        _dialoguePanel
+            .DOLocalMove(_dialoguePanelStartPos + new Vector3(0, -2000, 0), 0.3f)
+            .SetEase(_easeType);
         CanvasGroup _canvasGroup = _dialoguePanel.GetComponent<CanvasGroup>();
         _canvasGroup.alpha = 1;
 
         // Create the fade sequence
-        Sequence _sequence = DOTween.Sequence()
+        Sequence _sequence = DOTween
+            .Sequence()
             .Append(_canvasGroup.DOFade(0f, 1f))
             .SetLoops(1, LoopType.Incremental);
 
@@ -203,9 +242,11 @@ public class HUDAnimations : MonoBehaviour
     {
         if (_dialoguePanel == null)
         {
-            Debug.Log("_dialoguePanel not found");
+            Debug.Log("HUDA _dialoguePanel not found");
         }
-        _dialoguePanel.DOLocalMove(_dialoguePanelStartPos + new Vector3(0, 1560, 0), 0.3f).SetEase(_easeType);
+        _dialoguePanel
+            .DOLocalMove(_dialoguePanelStartPos + new Vector3(0, 1560, 0), 0.3f)
+            .SetEase(_easeType);
     }
 
     public void MoveDialogueDown()
@@ -218,7 +259,8 @@ public class HUDAnimations : MonoBehaviour
         CanvasGroup _canvasGroup = _blackCanvas.GetComponent<CanvasGroup>();
 
         // Create the fade sequence
-        Sequence _sequence = DOTween.Sequence()
+        Sequence _sequence = DOTween
+            .Sequence()
             .Append(_canvasGroup.DOFade(0f, 1f))
             .SetLoops(1, LoopType.Incremental);
 
@@ -239,7 +281,8 @@ public class HUDAnimations : MonoBehaviour
         {
             // Create the fade sequence
             Debug.Log("HUDA - Fading to black");
-            Sequence _sequence = DOTween.Sequence()
+            Sequence _sequence = DOTween
+                .Sequence()
                 .Append(_canvasGroup.DOFade(1f, 1f))
                 .SetLoops(1, LoopType.Incremental);
 
@@ -247,45 +290,57 @@ public class HUDAnimations : MonoBehaviour
             _sequence.Play();
         }
     }
+
     public void MoveHUDGameLauncher()
     {
-        Debug.Log("HA - MoveHUDToMenu");
+        Debug.Log("HUDA - MoveHUDToMenu");
         _menuRingBlue.DOLocalMove(_menuRingStartPos, 0.3f).SetEase(_easeType);
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
     }
 
     public void MoveHUDGameToMenu()
     {
-        Debug.Log("HA - MoveHUDGameToMenu");
-        _leftRing.DOLocalMove(_leftRingStartPos + new Vector3(-_newXMenuShift, 0, 0), .3f).SetEase(_easeType);
-        _rightRing.DOLocalMove(_rightRingStartPos + new Vector3(_newXMenuShift, 0, 0), .3f).SetEase(_easeType);
-        _targetSquare.DOLocalMove(_targetSquareStartPos + new Vector3(0, -_newYMenuShift, 0), .3f).SetEase(_easeType);
+        Debug.Log("HUDA - MoveHUDGameToMenu");
+        _leftRing
+            .DOLocalMove(_leftRingStartPos + new Vector3(-_newXMenuShift, 0, 0), .3f)
+            .SetEase(_easeType);
+        _rightRing
+            .DOLocalMove(_rightRingStartPos + new Vector3(_newXMenuShift, 0, 0), .3f)
+            .SetEase(_easeType);
+        _targetSquare
+            .DOLocalMove(_targetSquareStartPos + new Vector3(0, -_newYMenuShift, 0), .3f)
+            .SetEase(_easeType);
         _menuRingBlue.DOLocalMove(_menuRingStartPos, .3f).SetEase(_easeType);
     }
 
     public void MoveHUDMenuToGame()
     {
-        Debug.Log("HA - MoveHUDMenuToGame");
+        Debug.Log("HUDA - MoveHUDMenuToGame");
         _leftRing.DOLocalMove(_leftRingStartPos, .3f).SetEase(_easeType);
         _rightRing.DOLocalMove(_rightRingStartPos, .3f).SetEase(_easeType);
         _targetSquare.DOLocalMove(_targetSquareStartPos, .3f).SetEase(_easeType);
-        _menuRingBlue.DOLocalMove(_menuRingStartPos + new Vector3(0, _newYMenuShift, 0), .3f).SetEase(_easeType);
+        _menuRingBlue
+            .DOLocalMove(_menuRingStartPos + new Vector3(0, _newYMenuShift, 0), .3f)
+            .SetEase(_easeType);
     }
 
     public void MoveHUDMenuToSettings()
     {
-        Debug.Log("HA - MoveHUDMenuToSettings");
-        _menuRingBlue.DOLocalMove(_menuRingStartPos + new Vector3(0, _newYMenuShift, 0), .3f).SetEase(_easeType);
+        Debug.Log("HUDA - MoveHUDMenuToSettings");
+        _menuRingBlue
+            .DOLocalMove(_menuRingStartPos + new Vector3(0, _newYMenuShift, 0), .3f)
+            .SetEase(_easeType);
         _settingsRingBlue.DOLocalMove(_settingsRingStartPos, .3f).SetEase(_easeType);
     }
 
     public void MoveHUDSettingsToMenu()
     {
-        Debug.Log("MoveHUDSettingsToMenu");
+        Debug.Log("HUDA - MoveHUDSettingsToMenu");
         _menuRingBlue.DOLocalMove(_menuRingStartPos, .3f).SetEase(_easeType);
-        _settingsRingBlue.DOLocalMove(_settingsRingStartPos + new Vector3(0, -_newYMenuShift, 0), .3f).SetEase(_easeType);
+        _settingsRingBlue
+            .DOLocalMove(_settingsRingStartPos + new Vector3(0, -_newYMenuShift, 0), .3f)
+            .SetEase(_easeType);
     }
-
 
     IEnumerator ActivateGameObjects()
     {
@@ -323,5 +378,4 @@ public class HUDAnimations : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         //_mainMenu.SetActive(false);
     }
-
 }

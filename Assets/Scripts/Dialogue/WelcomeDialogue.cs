@@ -154,7 +154,7 @@ public class WelcomeDialogue : MonoBehaviour
 
         //force correct map
         SwitchActionMap("UIControls");
-        Debug.Log("SelectUI controls action Map");
+        Debug.Log("WD SelectUI controls action Map");
         HUDAnimations._showDialogue = true;
 
         //Menu loop script and another to reset coroutine if needed

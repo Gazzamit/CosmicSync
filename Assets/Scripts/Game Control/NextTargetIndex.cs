@@ -51,7 +51,10 @@ public class NextTargetIndex : MonoBehaviour
         }
 
         //not end of game, and child object is destoryed, increment child
-        if (ScoreManager._finalTargetDestroyed == false && _targetsDestoryedStaticVar[_nextTargetIndex] == true)
+        if (
+            ScoreManager._finalTargetDestroyed == false
+            && _targetsDestoryedStaticVar[_nextTargetIndex] == true
+        )
         {
             Debug.Log("NTI - Object already destroyed: " + _nextTargetIndex);
             _nextTargetIndex++;

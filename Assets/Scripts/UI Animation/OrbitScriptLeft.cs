@@ -6,6 +6,7 @@ public class OrbitScriptLeft : MonoBehaviour
 {
     [Header("REQUIRED")]
     public float _radius = 215.5f;
+
     [Range(0, 1)]
     public float _startOffsetUnit; //0 to 1
     public GameObject _tapIndicatorPrefab;
@@ -13,7 +14,7 @@ public class OrbitScriptLeft : MonoBehaviour
     void Start()
     {
         gameObject.SetActive(true);
-        
+
         float _beatsInLoop = BeatController.instance._beatsInLoop;
         List<float> _leftBeats = TapLeft._leftBeatsStaticVar;
 
@@ -34,7 +35,6 @@ public class OrbitScriptLeft : MonoBehaviour
 
             // Calculate angle to centre
             float _angleToCenter = Mathf.Atan2(_dirToCenter.y, _dirToCenter.x) * Mathf.Rad2Deg;
-
 
             // Set the position / rotation of the position to tap indicator
             _indicator.transform.localPosition = _indicatorPosition;
@@ -62,8 +62,5 @@ public class OrbitScriptLeft : MonoBehaviour
         // Set the position / rotation of the position to tap indicator
         transform.localPosition = _indicatorPosition;
         transform.localRotation = Quaternion.Euler(0, 0, _angleToCenter + 90); // rotate around z-axis
-
-
     }
-
 }

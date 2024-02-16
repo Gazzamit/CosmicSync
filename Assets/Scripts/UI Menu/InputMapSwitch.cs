@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class InputMapSwitch : MonoBehaviour
 {
-
     public PlayerInput _playerInput; // Reference to the PlayerInput
 
     public static bool _switchInputMaps = false;
@@ -43,7 +43,7 @@ public class InputMapSwitch : MonoBehaviour
         //Switch Input Maps for Game or Menu
         //From game switch to Menu map (for Menu and settings UI)
         //Switch to UI is called from spaceships controls
-        //switch to spaceship controls happens when new scenen in awake
+        //switch to spaceship controls happens when new scene in awake
         if (_switchInputMaps == true)
         {
             if (_playerInput.currentActionMap.name == "SpaceshipControls")
@@ -56,7 +56,7 @@ public class InputMapSwitch : MonoBehaviour
                 Debug.Log("IMS - Switching to UI Menu...");
                 ActivateUIMenuControls();
             }
-            //this should not be called as a load scene occura for each level
+            //this should not be called as a load scene occurs for each level
             else if (_playerInput.currentActionMap.name == "UIControls")
             {
                 Debug.Log("IMS - Switching to Spaceship Contols...");
@@ -82,23 +82,28 @@ public class InputMapSwitch : MonoBehaviour
 
     private void CheckWhichMapsAreActive()
     {
-        // get reference 
+        // get reference
         InputActionMap _pressIActionMap = _playerInput.actions.FindActionMap("PressI");
         InputActionMap _UIControlsActionMap = _playerInput.actions.FindActionMap("UIControls");
-        InputActionMap _spaceshipControlsActionMap = _playerInput.actions.FindActionMap("SpaceshipControls");
+        InputActionMap _spaceshipControlsActionMap = _playerInput.actions.FindActionMap(
+            "SpaceshipControls"
+        );
 
-        // check if active
+        // check if active and debug
         if (_playerInput.currentActionMap == _pressIActionMap)
         {
-            Debug.Log("WD - Action Map Check for pressI: " + _playerInput.currentActionMap.name);
+            Debug.Log("IMS - Action Map Check for pressI: " + _playerInput.currentActionMap.name);
         }
         if (_playerInput.currentActionMap == _UIControlsActionMap)
         {
-            Debug.Log("WD - Action Map Check for UI: " + _playerInput.currentActionMap.name);
+            Debug.Log("IMS - Action Map Check for UI: " + _playerInput.currentActionMap.name);
         }
         if (_playerInput.currentActionMap == _spaceshipControlsActionMap)
         {
-            Debug.Log("WD - Action Map Check for Spaceship Conotrols: " + _playerInput.currentActionMap.name);
+            Debug.Log(
+                "IMS - Action Map Check for Spaceship Conotrols: "
+                    + _playerInput.currentActionMap.name
+            );
         }
     }
 
@@ -107,11 +112,19 @@ public class InputMapSwitch : MonoBehaviour
         //go back to manu
         yield return new WaitForSeconds(10f);
         ActivateUIMenuControls();
+        StartCoroutine(LoadMenuScene()); // not currently not used as it interrupts gameplay
+    }
+
+    IEnumerator LoadMenuScene()
+    {
+        yield return new WaitForSeconds(0.01f);
+        //load new menu scene - currently not used as interrupts game play
+        //SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
 
     void ActivateUIMenuControls()
     {
-        // Switch to the UI action map 
+        // Switch to the UI action map
         SwitchActionMap("UIControls");
         Debug.Log("IMS - To UI Action Map: " + _playerInput.currentActionMap.name);
         CheckWhichMapsAreActive();
@@ -119,13 +132,14 @@ public class InputMapSwitch : MonoBehaviour
         //set bools for HUD
         HUDAnimations._switchingHUD = true; //for HUD animations
         Debug.Log("IMS - Game Mode is MainMenu");
+        GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game; //force menu to load
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.MainMenu;
         //Debug.Log("MainMenu Mode: " + GameManagerDDOL._currentMode);
     }
 
     void ActivateSpaceshipControls()
     {
-        // Switch back to the player action map 
+        // Switch back to the player action map
         SwitchActionMap("SpaceshipControls");
         Debug.Log("IMS - To Spaceship Action Map: " + _playerInput.currentActionMap.name);
         CheckWhichMapsAreActive();
@@ -134,7 +148,6 @@ public class InputMapSwitch : MonoBehaviour
         HUDAnimations._switchingHUD = true; //for HUD animations
         Debug.Log("IMS - Game Mode is Game");
         GameManagerDDOL._currentMode = GameManagerDDOL.GameMode.Game;
-
     }
 
     void ActivateWelcomeControls()
@@ -143,7 +156,6 @@ public class InputMapSwitch : MonoBehaviour
         Debug.Log("IMS - To PressI Action Map: " + _playerInput.currentActionMap.name);
         CheckWhichMapsAreActive();
     }
-
 
     public void SwitchActionMap(string actionMapName)
     {
@@ -155,5 +167,3 @@ public class InputMapSwitch : MonoBehaviour
         }
     }
 }
-
-
